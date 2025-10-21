@@ -4,132 +4,124 @@
 </head>
 <body>
     <div class="row">
-    <div class="col-12">
-        <div class="pt-2">
-            <div class="d-flex align-items-center justify-content-between mb-3">
-                <h5 class="mb-0">Card</h5>
-                <div class="d-flex align-items-center">
-                    <i class="bi bi-house-door-fill pe-2"></i>
-                    <p class="fs-8 mb-0 pe-2">Home</p>
-                    <i class="fa-solid fa-angle-right fs-8 text-grey pe-2"></i>
-                    <p class="fs-8 mb-0">Card</p>
-                </div>
-            </div>
+        <div class="col-12">
+            <div class="pt-2">
+                <div th:replace="~{pages/layout/fragments :: maps('Card')}"></div>
 
-            <div class="card-wrapper">
-                <div class="card-header d-flex justify-content-between">
-                    <p class="fs-6 fw-bold mb-0">기본정보</p>
-                    <button class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 flex-edit">edit</button>
-                </div>
-                <div class="card-contents">
-                    <div class="card-row m-0">
-                        <div class="col d-flex">
-                            <div class="card-title"><p class="fs-8 fw-bold">서비스명</p></div>
-                            <div class="card-txt">
-                                <p class="fs-8 value">이투유</p>
-                                <div class="edit-group">
-                                    <input type="text" class="form-control fs-8" value="이투유">
+                <div class="card-wrapper">
+                    <div class="card-header d-flex justify-content-between">
+                        <p class="fs-6 fw-bold mb-0">기본정보</p>
+                        <button class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 flex-edit">edit</button>
+                    </div>
+                    <div class="card-contents">
+                        <div class="card-row m-0">
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">서비스명</p></div>
+                                <div class="card-txt">
+                                    <p class="fs-8 value">이투유</p>
+                                    <div class="edit-group">
+                                        <input type="text" class="form-control fs-8" value="이투유">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">상태</p></div>
+                                <div class="card-txt">
+                                    <p class="fs-8 value">사용</p>
+                                    <div class="edit-group">
+                                        <select name="" id="" class="form-control fs-8">
+                                            <option value="사용">사용</option>
+                                            <option value="중지">중지</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">데이터수집</p></div>
+                                <div class="card-txt">
+                                    <p class="fs-8 value">진행</p>
+                                    <div class="edit-group">
+                                        <input type="text" class="form-control fs-8 w-100" value="진행">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">매입여부</p></div>
+                                <div class="card-txt">
+                                    <p class="fs-8 value">매입</p>
+                                    <div class="edit-group">
+                                        <input type="text" class="form-control fs-8" value="매입">
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col d-flex">
-                            <div class="card-title"><p class="fs-8 fw-bold">상태</p></div>
-                            <div class="card-txt">
-                                <p class="fs-8 value">사용</p>
-                                <div class="edit-group">
-                                    <select name="" id="" class="form-control fs-8">
-                                        <option value="사용">사용</option>
-                                        <option value="중지">중지</option>
-                                    </select>
-                                </div>
+                        <div class="card-row m-0">
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">기관</p></div>
+                                <div class="card-txt"><p class="fs-8">신한카드, SHINGANCARD</p></div>
                             </div>
-                        </div>
-                        <div class="col d-flex">
-                            <div class="card-title"><p class="fs-8 fw-bold">데이터수집</p></div>
-                            <div class="card-txt">
-                                <p class="fs-8 value">진행</p>
-                                <div class="edit-group">
-                                    <input type="text" class="form-control fs-8 w-100" value="진행">
-                                </div>
+                            <div class="col">
+                                <div class="card-title"><p class="fs-8 fw-bold">상품</p></div>
+                                <div class="card-txt"><p class="fs-8">신용카드</p></div>
                             </div>
-                        </div>
-                        <div class="col d-flex">
-                            <div class="card-title"><p class="fs-8 fw-bold">매입여부</p></div>
-                            <div class="card-txt">
-                                <p class="fs-8 value">매입</p>
-                                <div class="edit-group">
-                                    <input type="text" class="form-control fs-8" value="매입">
-                                </div>
-                            </div>
+                            <div class="col m-none"></div>
+                            <div class="col m-none"></div>
                         </div>
                     </div>
-                    <div class="card-row m-0">
-                        <div class="col d-flex">
-                            <div class="card-title"><p class="fs-8 fw-bold">기관</p></div>
-                            <div class="card-txt"><p class="fs-8">신한카드, SHINGANCARD</p></div>
-                        </div>
-                        <div class="col">
-                            <div class="card-title"><p class="fs-8 fw-bold">상품</p></div>
-                            <div class="card-txt"><p class="fs-8">신용카드</p></div>
-                        </div>
-                        <div class="col m-none"></div>
-                        <div class="col m-none"></div>
-                    </div>
                 </div>
-            </div>
 
-            <div class="card-wrapper mt-3">
-                <div class="card-header d-flex justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <p class="fs-6 fw-bold mb-0">지급정보</p>
-                        <p class="fs-9 mb-0 ps-4">
-                            *서비스수수료는 “영업일 1일 기준 값”입니다.<br>
-                            *기타수수료,계좌(인증/방식)는 D+0 이용 시 고정되어 부과됩니다.
-                        </p>
-                    </div>
-                    <button class="btn btn-link fs-9 text-darkGrey p-0 flex-edit">edit</button>
-                </div>
-                <div class="card-contents">
-                    <div class="card-row m-0">
-                        <div class="col d-flex">
-                            <div class="card-title"><p class="fs-8 fw-bold">지급계좌</p></div>
-                            <div class="card-txt"><p class="fs-8">우리,(주)이투유,11111111111111</p></div>
+                <div class="card-wrapper mt-3">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <p class="fs-6 fw-bold mb-0">지급정보</p>
+                            <p class="fs-9 mb-0 ps-4">
+                                *서비스수수료는 “영업일 1일 기준 값”입니다.<br>
+                                *기타수수료,계좌(인증/방식)는 D+0 이용 시 고정되어 부과됩니다.
+                            </p>
                         </div>
-                        <div class="col d-flex">
-                            <div class="card-title"><p class="fs-8 fw-bold">서비스수수료</p></div>
-                            <div class="card-txt"><p class="fs-8">D+1, 0.060%.DAILY</p></div>
+                        <button class="btn btn-link fs-9 text-darkGrey p-0 flex-edit">edit</button>
+                    </div>
+                    <div class="card-contents">
+                        <div class="card-row m-0">
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">지급계좌</p></div>
+                                <div class="card-txt"><p class="fs-8">우리,(주)이투유,11111111111111</p></div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">서비스수수료</p></div>
+                                <div class="card-txt"><p class="fs-8">D+1, 0.060%.DAILY</p></div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="card-wrapper mt-3">
-                <div class="card-header d-flex justify-content-between">
-                    <div class="d-flex align-items-center">
-                        <p class="fs-6 fw-bold mb-0">지급정보</p>
-                        <span class="badge bg-blue-outline ms-2 fw-normal p-1">연결확인</span>
+                <div class="card-wrapper mt-3">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <p class="fs-6 fw-bold mb-0">지급정보</p>
+                            <span class="badge bg-blue-outline ms-2 fw-normal p-1">연결확인</span>
+                        </div>
+                        <button class="btn btn-darkGrey-outline fs-9 pt-0 pb-0 btn-radius-2 flex-edit">edit</button>
                     </div>
-                    <button class="btn btn-darkGrey-outline fs-9 pt-0 pb-0 btn-radius-2 flex-edit">edit</button>
-                </div>
-                <div class="card-contents">
-                    <div class="card-row m-0">
-                        <div class="col d-flex">
-                            <div class="card-title"><p class="fs-8 fw-bold">지급계좌</p></div>
-                            <div class="card-txt"><p class="fs-8">우리,(주)이투유,11111111111111</p></div>
-                        </div>
-                        <div class="col d-flex">
-                            <div class="card-title"><p class="fs-8 fw-bold">MID</p></div>
-                            <div class="card-txt"><p class="fs-8">A1234123</p></div>
-                        </div>
-                        <div class="col d-flex">
-                            <div class="card-title"><p class="fs-8 fw-bold">접속계정ID</p></div>
-                            <div class="card-txt"><p class="fs-8">test</p></div>
+                    <div class="card-contents">
+                        <div class="card-row m-0">
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">지급계좌</p></div>
+                                <div class="card-txt"><p class="fs-8">우리,(주)이투유,11111111111111</p></div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">MID</p></div>
+                                <div class="card-txt"><p class="fs-8">A1234123</p></div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">접속계정ID</p></div>
+                                <div class="card-txt"><p class="fs-8">test</p></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 </body>
 </html>

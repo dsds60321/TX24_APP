@@ -1,0 +1,41 @@
+<div class="modal-header" xmlns:th="http://www.thymeleaf.org">
+    <h5 class="modal-title">샘플 등록 폼</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+</div>
+<div class="modal-body">
+    <form id="modalSampleForm" class="needs-validation" novalidate>
+        <div class="mb-3">
+            <label for="modalInputName" class="form-label">이름</label>
+            <input type="text" class="form-control" id="modalInputName" name="name" placeholder="홍길동" required
+                   th:value="${param.name != null ? param.name : ''}">
+            <div class="invalid-feedback">이름을 입력해 주세요.</div>
+        </div>
+        <div class="mb-3">
+            <label for="modalInputEmail" class="form-label">이메일</label>
+            <input type="email" class="form-control" id="modalInputEmail" name="email" placeholder="user@example.com" required
+                   th:value="${param.email != null ? param.email : ''}">
+            <div class="invalid-feedback">올바른 이메일을 입력해 주세요.</div>
+        </div>
+        <div class="row g-2">
+            <div class="col-md-6">
+                <label for="modalSelectRole" class="form-label">권한</label>
+                <select id="modalSelectRole" class="form-select" name="role" required>
+                    <option value="" disabled th:selected="${param.role == null}">선택하세요</option>
+                    <option value="ADMIN" th:selected="${param.role != null ? param.role == 'ADMIN' : false}">관리자</option>
+                    <option value="USER" th:selected="${param.role != null ? param.role == 'USER' : false}">일반 사용자</option>
+                    <option value="GUEST" th:selected="${param.role != null ? param.role == 'GUEST' : false}">게스트</option>
+                </select>
+                <div class="invalid-feedback">권한을 선택해 주세요.</div>
+            </div>
+            <div class="col-md-6">
+                <label for="modalInputPhone" class="form-label">연락처</label>
+                <input type="tel" class="form-control" id="modalInputPhone" name="phone" placeholder="010-0000-0000"
+                       th:value="${param.phone != null ? param.phone : ''}">
+            </div>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+    <button type="submit" class="btn btn-primary" form="modalSampleForm">저장</button>
+</div>

@@ -6,15 +6,9 @@
         <div class="row">
             <div class="col-12">
                 <div class="pt-2">
-                    <div class="d-flex align-items-center mb-3 mt-3">
-                        <h5 class="mb-0">Tables</h5>
-                        <div class="d-flex align-items-center ms-3">
-                            <i class="bi bi-house-door-fill pe-2"></i>
-                            <p class="fs-8 mb-0 pe-2">Home</p>
-                            <i class="fa-solid fa-angle-right fs-8 text-grey pe-2"></i>
-                            <p class="fs-8 mb-0">Tables</p>
-                        </div>
-                    </div>
+
+                    <div th:replace="~{pages/layout/fragments :: maps('Tables')}"></div>
+
 
                     <div class="card-wrapper search">
                         <form action="">

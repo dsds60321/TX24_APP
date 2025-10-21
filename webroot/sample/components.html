@@ -7,7 +7,7 @@
             <div class="col-12">
                 <div class="pt-2">
 
-                    <div th:replace="layout/fragments :: maps('Components')"></div>
+                    <div th:replace="~{pages/layout/fragments :: maps('Components')}"></div>
 
                     <div class="card-wrapper">
                         <div class="card-header">
@@ -98,11 +98,22 @@
                                 <div class="col d-flex">
                                     <div class="card-title"><p class="fs-8 fw-bold">기본</p></div>
                                     <div class="card-txt">
-                                        <button class="btn btn-darkGrey fs-8" data-bs-toggle="modal" data-bs-target="#exampleModal">기본 모달</button>
-                                        <button class="btn btn-red-outline fs-8" data-bs-toggle="modal" data-bs-target="#exampleModalFail">실패 모달</button>
-                                        <button class="btn btn-blue fs-8" data-bs-toggle="modal" data-bs-target="#exampleModalTabs">Tabs</button>
-                                        <button class="btn btn-blue-outline fs-8" data-bs-toggle="modal" data-bs-target="#exampleModalForm">Form</button>
-                                        <button class="btn btn-yellow-outline fs-8" data-bs-toggle="modal" data-bs-target="#exampleModalScroll">Scroll</button>
+                                        <button class="btn btn-darkGrey fs-8" data-bs-toggle="modal"
+                                                data-bs-target="#default" data-modal-url="/example/modal/default">기본 모달
+                                        </button>
+                                        <button class="btn btn-red-outline fs-8" data-bs-toggle="modal"
+                                                data-bs-target="#default" data-modal-url="/example/modal/fail">실패 모달
+                                        </button>
+                                        <button class="btn btn-blue fs-8" data-bs-toggle="modal"
+                                                data-bs-target="#default" data-modal-url="/example/modal/tab">Tabs
+                                        </button>
+                                        <button class="btn btn-blue-outline fs-8" data-bs-toggle="modal"
+                                                data-bs-target="#default" data-modal-url="/example/modal/form">
+                                            Form
+                                        </button>
+                                        <button class="btn btn-yellow-outline fs-8" data-bs-toggle="modal"
+                                                data-bs-target="#default" data-modal-url="/example/modal/scroll">Scroll
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -142,6 +153,11 @@
                     </div>
                 </div>
             </div>
+
+
+            <div th:replace="~{pages/layout/fragments :: modal('default', 'modal-lg')}"></div>
         </div>
+
+
     </body>
 </html>

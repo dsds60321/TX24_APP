@@ -1,0 +1,184 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8" />
+</head>
+<body>
+    <div class="row">
+        <div class="col-12">
+            <div class="pt-2">
+                <div th:replace="~{pages/layout/fragments :: maps('Card2')}"></div>
+
+                <div class="nav-box nav-underline">
+                    <div class="tab-nav">
+                        <button class="tab-button active" data-tab-target="tab1">위험성검토</button>
+                        <button class="tab-button" data-tab-target="tab2">기본정보</button>
+                        <button class="tab-button" data-tab-target="tab3">정산정보</button>
+                    </div>
+                    <div class="tab-content">
+                        <div id="tab1" class="tab-pane active">
+                            <div class="card-wrapper">
+                                <div class="card-header d-flex justify-content-between">
+                                    <p class="fs-6 fw-bold mb-0">기본정보</p>
+                                    <button class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 flex-edit">edit</button>
+                                </div>
+                                <div class="card-contents">
+                                    <div class="card-row m-0">
+                                        <div class="col d-flex">
+                                            <div class="card-title"><p class="fs-8 fw-bold">서비스명</p></div>
+                                            <div class="card-txt">
+                                                <p class="fs-8 value">이투유</p>
+                                                <div class="edit-group">
+                                                    <input type="text" class="form-control fs-8" value="이투유">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex">
+                                            <div class="card-title"><p class="fs-8 fw-bold">상태</p></div>
+                                            <div class="card-txt">
+                                                <p class="fs-8 value">사용</p>
+                                                <div class="edit-group">
+                                                    <select name="" id="" class="form-control fs-8">
+                                                        <option value="사용">사용</option>
+                                                        <option value="중지">중지</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex">
+                                            <div class="card-title"><p class="fs-8 fw-bold">데이터수집</p></div>
+                                            <div class="card-txt">
+                                                <p class="fs-8 value">진행</p>
+                                                <div class="edit-group">
+                                                    <input type="text" class="form-control fs-8 w-100" value="진행">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex">
+                                            <div class="card-title"><p class="fs-8 fw-bold">매입여부</p></div>
+                                            <div class="card-txt">
+                                                <p class="fs-8 value">매입</p>
+                                                <div class="edit-group">
+                                                    <input type="text" class="form-control fs-8" value="매입">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-row m-0">
+                                        <div class="col d-flex">
+                                            <div class="card-title"><p class="fs-8 fw-bold">기관</p></div>
+                                            <div class="card-txt">
+                                                <p class="fs-8 value">신한카드, SHINGANCARD</p>
+                                                <div class="edit-group">
+                                                    <input type="text" class="form-control fs-8" value="신한카드, SHINGANCARD">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card-title"><p class="fs-8 fw-bold">상품</p></div>
+                                            <div class="card-txt">
+                                                <p class="fs-8 value">신용카드</p>
+                                                <div class="edit-group">
+                                                    <input type="text" class="form-control fs-8" value="신용카드">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col m-none"></div>
+                                        <div class="col m-none"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab2" class="tab-pane">
+                            <p>두번째 내용</p>
+                        </div>
+                        <div id="tab3" class="tab-pane">
+                            <p>세번째 내용</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="nav-box nav-fill mt-3">
+                    <div class="tab-nav">
+                        <button class="tab-button active" data-tab-target="tab4">위험성검토</button>
+                        <button class="tab-button" data-tab-target="tab5">기본정보</button>
+                        <button class="tab-button" data-tab-target="tab6">정산정보</button>
+                    </div>
+                    <div class="tab-content">
+                        <div id="tab4" class="tab-pane active">
+                            <div class="card-wrapper">
+                                <div class="card-header d-flex justify-content-between">
+                                    <p class="fs-6 fw-bold mb-0">기본정보</p>
+                                    <button class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 flex-edit">edit</button>
+                                </div>
+                                <div class="card-contents">
+                                    <div class="card-row m-0">
+                                        <div class="col d-flex">
+                                            <div class="card-title"><p class="fs-8 fw-bold">서비스명</p></div>
+                                            <div class="card-txt">
+                                                <p class="fs-8 value">이투유</p>
+                                                <div class="edit-group">
+                                                    <input type="text" class="form-control fs-8" value="이투유">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex">
+                                            <div class="card-title"><p class="fs-8 fw-bold">상태</p></div>
+                                            <div class="card-txt">
+                                                <p class="fs-8 value">사용</p>
+                                                <div class="edit-group">
+                                                    <select name="" id="" class="form-control fs-8">
+                                                        <option value="사용">사용</option>
+                                                        <option value="중지">중지</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex">
+                                            <div class="card-title"><p class="fs-8 fw-bold">데이터수집</p></div>
+                                            <div class="card-txt">
+                                                <p class="fs-8 value">진행</p>
+                                                <div class="edit-group">
+                                                    <input type="text" class="form-control fs-8 w-100" value="진행">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col d-flex">
+                                            <div class="card-title"><p class="fs-8 fw-bold">매입여부</p></div>
+                                            <div class="card-txt">
+                                                <p class="fs-8 value">매입</p>
+                                                <div class="edit-group">
+                                                    <input type="text" class="form-control fs-8" value="매입">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-row m-0">
+                                        <div class="col d-flex">
+                                            <div class="card-title"><p class="fs-8 fw-bold">기관</p></div>
+                                            <div class="card-txt"><p class="fs-8">신한카드, SHINGANCARD</p></div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="card-title"><p class="fs-8 fw-bold">상품</p></div>
+                                            <div class="card-txt"><p class="fs-8">신용카드</p></div>
+                                        </div>
+                                        <div class="col m-none"></div>
+                                        <div class="col m-none"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="tab5" class="tab-pane">
+                            <p>두번째 내용</p>
+                        </div>
+                        <div id="tab6" class="tab-pane">
+                            <p>세번째 내용</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</body>
+</html>

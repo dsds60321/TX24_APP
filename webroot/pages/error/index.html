@@ -20,12 +20,12 @@
 <div class="main">
     <div class="d-flex flex-row">
         <!-- 사이드바 (공통) -->
-        <nav id="sidebar" class="d-md-block sidebar collapse p-0" th:replace="~{layout/sidebar :: sidebar}"></nav>
+        <nav id="sidebar" class="d-md-block sidebar collapse p-0" th:replace="~{pages/layout/sidebar :: sidebar}"></nav>
 
         <!-- 메인 콘텐츠 -->
         <main class="main-content p-0">
             <!-- 상단 네비게이션 바 (공통) -->
-            <div th:replace="~{layout/header :: header}"></div>
+            <div th:replace="~{pages/layout/header :: header}"></div>
 
             <!-- 페이지별 콘텐츠 영역 -->
             <div class="container-fluid px-3" id="main-content-area">
@@ -57,6 +57,6 @@
 
 
 <!-- 추가 JavaScript -->
-<th:block th:replace="~{layout/fragments :: scripts}"></th:block>
+<th:block th:replace="~{pages/layout/fragments :: scripts}"></th:block>
 </body>
 </html>

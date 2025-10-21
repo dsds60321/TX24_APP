@@ -1,11 +1,7 @@
-/**
- * 공통 레이아웃 JS
- */
 class Layout {
     constructor() {
         // 하위 페이지 탭 매니저
         this.TabManager = this.createTabManager();
-        this.modalCache = new Map();
         this.init();
     }
 
@@ -22,7 +18,6 @@ class Layout {
         this.bindSelectToInput();
         this.bindEmailFocus();
         this.bindCardEdit();
-        this.bindModalLoader();
     }
 
     // 탭 함수
@@ -164,123 +159,6 @@ class Layout {
         }
     }
 
-    /**
-     * 모달 관련 JS
-     */
-    bindModalLoader(root = document) {
-        if (!root) {
-            return;
-        }
-
-        const layout = this;
-        const modals = root.querySelectorAll('.modal');
-
-        modals.forEach(function(modal) {
-            if (modal.dataset.boundModalAjax === 'true') {
-                return;
-            }
-            modal.dataset.boundModalAjax = 'true';
-
-            modal.addEventListener('show.bs.modal', function(event) {
-                const trigger = event.relatedTarget;
-                if (!trigger) {
-                    return;
-                }
-                const requestUrl = trigger.getAttribute('data-modal-url');
-                if (!requestUrl) {
-                    return;
-                }
-
-                const modalContent = modal.querySelector('.modal-content');
-                if (!modalContent) {
-                    return;
-                }
-
-                modalContent.innerHTML = layout.buildModalLoading();
-                layout.loadModalContent(requestUrl).then(function(html) {
-                    modalContent.innerHTML = html;
-                    layout.rebindDynamic(modal);
-                    layout.syncModalLabel(modal);
-                }).catch(function(error) {
-                    modalContent.innerHTML = layout.buildModalError(error);
-                });
-            });
-
-            modal.addEventListener('hidden.bs.modal', function() {
-                const modalContent = modal.querySelector('.modal-content');
-                if (!modalContent) {
-                    return;
-                }
-                if (modal.dataset.keepContent === 'true') {
-                    return;
-                }
-                modalContent.innerHTML = '';
-            });
-        });
-    }
-
-    loadModalContent(url) {
-        if (!url) {
-            return Promise.reject(new Error('유효한 요청 경로가 없습니다.'));
-        }
-        return fetch(url, {
-            credentials: 'same-origin',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then(function(response) {
-            if (!response.ok) {
-                const message = '모달 데이터를 불러오지 못했습니다. (' + response.status + ')';
-                throw new Error(message);
-            }
-            return response.text();
-        });
-    }
-
-    buildModalLoading() {
-        return '<div class="modal-body py-5 text-center">' +
-            '<div class="spinner-border text-primary" role="status" aria-hidden="true"></div>' +
-            '<p class="mt-3 mb-0 text-muted">콘텐츠를 불러오는 중입니다...</p>' +
-            '</div>';
-    }
-
-    buildModalError(error) {
-        const message = error && error.message ? error.message : '잠시 후 다시 시도해 주세요.';
-        return '<div class="modal-body py-4 text-center">' +
-            '<i class="fa-solid fa-triangle-exclamation fa-2x text-danger mb-3" aria-hidden="true"></i>' +
-            '<p class="mb-1">모달 콘텐츠를 가져오는 데 실패했습니다.</p>' +
-            '<p class="text-muted small mb-0">' + message + '</p>' +
-            '</div>';
-    }
-
-    buildModalUrl(baseUrl, trigger) {
-        const url = new URL(baseUrl, window.location.origin);
-        const params = this.collectModalParams(trigger);
-        params.forEach(function(value, key) {
-            url.searchParams.append(key, value);
-        });
-        return url.toString();
-    }
-
-    syncModalLabel(modal) {
-        if (!modal) {
-            return;
-        }
-        const labelId = modal.getAttribute('aria-labelledby');
-        if (!labelId) {
-            return;
-        }
-        const modalContent = modal.querySelector('.modal-content');
-        if (!modalContent) {
-            return;
-        }
-        const title = modalContent.querySelector('.modal-title');
-        if (!title) {
-            return;
-        }
-        title.id = labelId;
-    }
-
     mobileSize() {
         const mainElement = document.querySelector('.main');
         if (!mainElement) {
@@ -304,7 +182,6 @@ class Layout {
         this.bindSelectToInput(root);
         this.bindEmailFocus(root);
         this.bindCardEdit(root);
-        this.bindModalLoader(root);
         this.showTab(root);
     }
 

@@ -1,5 +1,6 @@
 package kr.tx24.fc.ctl;
 
+import kr.tx24.lib.map.SharedMap;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,7 +62,36 @@ public class ExampleCtl {
     public String forms() {
         return "sample/forms"; 
     }
+
+    @GetMapping("/modal/default")
+    public String modalDefault(Model model) {
+        return "sample/modal/default";
+    }
+
+    @GetMapping("/modal/fail")
+    public String modalFail(Model model) {
+        return "sample/modal/fail";
+    }
+
+    @GetMapping("/modal/tab")
+    public String modalTab(Model model) {
+        return "sample/modal/tabs";
+    }
 	
-	
+	@GetMapping("/modal/form")
+	public String modalForm(Model model) {
+        SharedMap<String, Object> map = new SharedMap<>();
+        map.put("name" , "test");
+        map.put("email" , "test");
+        map.put("role" , "test");
+        map.put("phone" , "test");
+        model.addAttribute("param" , map);
+		return "sample/modal/form";
+	}
+
+    @GetMapping("/modal/scroll")
+    public String modalScroll(Model model) {
+        return "sample/modal/scroll";
+    }
 	
 }

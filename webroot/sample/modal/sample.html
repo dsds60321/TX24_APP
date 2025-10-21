@@ -1,0 +1,276 @@
+<!-- 기본 모달 -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <button type="button" class="btn-close d-flex align-items-center" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="fs-8 pb-0 text-center">
+                    거래번호가 선택되지 않았습니다.
+                </p>
+            </div>
+            <div class="modal-footer border-top-0">
+                <button type="button" class="btn btn-darkGrey fs-8" data-bs-dismiss="modal">확인</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 실패 모달 -->
+<div class="modal fade" id="exampleModalFail" tabindex="-1" aria-labelledby="exampleModalFail" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <button type="button" class="btn-close d-flex align-items-center" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="error-icon mb-3">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                </p>
+                <p class="fs-8 pb-0 text-center">
+                    비정상 접근입니다. 다시 한번 확인해주세요.
+                </p>
+            </div>
+            <div class="modal-footer border-top-0">
+                <button type="button" class="btn btn-danger fs-8" data-bs-dismiss="modal">확인</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 탭 모달 -->
+<div class="modal fade" id="exampleModalTabs" tabindex="-1" aria-labelledby="exampleModalTabs" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header border-bottom-0">
+                <p class="fs-6 fw-bold mb-0">거래 정보 상세</p>
+                <p class="fs-7 mb-0 ps-2">T12341233995A22EEf</p>
+                <button type="button" class="btn-close d-flex align-items-center" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body p-0">
+                <div class="nav-box nav-underline">
+                    <div class="tab-nav">
+                        <button class="tab-button active" onclick="showTab('home', this)">위험성검토</button>
+                        <button class="tab-button" onclick="showTab('profile', this)">기본정보</button>
+                        <button class="tab-button" onclick="showTab('contact', this)">정산정보</button>
+                    </div>
+                    <div class="tab-content">
+                        <div id="home" class="tab-pane active">
+                            <p class="fs-7 text-primary fw-bold text-decoration-underline mb-2">위험성검토</p>
+
+                            <div class="group">
+                                <div class="group-row">
+                                    <div class="group-col">
+                                        <div class="group-title"><p class="fs-8 fw-bold mb-0">Badges</p></div>
+                                        <div class="group-txt"><span class="badge bg-green fw-normal">완료</span></div>
+                                    </div>
+                                    <div class="group-col">
+                                        <div class="group-title"><p class="fs-8 fw-bold mb-0">미수여부</p></div>
+                                        <div class="group-txt"><p class="fs-8 text-primary mb-0">미수없음</p></div>
+                                    </div>
+                                    <div class="group-col">
+                                        <div class="group-title"><p class="fs-8 fw-bold mb-0">위험성검토</p></div>
+                                        <div class="group-txt d-flex">
+                                            <p class="fs-8 text-danger mb-0">0</p>
+                                            <p class="fs-8 text-muted mb-0">원</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="line-grey mt-3 pb-2"></div>
+                            <p class="fs-7 text-primary fw-bold text-decoration-underline mb-2">Form</p>
+                            <form action="">
+                                <div class="group">
+                                    <div class="group-row">
+                                        <div class="group-col">
+                                            <div class="group-title"><p class="fs-8 fw-bold mb-0">민원인 전화번호</p></div>
+                                            <div class="group-txt"><input type="text" class="form-control fs-8" id="" placeholder="" value="확인 필요"></div>
+                                        </div>
+                                        <div class="group-col">
+                                            <div class="group-title"><p class="fs-8 fw-bold mb-0">민원인 전화번호</p></div>
+                                            <div class="group-txt">
+                                                <select name="" id="" class="form-control">
+                                                    <option value="1">1</option>
+                                                    <option value="2">2</option>
+                                                    <option value="3">3</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="group-row">
+                                        <div class="group-col">
+                                            <div class="group-title"><p class="fs-8 fw-bold mb-0">파일등록</p></div>
+                                            <div class="group-txt"><input type="file" class="form-control fs-8" id="" placeholder=""></div>
+                                        </div>
+                                        <div class="group-col"></div>
+                                    </div>
+                                    <div class="group-row">
+                                        <div class="group-col">
+                                            <div class="group-title"><p class="fs-8 fw-bold mb-0">상담내용</p></div>
+                                            <div class="group-txt justify-content-start">
+                                                <textarea name="" id="" class="form-control fs-8 w-md-100 w-80" placeholder="상담 내용을 입력해주세요."></textarea>
+                                                <button class="btn btn-primary height-auto fs-8 align-self-start"><i class="fa-solid fa-circle-check pe-2"></i>등록</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div id="profile" class="tab-pane">
+                            <p>여기는 프로필 탭의 내용입니다.</p>
+                            <p>여기는 프로필 탭의 내용입니다.</p>
+                            <p>여기는 프로필 탭의 내용입니다.</p>
+                            <p>여기는 프로필 탭의 내용입니다.</p>
+                            <p>여기는 프로필 탭의 내용입니다.</p>
+                            <p>여기는 프로필 탭의 내용입니다.</p>
+                        </div>
+                        <div id="contact" class="tab-pane">
+                            <p>여기는 연락처 탭의 내용입니다.</p>
+                            <p>여기는 연락처 탭의 내용입니다.</p>
+                            <p>여기는 연락처 탭의 내용입니다.</p>
+                            <p>여기는 연락처 탭의 내용입니다.</p>
+                            <p>여기는 연락처 탭의 내용입니다.</p>
+                            <p>여기는 연락처 탭의 내용입니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer border-top-0">
+                <button type="button" class="btn btn-darkGrey fs-8" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 폼 모달 -->
+<div class="modal fade" id="exampleModalForm" tabindex="-1" aria-labelledby="exampleModalForm" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="fw-bold fs-6 mb-0">대표자 정보 등록</p>
+                <button type="button" class="btn-close d-flex align-items-center" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <form action="">
+                    <div class="group ps-2 pe-2">
+                        <div class="group-row">
+                            <div class="group-col">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0 required">성명</p></div>
+                                <div class="group-txt"><input type="text" class="form-control fs-8" id="" placeholder="" value="홍길동"></div>
+                            </div>
+                            <div class="group-col">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0 required">상태</p></div>
+                                <div class="group-txt">
+                                    <select name="" id="" class="form-control fs-8">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group-row">
+                            <div class="group-col">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0 required">이메일</p></div>
+                                <div class="group-txt justify-content-start">
+                                    <div class="w-50">
+                                        <div class="email fs-8">
+                                            <input type="text" class="form-control fs-8" id="" placeholder="" value="test">
+                                            @
+                                            <input type="text" class="form-control fs-8" id="emailUrl" placeholder="" value="test.com">
+                                        </div>
+                                    </div>
+                                    <div class="w-30">
+                                        <select name="" data-target="emailUrl" class="form-control fs-8 select-to-input">
+                                            <option value="test.com">직접입력</option>
+                                            <option value="naver.com">naver.com</option>
+                                            <option value="gmail.com">gmail.com</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group-row">
+                            <div class="group-col">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0">휴대폰 번호</p></div>
+                                <div class="group-txt"><input type="text" class="form-control fs-8" id="" placeholder="" value="010-1234-1234"></div>
+                            </div>
+                            <div class="group-col">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0 required">주민등록번호</p></div>
+                                <div class="group-txt"><input type="text" class="form-control fs-8" id="" placeholder="" value="000000-1111111"></div>
+                            </div>
+                        </div>
+                        <div class="group-row">
+                            <div class="group-col">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0 required">전화번호</p></div>
+                                <div class="group-txt"><input type="text" class="form-control fs-8" id="" placeholder="전화번호를 입력해주세요."></div>
+                            </div>
+                            <div class="group-col">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0">팩스번호</p></div>
+                                <div class="group-txt"><input type="text" class="form-control fs-8" id="" placeholder="팩스번호를 입력해주세요."></div>
+                            </div>
+                        </div>
+                        <div class="line-grey mt-3 pb-2"></div>
+                        <div class="group-row">
+                            <div class="group-col w-50 w-md-100">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0 required">우편번호</p></div>
+                                <div class="group-txt"><input type="text" class="form-control fs-8" id="" placeholder="" value=""></div>
+                            </div>
+                        </div>
+                        <div class="group-row">
+                            <div class="group-col w-50 w-md-100">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0 required">주소</p></div>
+                                <div class="group-txt align-self-start flex-md-nowrap gap-0">
+                                    <button type="button" class="btn btn-blue fs-8 col-4 no-right-radius">주소검색</button>
+                                    <input type="text" class="form-control fs-8 col-8 no-left-radius" id="" placeholder="" value="">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group-row">
+                            <div class="group-col w-50 w-md-100">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0">상세주소</p></div>
+                                <div class="group-txt"><input type="text" class="form-control fs-8" id="" placeholder="" value=""></div>
+                            </div>
+                        </div>
+                        <div class="group-row">
+                            <div class="group-col w-50 w-md-100">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0">상세주소</p></div>
+                                <div class="group-txt"><input type="text" class="form-control fs-8" id="" placeholder="" value=""></div>
+                            </div>
+                        </div>
+                        <div class="group-row">
+                            <div class="group-col">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0">Summary</p></div>
+                                <div class="group-txt"><textarea name="" id="" class="form-control fs-8" placeholder="상담 내용을 입력해주세요."></textarea></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-darkGrey fs-8" data-bs-dismiss="modal">확인</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 스크롤 모달 -->
+<div class="modal fade" id="exampleModalScroll" tabindex="-1" aria-labelledby="exampleModalScroll" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <p class="fw-bold fs-6 mb-0">Modal Title</p>
+                <button type="button" class="btn-close d-flex align-items-center" data-bs-dismiss="modal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <p class="fs-7 pb-0">
+                    Cras mattis consectetur purus sit amet fermentum. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Aenean lacinia bibendum nulla sed consectetur. Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Donec ullamcorper nulla non metus auctor fringilla.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-darkGrey fs-8" data-bs-dismiss="modal">확인</button>
+            </div>
+        </div>
+    </div>
+</div>

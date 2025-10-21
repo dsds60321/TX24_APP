@@ -1,0 +1,92 @@
+<div class="modal-header" xmlns:th="http://www.thymeleaf.org">
+    <h5 class="modal-title">Tabs 모달</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+</div>
+<div class="modal-body p-0">
+    <div class="nav-box nav-underline">
+        <div class="tab-nav">
+            <button class="tab-button active" data-tab-target="home">위험성검토</button>
+            <button class="tab-button" data-tab-target="profile">기본정보</button>
+            <button class="tab-button" data-tab-target="contact">정산정보</button>
+        </div>
+        <div class="tab-content">
+            <div id="home" class="tab-pane active">
+                <p class="fs-7 text-primary fw-bold text-decoration-underline mb-2">위험성검토</p>
+
+                <div class="group">
+                    <div class="group-row">
+                        <div class="group-col">
+                            <div class="group-title"><p class="fs-8 fw-bold mb-0">Badges</p></div>
+                            <div class="group-txt"><span class="badge bg-green fw-normal">완료</span></div>
+                        </div>
+                        <div class="group-col">
+                            <div class="group-title"><p class="fs-8 fw-bold mb-0">미수여부</p></div>
+                            <div class="group-txt"><p class="fs-8 text-primary mb-0">미수없음</p></div>
+                        </div>
+                        <div class="group-col">
+                            <div class="group-title"><p class="fs-8 fw-bold mb-0">위험성검토</p></div>
+                            <div class="group-txt d-flex">
+                                <p class="fs-8 text-danger mb-0">0</p>
+                                <p class="fs-8 text-muted mb-0">원</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="line-grey mt-3 pb-2"></div>
+                <p class="fs-7 text-primary fw-bold text-decoration-underline mb-2">Form</p>
+                <form action="">
+                    <div class="group">
+                        <div class="group-row">
+                            <div class="group-col">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0">민원인 전화번호</p></div>
+                                <div class="group-txt"><input type="text" class="form-control fs-8" id="" placeholder="" value="확인 필요"></div>
+                            </div>
+                            <div class="group-col">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0">민원인 전화번호</p></div>
+                                <div class="group-txt">
+                                    <select name="" id="" class="form-control">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="group-row">
+                            <div class="group-col">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0">파일등록</p></div>
+                                <div class="group-txt"><input type="file" class="form-control fs-8" id="" placeholder=""></div>
+                            </div>
+                            <div class="group-col"></div>
+                        </div>
+                        <div class="group-row">
+                            <div class="group-col">
+                                <div class="group-title"><p class="fs-8 fw-bold mb-0">상담내용</p></div>
+                                <div class="group-txt justify-content-start">
+                                    <textarea name="" id="" class="form-control fs-8 w-md-100 w-80" placeholder="상담 내용을 입력해주세요."></textarea>
+                                    <button class="btn btn-primary height-auto fs-8 align-self-start"><i class="fa-solid fa-circle-check pe-2"></i>등록</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div id="profile" class="tab-pane">
+                <p>여기는 프로필 탭의 내용입니다.</p>
+                <p>여기는 프로필 탭의 내용입니다.</p>
+                <p>여기는 프로필 탭의 내용입니다.</p>
+                <p>여기는 프로필 탭의 내용입니다.</p>
+                <p>여기는 프로필 탭의 내용입니다.</p>
+                <p>여기는 프로필 탭의 내용입니다.</p>
+            </div>
+            <div id="contact" class="tab-pane">
+                <p>여기는 연락처 탭의 내용입니다.</p>
+                <p>여기는 연락처 탭의 내용입니다.</p>
+                <p>여기는 연락처 탭의 내용입니다.</p>
+                <p>여기는 연락처 탭의 내용입니다.</p>
+                <p>여기는 연락처 탭의 내용입니다.</p>
+                <p>여기는 연락처 탭의 내용입니다.</p>
+            </div>
+        </div>
+    </div>
+</div>
