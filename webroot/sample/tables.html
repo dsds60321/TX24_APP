@@ -1,0 +1,406 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8" />
+</head>
+    <body>
+        <div class="row">
+            <div class="col-12">
+                <div class="pt-2">
+                    <div class="d-flex align-items-center mb-3 mt-3">
+                        <h5 class="mb-0">Tables</h5>
+                        <div class="d-flex align-items-center ms-3">
+                            <i class="bi bi-house-door-fill pe-2"></i>
+                            <p class="fs-8 mb-0 pe-2">Home</p>
+                            <i class="fa-solid fa-angle-right fs-8 text-grey pe-2"></i>
+                            <p class="fs-8 mb-0">Tables</p>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper search">
+                        <form action="">
+                            <div class="card-contents">
+                                <div class="card-row">
+                                    <div class="col d-flex">
+                                        <div class="card-title"><p class="fs-8 fw-bold">취급일</p></div>
+                                        <div class="card-txt">
+                                            <div class="search-group">
+                                                <input type="text" id="datepicker" class="form-control fs-8">
+                                                <button type="button" class="btn search-btn circle"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col d-flex">
+                                        <div class="card-title"><p class="fs-8 fw-bold">대상거래일</p></div>
+                                        <div class="card-txt">
+                                            <div class="search-group">
+                                                <input type="text" id="datepicker2" class="form-control fs-8">
+                                                <button type="button" class="btn search-btn"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col d-flex">
+                                        <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                        <div class="card-txt">
+                                            <div class="search-group">
+                                                <select name="" id="" class="form-control fs-8">
+                                                    <option value="사용">사용</option>
+                                                    <option value="중지">중지</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col d-flex">
+                                        <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                        <div class="card-txt">
+                                            <div class="search-group">
+                                                <input type="text" id="el" class="form-control fs-8">
+                                                <button type="button" class="btn search-btn circle"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-row">
+                                    <div class="col d-flex">
+                                        <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                        <div class="card-txt">
+                                            <div class="search-group">
+                                                <input type="text" id="datepicker" class="form-control fs-8">
+                                                <button type="button" class="btn search-btn circle"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col d-flex">
+                                        <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                        <div class="card-txt">
+                                            <div class="search-group">
+                                                <select name="" id="" class="form-control fs-8">
+                                                    <option value="대기">대기</option>
+                                                    <option value="완료">완료</option>
+                                                    <option value="실패">실패</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col d-flex">
+                                        <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                        <div class="card-txt">
+                                            <div class="search-group">
+                                                <input type="text" id="el" class="form-control fs-8">
+                                                <button type="button" class="btn search-btn"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col d-flex">
+                                        <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                        <div class="card-txt">
+                                            <div class="search-group">
+                                                <input type="text" id="el" class="form-control fs-8">
+                                                <button type="button" class="btn search-btn"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="card-row">
+                                    <div class="col d-flex">
+                                        <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                        <div class="card-txt">
+                                            <div class="search-group">
+                                                <input type="text" id="datepicker" class="form-control fs-8">
+                                                <button type="button" class="btn search-btn"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col d-flex m-none">
+                                    </div>
+                                    <div class="col d-flex m-none">
+                                    </div>
+                                    <div class="col d-flex m-none">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tag-contents">
+                                <div class="tag-inner">
+                                    <a href="#" class="search-reload">
+                                        Reset
+                                    </a>
+                                    <div class="field">
+                                        <div class="tag" data-id="A.trxDay" data-oper="eq" data-oper-sep=" - " data-order="null" data-group="0">
+                                            <a href="#" class="tag-close">
+                                                <i class="fas fa-times-circle"></i>
+                                            </a>
+                                            <span class="tag-label">2025-09-10 - 2025-09-19</span>
+                                        </div>
+                                        <div class="tag" data-id="A.trxEndDay" data-oper="eq" data-oper-sep=" - " data-order="null" data-group="0">
+                                            <a href="#" class="tag-close">
+                                                <i class="fas fa-times-circle"></i>
+                                            </a>
+                                            <span class="tag-label">2025-09-01 - 2025-09-18</span>
+                                        </div>
+                                        <div class="tag" data-id="A.trxStatus" data-oper="eq" data-oper-sep="null" data-order="null" data-group="null">
+                                            <a href="#" class="tag-close">
+                                                <i class="fas fa-times-circle"></i>
+                                            </a>
+                                            <span class="tag-label">완료</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="search-btn btn btn-primary" onclick="search.submit(this,'','tag');">검색</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="table-wrapper mt-3">
+                        <div class="table-header">
+                            <div class="txt-box">
+                                <p class="fs-6 fw-bold mb-0">RESULT</p>
+                                <p class="fs-9 text-grey mb-0 ms-2">999</p>
+                                <p class="fs-9 text-grey mb-0">건 조회됨</p>
+                            </div>
+                            <div class="btn-box">
+                                <select name="" id="" class="form-control select-grey fs-8">
+                                    <option value="데이터 수집">데이터 수집</option>
+                                    <option value="D+0지급내역수집">D+0지급내역수집</option>
+                                </select>
+                                <select name="" id="" class="form-control select-grey fs-8">
+                                    <option value="정산생성">정산생성</option>
+                                </select>
+                                <select name="" id="" class="form-control select-grey fs-8">
+                                    <option value="20">show 20</option>
+                                    <option value="50">show 50</option>
+                                    <option value="100">show 100</option>
+                                </select>
+                                <button type="button" class="badge bg-grey-outline"><i class="fa-solid fa-file-excel"></i></button>
+                            </div>
+                        </div>
+                        <div class="table-contents">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th class="chk">
+                                        <input type="checkbox" class="form-check-input" onclick="checkAll(this);">
+                                    </th>
+                                    <th class="excel-width" data-width="20">No</th>
+                                    <th>정산번호</th>
+                                    <th>취급일</th>
+                                    <th>대상발생일</th>
+                                    <th>고객사</th>
+                                    <th>APP</th>
+                                    <th>PG</th>
+                                    <th>MID</th>
+                                    <th>거래건수</th>
+                                    <th class="text-right">총거래금액</th>
+                                    <th class="text-right">채권예상금액</th>
+                                    <th>상품</th>
+                                    <th>선지급</th>
+                                    <th>수집상태</th>
+                                    <th>정산생성여부</th>
+                                    <th>메세지</th>
+                                    <th>등록일시</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input danger"></td>
+                                    <td>1</td>
+                                    <td><a href="#">T57982435173F50662</a></td>
+                                    <td>20250916</td>
+                                    <td>20250915 - 20250915</td>
+                                    <td>주식회사 피에스페이먼트</td>
+                                    <td title="A33204123993302C9F">피에스페이먼트1</td>
+                                    <td>(주)이투유</td>
+                                    <td>pspay001</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">1</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">500,000</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">484,050</td>
+                                    <td>D+0</td>
+                                    <td><span class="badge bg-green fs-10 fw-normal">있음</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue-outline fs-10 fw-normal">정보수취완료</span></td>
+                                    <td class="date">2025-09-16 07:30:00</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>2</td>
+                                    <td><a href="#">T57982435173F50662</a></td>
+                                    <td>20250916</td>
+                                    <td>20250915 - 20250915</td>
+                                    <td>주식회사 피에스페이먼트</td>
+                                    <td title="A33204123993302C9F">피에스페이먼트1</td>
+                                    <td>(주)이투유</td>
+                                    <td>pspay001</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">1</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">500,000</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">484,050</td>
+                                    <td>D+0</td>
+                                    <td></td>
+                                    <td><span class="badge bg-red-outline fs-10 fw-normal">실패</span></td>
+                                    <td><span class="badge bg-yellow-outline fs-10 fw-normal">대기</span></td>
+                                    <td><span class="badge bg-danger fs-10 fw-normal">정보수취완료</span></td>
+                                    <td class="date">2025-09-16 07:30:00</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>3</td>
+                                    <td><a href="#">T57982435173F50662</a></td>
+                                    <td>20250916</td>
+                                    <td>20250915 - 20250915</td>
+                                    <td>주식회사 피에스페이먼트</td>
+                                    <td title="A33204123993302C9F">피에스페이먼트1</td>
+                                    <td>(주)이투유</td>
+                                    <td>urifnbP001,urifnbP002,urifnbP003,urifnb002,urifnb003</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">1</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">500,000</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">484,050</td>
+                                    <td>D+0</td>
+                                    <td><span class="badge bg-green fs-10 fw-normal">있음</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue-outline fs-10 fw-normal">정보수취완료</span></td>
+                                    <td class="date">2025-09-16 07:30:00</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>3</td>
+                                    <td><a href="#">T57982435173F50662</a></td>
+                                    <td>20250916</td>
+                                    <td>20250915 - 20250915</td>
+                                    <td>주식회사 피에스페이먼트</td>
+                                    <td title="A33204123993302C9F">피에스페이먼트1</td>
+                                    <td>(주)이투유</td>
+                                    <td>urifnbP001,urifnbP002,urifnbP003,urifnb002,urifnb003</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">1</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">500,000</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">484,050</td>
+                                    <td>D+0</td>
+                                    <td><span class="badge bg-green fs-10 fw-normal">있음</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue-outline fs-10 fw-normal">정보수취완료</span></td>
+                                    <td class="date">2025-09-16 07:30:00</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>3</td>
+                                    <td><a href="#">T57982435173F50662</a></td>
+                                    <td>20250916</td>
+                                    <td>20250915 - 20250915</td>
+                                    <td>주식회사 피에스페이먼트</td>
+                                    <td title="A33204123993302C9F">피에스페이먼트1</td>
+                                    <td>(주)이투유</td>
+                                    <td>urifnbP001,urifnbP002,urifnbP003,urifnb002,urifnb003</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">1</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">500,000</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">484,050</td>
+                                    <td>D+0</td>
+                                    <td><span class="badge bg-green fs-10 fw-normal">있음</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue-outline fs-10 fw-normal">정보수취완료</span></td>
+                                    <td class="date">2025-09-16 07:30:00</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>3</td>
+                                    <td><a href="#">T57982435173F50662</a></td>
+                                    <td>20250916</td>
+                                    <td>20250915 - 20250915</td>
+                                    <td>주식회사 피에스페이먼트</td>
+                                    <td title="A33204123993302C9F">피에스페이먼트1</td>
+                                    <td>(주)이투유</td>
+                                    <td>urifnbP001,urifnbP002,urifnbP003,urifnb002,urifnb003</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">1</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">500,000</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">484,050</td>
+                                    <td>D+0</td>
+                                    <td><span class="badge bg-green fs-10 fw-normal">있음</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue-outline fs-10 fw-normal">정보수취완료</span></td>
+                                    <td class="date">2025-09-16 07:30:00</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>3</td>
+                                    <td><a href="#">T57982435173F50662</a></td>
+                                    <td>20250916</td>
+                                    <td>20250915 - 20250915</td>
+                                    <td>주식회사 피에스페이먼트</td>
+                                    <td title="A33204123993302C9F">피에스페이먼트1</td>
+                                    <td>(주)이투유</td>
+                                    <td>urifnbP001,urifnbP002,urifnbP003,urifnb002,urifnb003</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">1</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">500,000</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">484,050</td>
+                                    <td>D+0</td>
+                                    <td><span class="badge bg-green fs-10 fw-normal">있음</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue-outline fs-10 fw-normal">정보수취완료</span></td>
+                                    <td class="date">2025-09-16 07:30:00</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>3</td>
+                                    <td><a href="#">T57982435173F50662</a></td>
+                                    <td>20250916</td>
+                                    <td>20250915 - 20250915</td>
+                                    <td>주식회사 피에스페이먼트</td>
+                                    <td title="A33204123993302C9F">피에스페이먼트1</td>
+                                    <td>(주)이투유</td>
+                                    <td>urifnbP001,urifnbP002,urifnbP003,urifnb002,urifnb003</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">1</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">500,000</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">484,050</td>
+                                    <td>D+0</td>
+                                    <td><span class="badge bg-green fs-10 fw-normal">있음</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue-outline fs-10 fw-normal">정보수취완료</span></td>
+                                    <td class="date">2025-09-16 07:30:00</td>
+                                </tr>
+                                <tr>
+                                    <td><input type="checkbox" class="form-check-input"></td>
+                                    <td>3</td>
+                                    <td><a href="#">T57982435173F50662</a></td>
+                                    <td>20250916</td>
+                                    <td>20250915 - 20250915</td>
+                                    <td>주식회사 피에스페이먼트</td>
+                                    <td title="A33204123993302C9F">피에스페이먼트1</td>
+                                    <td>(주)이투유</td>
+                                    <td>urifnbP001,urifnbP002,urifnbP003,urifnb002,urifnb003</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">1</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">500,000</td>
+                                    <td class="amount text-end font-weight-700 fw-bold">484,050</td>
+                                    <td>D+0</td>
+                                    <td><span class="badge bg-green fs-10 fw-normal">있음</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue fs-10 fw-normal">완료</span></td>
+                                    <td><span class="badge bg-blue-outline fs-10 fw-normal">정보수취완료</span></td>
+                                    <td class="date">2025-09-16 07:30:00</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="table-footer">
+                            <div class="paging">
+                                <button type="button" class="arrow-btn prev-btn block" onclick="search.pagingbtn('prev', this)" disabled="true">
+                                    <i class="fa-solid fa-angle-left"></i>
+                                </button>
+                                <div class="num">
+                                    <a class="active">1</a>
+                                    <a class="">2</a>
+                                    <a class="">3</a>
+                                    <a class="">4</a>
+                                    <a class="">5</a>
+                                </div>
+                                <button type="button" class="arrow-btn next-btn" onclick="search.pagingbtn('next', this)" disabled="true">
+                                    <i class="fa-solid fa-angle-right"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

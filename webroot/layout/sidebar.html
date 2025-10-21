@@ -1,0 +1,508 @@
+<html xmlns:th="http://www.thymeleaf.org">
+    <body>
+        <nav th:fragment="sidebar" id="sidebar" class="d-md-block sidebar collapse p-0">
+            <div class="position-sticky d-flex flex-column">
+                <!-- 로고 -->
+                <div class="logo-box text-left d-flex align-items-center">
+                    <a th:href="@{/example/dashboard}" class="p-3" data-ajax-link>
+                        <img th:src="@{/assets/img/syslink.png}" alt="Logo">
+                    </a>
+                </div>
+                <button onclick="sidebarHide(this)" class="btn btn-grey close_sidebar">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+
+                <!-- 네비게이션 메뉴 -->
+                <div class="nav-wrapper">
+                    <ul class="nav flex-column">
+                        <!-- Home 메뉴 -->
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#" data-bs-toggle="collapse" data-bs-target="#dashboardMenu">
+                                <i class="fa-solid fa-caret-down" style="transform: rotate(0deg);"></i>
+                                <i class="bi bi-house-door"></i>
+                                <span class="sidebar-text fw-medium">Home</span>
+                            </a>
+                            <div class="collapse show" id="dashboardMenu">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="" data-tab-id="demo-components" data-tab-title="컴포넌트" data-tab-url="/example/components">
+                                            <span class="sidebar-text">Components</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="" data-tab-id="demo-forms" data-tab-title="폼" data-tab-url="/example/forms">
+                                            <span class="sidebar-text">Forms</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="" data-tab-id="demo-tables" data-tab-title="테이블" data-tab-url="/example/tables">
+                                            <span class="sidebar-text">Tables</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="" data-tab-id="demo-card" data-tab-title="카드" data-tab-url="/example/card">
+                                            <span class="sidebar-text">Card</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" th:href="@{/example/card2}"
+                                           data-ajax-link th:classappend="${currentPage == 'card2'} ? 'active' : ''">
+                                            <span class="sidebar-text">Card2</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#" data-bs-toggle="collapse" data-bs-target="#analyticsMenu">
+                                            <i class="fa-solid fa-caret-down"></i>
+                                            <span class="sidebar-text">3단 메뉴</span>
+                                        </a>
+                                        <div class="collapse" id="analyticsMenu">
+                                            <ul class="nav flex-column">
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" th:href="@{/sample/menu3-1}" data-ajax-link>
+                                                        <span class="sidebar-text">1</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" th:href="@{/sample/menu3-2}" data-ajax-link>
+                                                        <span class="sidebar-text">2</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" th:href="@{/sample/menu3-3}" data-ajax-link>
+                                                        <span class="sidebar-text">3</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <!-- 정산 메뉴 -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#trx-menu">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="bi bi-card-text"></i>
+                                <span class="sidebar-text fw-medium">정산</span>
+                            </a>
+                            <div class="collapse" id="trx-menu">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" th:href="@{/trx/collection}" data-ajax-link>
+                                            <span class="sidebar-text">데이터수집</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" th:href="@{/trx/collection-diff}" data-ajax-link>
+                                            <span class="sidebar-text">데이터수집(차액)</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" th:href="@{/trx/settlement}" data-ajax-link>
+                                            <span class="sidebar-text">정산관리</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" th:href="@{/trx/na}" data-ajax-link>
+                                            <span class="sidebar-text">미취급거래(N/A)</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" th:href="@{/trx/history}" data-ajax-link>
+                                            <span class="sidebar-text">정산내역</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+
+                        <!--  지급  -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#trx-payout-menu">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="bi bi-file-earmark-arrow-up"></i>
+                                <span class="sidebar-text">지급</span>
+                            </a>
+                            <div class="collapse" id="trx-payout-menu">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">지급관리-매입</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">지급관리-미매입</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">지급내역(D+0)</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#trx-dt-menu">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="bi bi-card-heading"></i>
+                                <span class="sidebar-text">입금</span>
+                            </a>
+                            <div class="collapse" id="trx-dt-menu">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">입금관리</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">입금현황-PG</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">입금현황-일별</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">입금현황-APPs</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#trx-fc2-menu">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="bi bi-building"></i>
+                                <span class="sidebar-text">기관</span>
+                            </a>
+                            <div class="collapse" id="trx-fc2-menu">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">채권관리</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">기관한도</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#mcht-menu">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="bi bi-house"></i>
+                                <span class="sidebar-text">고객사</span>
+                            </a>
+                            <div class="collapse" id="mcht-menu">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">고객사조회</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">고객사등록</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">심사대기</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#" data-bs-toggle="collapse" data-bs-target="#mcht-menu-app">
+                                            <i class="fa-solid fa-caret-down"></i>
+                                            <span class="sidebar-text">APP</span>
+                                        </a>
+                                        <div class="collapse" id="mcht-menu-app">
+                                            <ul class="nav flex-column">
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" href="#">
+                                                        <span class="sidebar-text">미수관리</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" href="#">
+                                                        <span class="sidebar-text">지급보류</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#report-menu">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="bi bi-house-check"></i>
+                                <span class="sidebar-text">본사운영</span>
+                            </a>
+                            <div class="collapse" id="report-menu">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">통장 입금 내역</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">입금 통장 관리</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">세금계산서 발행</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">세금계산서 조회</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">회계자료</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">휴일관리</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">기관관리</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">PG관리</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#aggregate-menu">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="bi bi-file-earmark-bar-graph"></i>
+                                <span class="sidebar-text">거래 집계</span>
+                            </a>
+                            <div class="collapse" id="aggregate-menu">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">취급 일별 집계</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">취급 월별 집계</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">상환 일뱔 집계</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">상환 월별 집계</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#statistic-menu">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="bi bi-graph-up"></i>
+                                <span class="sidebar-text">통계</span>
+                            </a>
+                            <div class="collapse" id="statistic-menu">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">고객사</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">매출 및 수익</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">채권매입현황</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#" data-bs-toggle="collapse" data-bs-target="#statistic-day-menu">
+                                            <i class="fa-solid fa-caret-down"></i>
+                                            <span class="sidebar-text">일별</span>
+                                        </a>
+                                        <div class="collapse" id="statistic-day-menu">
+                                            <ul class="nav flex-column">
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" href="#">
+                                                        <span class="sidebar-text">정산내역</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" href="#">
+                                                        <span class="sidebar-text">SAPP지급내역</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" href="#">
+                                                        <span class="sidebar-text">지급</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" href="#">
+                                                        <span class="sidebar-text">기관</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" href="#">
+                                                        <span class="sidebar-text">채권</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" href="#">
+                                                        <span class="sidebar-text">수익</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#" data-bs-toggle="collapse" data-bs-target="#statistic-month-menu">
+                                            <i class="fa-solid fa-caret-down"></i>
+                                            <span class="sidebar-text">월별</span>
+                                        </a>
+                                        <div class="collapse" id="statistic-month-menu">
+                                            <ul class="nav flex-column">
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" href="#">
+                                                        <span class="sidebar-text">정산내역</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" href="#">
+                                                        <span class="sidebar-text">SAPP지급내역</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" href="#">
+                                                        <span class="sidebar-text">지급</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" href="#">
+                                                        <span class="sidebar-text">기관</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" href="#">
+                                                        <span class="sidebar-text">채권</span>
+                                                    </a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a class="nav-link ps-7" href="#">
+                                                        <span class="sidebar-text">수익</span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#member-menu">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="bi bi-person"></i>
+                                <span class="sidebar-text">회원</span>
+                            </a>
+                            <div class="collapse" id="member-menu">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">본사</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">사용자</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#ips-menu">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="bi bi-sliders"></i>
+                                <span class="sidebar-text">운영</span>
+                            </a>
+                            <div class="collapse" id="ips-menu">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">IP관리</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="#" data-bs-toggle="collapse" data-bs-target="#system-menu">
+                                <i class="fa-solid fa-caret-down"></i>
+                                <i class="bi bi-gear"></i>
+                                <span class="sidebar-text">시스템</span>
+                            </a>
+                            <div class="collapse" id="system-menu">
+                                <ul class="nav flex-column">
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">업무코드</span>
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link ps-6" href="#">
+                                            <span class="sidebar-text">관리도구</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </body>
+</html>

@@ -1,0 +1,887 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout}">
+<head>
+    <title>Tables</title>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="container-fluid px-3">
+        <div class="row pt-2 flex-container">
+            <div class="col-12 col-lg-6 d-flex flex-1">
+                <div class="card-wrapper flex-1 w-100">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="d-flex">
+                            <p class="fs-6 mb-0 pe-2">안녕하세요</p>
+                            <p class="fs-6 fw-bold mb-0">관리자</p>
+                            <p class="fs-6 fw-bold mb-0">님</p>
+                        </div>
+                        <button class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 ps-2 pe-2">></button>
+                    </div>
+                    <div class="card-contents">
+                        <div class="card-row">
+                            <div class="col d-flex pt-3 pb-3">
+                                <p class="mb-1 fs-8">2025-09-25 13:59:17 기준, 수집 필요한 정산데이터는 3건 입니다.</p>
+                                <p class="mb-0 fs-8">데이터 전송 진행률은 [성공 13 / 대상 16 (81%) ,2025-09-25] 입니다.</p>
+                            </div>
+                        </div>
+                        <div class="card-row pb-2">
+                        </div>
+                        <div class="p-2 pb-3 d-flex align-items-center">
+                            <p class="mb-0 fs-8 pe-2">진행상태</p>
+                            <div style="flex: 1;">
+                                <div class="progress" role="progressbar" aria-label="Example 5px high" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="height: 15px">
+                                    <div class="progress-bar" style="width: 80%">80%</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 d-flex flex-1 pt-3 pt-lg-0">
+                <div class="card-wrapper d-flex flex-1 w-100">
+                    <div class="card-contents flex-1 w-100 d-flex align-items-center p-2 pt-lg-0">
+                        <div class="card-row">
+                            <div class="col d-flex flex-column">
+                                <div class="d-flex align-items-center pb-1">
+                                    <i class="bi bi-caret-right-fill pe-2" style="font-size: .5rem"></i>
+                                    <span class="text-primary fs-8">6</span>
+                                    <span class="fs-8">건의 계좌정보 확인(계좌불일치)이 필요합니다.</span>
+                                </div>
+                                <div class="d-flex align-items-center pb-1">
+                                    <i class="bi bi-caret-right-fill pe-2" style="font-size: .5rem"></i>
+                                    <span class="text-primary fs-8">6</span>
+                                    <span class="fs-8">개의 폐업사업자가 확인되었습니다.</span>
+                                </div>
+                                <div class="d-flex align-items-center pb-1">
+                                    <i class="bi bi-caret-right-fill pe-2" style="font-size: .5rem"></i>
+                                    <span class="text-primary fs-8">0</span>
+                                    <span class="fs-8">개의 보증보험이 만료 예정입니다.</span>
+                                </div>
+                                <div class="d-flex align-items-center pb-1">
+                                    <i class="bi bi-caret-right-fill pe-2" style="font-size: .5rem"></i>
+                                    <span class="text-primary fs-8">0</span>
+                                    <span class="fs-8">개의 심사 승인대기 고객사가 있습니다.</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-caret-right-fill pe-2" style="font-size: .5rem"></i>
+                                    <span class="text-primary fs-8">5</span>
+                                    <span class="fs-8">개의 심사 취합대기 고객사가 있습니다.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3 pt-lg-0 flex-container">
+            <div class="col-12 col-lg-6 d-flex flex-1">
+                <div class="card-wrapper w-100 flex-1 d-flex flex-column">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="d-flex align-items-center">
+                            <p class="fs-8 fw-bold mb-0">기관매입채권</p>
+                            <button class="btn btn-blue-outline fs-10 p-1 pt-0 pb-0 ms-2">한도조회</button>
+                        </div>
+                        <button class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 ps-2 pe-2">></button>
+                    </div>
+                    <div class="card-contents flex-fill">
+                        <div class="card-row h-100">
+                            <div class="col-12 col-lg-6 ps-0 pe-0 d-flex flex-column justify-content-center">
+                                <div>
+                                    <p class="fs-8 mb-1 ps-3 pt-3 fw-bold">매입목록</p>
+                                    <p class="fs-8 mb-2 ps-3">매입요청금액 총 1,065,861,499원</p>
+                                </div>
+                                <div class="table-wrapper m-3 me-2">
+                                    <div class="table-contents">
+                                        <table style="border-bottom: 1px solid #C6CCD8">
+                                            <thead>
+                                            <th class="fs-9">기관명</th>
+                                            <th class="fs-9">운용일수</th>
+                                            <th class="fs-9">매입요청금액</th>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="fs-9">엘앤케이원피_쿠콘</td>
+                                                <td class="fs-9">3</td>
+                                                <td class="fs-9">46,501,653</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fs-9">엘앤케이원피_쿠콘</td>
+                                                <td class="fs-9">3</td>
+                                                <td class="fs-9">46,501,653</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fs-9">엘앤케이원피_쿠콘</td>
+                                                <td class="fs-9">3</td>
+                                                <td class="fs-9">46,501,653</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 col-lg-6 ps-0 pe-0 d-flex flex-column justify-content-center">
+                                <p class="fs-8 mb-1 ps-3 pt-3 fw-bold">상환목록</p>
+                                <p class="fs-8 mb-2 ps-3">상환예정금액 총 1,038,458,958원</p>
+                                <div class="table-wrapper m-3 ms-3">
+                                    <div class="table-contents">
+                                        <table style="border-bottom: 1px solid #C6CCD8">
+                                            <thead>
+                                            <th class="fs-9">기관명</th>
+                                            <th class="fs-9">상환상태</th>
+                                            <th class="fs-9">상환예정금액</th>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="fs-9">엘앤케이원피_쿠콘</td>
+                                                <td class="fs-9">3</td>
+                                                <td class="fs-9">46,501,653</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fs-9">엘앤케이원피_쿠콘</td>
+                                                <td class="fs-9">3</td>
+                                                <td class="fs-9">46,501,653</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fs-9">엘앤케이원피_쿠콘</td>
+                                                <td class="fs-9">3</td>
+                                                <td class="fs-9">46,501,653</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 d-flex flex-1 pt-3 pt-lg-0 flex-fill d-flex flex-column flex-fill">
+                <div class="card-wrapper w-100 flex-1">
+                    <div class="card-header d-flex justify-content-between">
+                        <p class="fs-8 fw-bold mb-0">기관매입채권</p>
+                        <button class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 ps-2 pe-2">></button>
+                    </div>
+                    <div class="card-contents flex-1 w-100 d-flex">
+                        <div class="card-row">
+                            <div class="table-wrapper ps-0 pe-0">
+                                <div class="table-contents m-3 p-0">
+                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                        <thead>
+                                        <th class="fs-9">입금예정금액</th>
+                                        <th class="fs-9">입금완료금액</th>
+                                        <th class="fs-9">대기</th>
+                                        <th class="fs-9">완료</th>
+                                        <th class="fs-9">검토</th>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="fs-9">1,046,510,051</td>
+                                            <td class="fs-9">0</td>
+                                            <td class="fs-9">0</td>
+                                            <td class="fs-9">0</td>
+                                            <td class="fs-9">0</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-wrapper w-100 flex-1 pt-3">
+                    <div class="card-header d-flex justify-content-between">
+                        <p class="fs-8 fw-bold mb-0">기관매입채권</p>
+                        <button class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 ps-2 pe-2">></button>
+                    </div>
+                    <div class="card-contents flex-1 w-100 d-flex align-items-center">
+                        <div class="card-row">
+                            <div class="table-wrapper ps-0 pe-0">
+                                <div class="table-contents m-3 p-0">
+                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                        <thead>
+                                        <th class="fs-8">정산예정금액</th>
+                                        <th class="fs-8">정산완료금액</th>
+                                        <th class="fs-8">대기</th>
+                                        <th class="fs-8">완료</th>
+                                        <th class="fs-8">검토</th>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="fs-8">1,046,510,051</td>
+                                            <td class="fs-8">1,046,510,051</td>
+                                            <td class="fs-8">0</td>
+                                            <td class="fs-8">0</td>
+                                            <td class="fs-8">5</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3 pt-lg-0 flex-container">
+            <div class="col-12 col-lg-6 d-flex flex-1">
+                <div class="card-wrapper w-100 flex-1 d-flex flex-column">
+                    <div class="card-header d-flex justify-content-between">
+                        <p class="fs-8 fw-bold mb-0">고객사</p>
+                        <p class="fs-10 mb-0 text-body-tertiary">※ 각 건수 클릭 시, 해당 데이터 조회 페이지로 이동합니다.</p>
+                    </div>
+                    <div class="card-contents flex-fill d-flex justify-content-center">
+                        <div class="card-row">
+                            <div class="col-12 ps-0 pe-0">
+                                <p class="fs-8 mb-1 ps-3 pt-3 fw-bold">승인대기현황</p>
+                                <div class="table-wrapper m-3 me-2">
+                                    <div class="table-contents">
+                                        <table style="border-bottom: 1px solid #C6CCD8">
+                                            <thead>
+                                            <th class="fs-9">심사대기</th>
+                                            <th class="fs-9">정보수정</th>
+                                            <th class="fs-9">중지/철회</th>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="fs-9">
+                                                    <a href="#">0</a>
+                                                </td>
+                                                <td class="fs-9">
+                                                    <a href="#">1</a>
+                                                </td>
+                                                <td class="fs-9">
+                                                    <a href="#">0</a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 ps-0 pe-0">
+                                <p class="fs-8 mb-1 ps-3 fw-bold">APP</p>
+                                <div class="table-wrapper m-3 ms-3">
+                                    <div class="table-contents">
+                                        <table style="border-bottom: 1px solid #C6CCD8">
+                                            <thead>
+                                            <th class="fs-9">사용대기</th>
+                                            <th class="fs-9">사용중</th>
+                                            <th class="fs-9">거래 미발생(180일 이상)</th>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="fs-9">
+                                                    <a href="#">13</a>
+                                                </td>
+                                                <td class="fs-9">
+                                                    <a href="#">24</a>
+                                                </td>
+                                                <td class="fs-9">
+                                                    <a href="#">15</a>
+                                                </td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 pt-3 pt-lg-0 d-flex flex-1">
+                <div class="card-wrapper w-100 flex-1">
+                    <div class="card-header d-flex justify-content-between">
+                        <p class="fs-8 fw-bold mb-0">고객사</p>
+                        <div>
+                            <select name="" data-target="emailUrl" class="form-control select-to-input fs-10 pt-0 pb-0">
+                                <option value="2025">2025</option>
+                                <option value="2024">2024</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-contents">
+                        <div class="card-row">
+                            <div class="col-12 ps-0 pe-0">
+                                <div class="m-3">
+                                    <img src="/assets/img/ex_1.png" alt="" style="width: 100%">
+                                </div>
+                            </div>
+                            <div class="col-12 ps-0 pe-0">
+                                <div class="table-wrapper m-3 mt-0">
+                                    <div class="table-contents">
+                                        <table style="border-bottom: 1px solid #C6CCD8">
+                                            <thead>
+                                            <th class="fs-9"></th>
+                                            <th class="fs-9">1월</th>
+                                            <th class="fs-9">2월</th>
+                                            <th class="fs-9">3월</th>
+                                            <th class="fs-9">4월</th>
+                                            <th class="fs-9">5월</th>
+                                            <th class="fs-9">6월</th>
+                                            <th class="fs-9">7월</th>
+                                            <th class="fs-9">8월</th>
+                                            <th class="fs-9">9월</th>
+                                            <th class="fs-9">10월</th>
+                                            <th class="fs-9">11월</th>
+                                            <th class="fs-9">12월</th>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="fs-9">
+                                                    <i class="bi bi-caret-right-fill text-primary pe-1" style="font-size: .5rem; position: relative; top: -2px;"></i>
+                                                    가입
+                                                </td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fs-9">
+                                                    <i class="bi bi-caret-right-fill text-danger pe-1" style="font-size: .5rem; position: relative; top: -2px;"></i>
+                                                    해지
+                                                </td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                                <td class="fs-9">0</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3 pt-lg-0 flex-container">
+            <div class="col-12 col-lg-6 d-flex flex-1">
+                <div class="card-wrapper w-100 flex-1 d-flex flex-column">
+                    <div class="card-header d-flex justify-content-between">
+                        <p class="fs-8 fw-bold mb-0">본사수익(전후3일)
+                        </p>
+                    </div>
+                    <div class="card-contents flex-fill">
+                        <div class="card-row">
+                            <div class="col-12 ps-0 pe-0">
+                                <p class="fs-8 mb-1 ps-3 pt-3 fw-bold">승인대기현황</p>
+                                <div class="table-wrapper m-3">
+                                    <div class="table-contents">
+                                        <table style="border-bottom: 1px solid #C6CCD8">
+                                            <thead>
+                                            <th class="fs-9">일자</th>
+                                            <th class="fs-9">구분</th>
+                                            <th class="fs-9">취급금액</th>
+                                            <th class="fs-9">수익</th>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="fs-9">2025-09-24</td>
+                                                <td class="fs-9">확정</td>
+                                                <td class="fs-9">1,138,488,472</td>
+                                                <td class="fs-9">218,181</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fs-9">2025-09-24</td>
+                                                <td class="fs-9">확정</td>
+                                                <td class="fs-9">1,138,488,472</td>
+                                                <td class="fs-9">218,181</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fs-9">2025-09-24</td>
+                                                <td class="fs-9">확정</td>
+                                                <td class="fs-9">1,138,488,472</td>
+                                                <td class="fs-9">218,181</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fs-9">2025-09-24</td>
+                                                <td class="fs-9">확정</td>
+                                                <td class="fs-9">1,138,488,472</td>
+                                                <td class="fs-9">218,181</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="fs-9">2025-09-24</td>
+                                                <td class="fs-9">확정</td>
+                                                <td class="fs-9">1,138,488,472</td>
+                                                <td class="fs-9">218,181</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 pt-3 pt-lg-0 d-flex flex-1">
+                <div class="card-wrapper w-100 flex-1 d-flex flex-column">
+                    <div class="card-header d-flex justify-content-between">
+                        <p class="fs-8 fw-bold mb-0">본사수익(주간,월별)</p>
+                    </div>
+                    <div class="card-contents flex-fill">
+                        <div class="card-row">
+                            <div class="col-12 ps-0 pe-0">
+                                <div class="nav-box nav-fill p-3 pb-0">
+                                    <div class="tab-nav d-flex justify-content-between">
+                                        <button class="tab-button fs-10 active" onclick="showTab('1', this)">1월</button>
+                                        <button class="tab-button fs-10" onclick="showTab('2', this)">2월</button>
+                                        <button class="tab-button fs-10" onclick="showTab('3', this)">3월</button>
+                                        <button class="tab-button fs-10" onclick="showTab('3', this)">4월</button>
+                                        <button class="tab-button fs-10" onclick="showTab('3', this)">5월</button>
+                                        <button class="tab-button fs-10" onclick="showTab('3', this)">6월</button>
+                                        <button class="tab-button fs-10" onclick="showTab('3', this)">7월</button>
+                                        <button class="tab-button fs-10" onclick="showTab('3', this)">8월</button>
+                                        <button class="tab-button fs-10" onclick="showTab('3', this)">9월</button>
+                                        <button class="tab-button fs-10" onclick="showTab('3', this)">10월</button>
+                                        <button class="tab-button fs-10" onclick="showTab('3', this)">11월</button>
+                                        <button class="tab-button fs-10" onclick="showTab('3', this)">12월</button>
+                                    </div>
+                                    <div class="tab-content">
+                                        <div id="1" class="tab-pane active">
+                                            <div class="table-wrapper">
+                                                <div class="table-contents">
+                                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                                        <thead>
+                                                        <th class="fs-9">w1</th>
+                                                        <th class="fs-9">w2</th>
+                                                        <th class="fs-9">w3</th>
+                                                        <th class="fs-9">w4</th>
+                                                        <th class="fs-9">w5</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <p class="fs-9 text-end mt-2 mb-1">월 수익 합계</p>
+                                            <p class="fs-9 text-end">33,522,546 원</p>
+                                        </div>
+                                        <div id="2" class="tab-pane">
+                                            <div class="table-wrapper">
+                                                <div class="table-contents">
+                                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                                        <thead>
+                                                        <th class="fs-9">w1</th>
+                                                        <th class="fs-9">w2</th>
+                                                        <th class="fs-9">w3</th>
+                                                        <th class="fs-9">w4</th>
+                                                        <th class="fs-9">w5</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <p class="fs-9 text-end mt-2 mb-1">월 수익 합계</p>
+                                            <p class="fs-9 text-end">33,522,546 원</p>
+                                        </div>
+                                        <div id="3" class="tab-pane">
+                                            <div class="table-wrapper">
+                                                <div class="table-contents">
+                                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                                        <thead>
+                                                        <th class="fs-9">w1</th>
+                                                        <th class="fs-9">w2</th>
+                                                        <th class="fs-9">w3</th>
+                                                        <th class="fs-9">w4</th>
+                                                        <th class="fs-9">w5</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <p class="fs-9 text-end mt-2 mb-1">월 수익 합계</p>
+                                            <p class="fs-9 text-end">33,522,546 원</p>
+                                        </div>
+                                        <div id="4" class="tab-pane">
+                                            <div class="table-wrapper">
+                                                <div class="table-contents">
+                                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                                        <thead>
+                                                        <th class="fs-9">w1</th>
+                                                        <th class="fs-9">w2</th>
+                                                        <th class="fs-9">w3</th>
+                                                        <th class="fs-9">w4</th>
+                                                        <th class="fs-9">w5</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <p class="fs-9 text-end mt-2 mb-1">월 수익 합계</p>
+                                            <p class="fs-9 text-end">33,522,546 원</p>
+                                        </div>
+                                        <div id="5" class="tab-pane">
+                                            <div class="table-wrapper">
+                                                <div class="table-contents">
+                                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                                        <thead>
+                                                        <th class="fs-9">w1</th>
+                                                        <th class="fs-9">w2</th>
+                                                        <th class="fs-9">w3</th>
+                                                        <th class="fs-9">w4</th>
+                                                        <th class="fs-9">w5</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <p class="fs-9 text-end mt-2 mb-1">월 수익 합계</p>
+                                            <p class="fs-9 text-end">33,522,546 원</p>
+                                        </div>
+                                        <div id="6" class="tab-pane">
+                                            <div class="table-wrapper">
+                                                <div class="table-contents">
+                                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                                        <thead>
+                                                        <th class="fs-9">w1</th>
+                                                        <th class="fs-9">w2</th>
+                                                        <th class="fs-9">w3</th>
+                                                        <th class="fs-9">w4</th>
+                                                        <th class="fs-9">w5</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <p class="fs-9 text-end mt-2 mb-1">월 수익 합계</p>
+                                            <p class="fs-9 text-end">33,522,546 원</p>
+                                        </div>
+                                        <div id="7" class="tab-pane">
+                                            <div class="table-wrapper">
+                                                <div class="table-contents">
+                                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                                        <thead>
+                                                        <th class="fs-9">w1</th>
+                                                        <th class="fs-9">w2</th>
+                                                        <th class="fs-9">w3</th>
+                                                        <th class="fs-9">w4</th>
+                                                        <th class="fs-9">w5</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <p class="fs-9 text-end mt-2 mb-1">월 수익 합계</p>
+                                            <p class="fs-9 text-end">33,522,546 원</p>
+                                        </div>
+                                        <div id="8" class="tab-pane">
+                                            <div class="table-wrapper">
+                                                <div class="table-contents">
+                                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                                        <thead>
+                                                        <th class="fs-9">w1</th>
+                                                        <th class="fs-9">w2</th>
+                                                        <th class="fs-9">w3</th>
+                                                        <th class="fs-9">w4</th>
+                                                        <th class="fs-9">w5</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <p class="fs-9 text-end mt-2 mb-1">월 수익 합계</p>
+                                            <p class="fs-9 text-end">33,522,546 원</p>
+                                        </div>
+                                        <div id="9" class="tab-pane">
+                                            <div class="table-wrapper">
+                                                <div class="table-contents">
+                                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                                        <thead>
+                                                        <th class="fs-9">w1</th>
+                                                        <th class="fs-9">w2</th>
+                                                        <th class="fs-9">w3</th>
+                                                        <th class="fs-9">w4</th>
+                                                        <th class="fs-9">w5</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <p class="fs-9 text-end mt-2 mb-1">월 수익 합계</p>
+                                            <p class="fs-9 text-end">33,522,546 원</p>
+                                        </div>
+                                        <div id="10" class="tab-pane">
+                                            <div class="table-wrapper">
+                                                <div class="table-contents">
+                                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                                        <thead>
+                                                        <th class="fs-9">w1</th>
+                                                        <th class="fs-9">w2</th>
+                                                        <th class="fs-9">w3</th>
+                                                        <th class="fs-9">w4</th>
+                                                        <th class="fs-9">w5</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <p class="fs-9 text-end mt-2 mb-1">월 수익 합계</p>
+                                            <p class="fs-9 text-end">33,522,546 원</p>
+                                        </div>
+                                        <div id="11" class="tab-pane">
+                                            <div class="table-wrapper">
+                                                <div class="table-contents">
+                                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                                        <thead>
+                                                        <th class="fs-9">w1</th>
+                                                        <th class="fs-9">w2</th>
+                                                        <th class="fs-9">w3</th>
+                                                        <th class="fs-9">w4</th>
+                                                        <th class="fs-9">w5</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <p class="fs-9 text-end mt-2 mb-1">월 수익 합계</p>
+                                            <p class="fs-9 text-end">33,522,546 원</p>
+                                        </div>
+                                        <div id="12" class="tab-pane">
+                                            <div class="table-wrapper">
+                                                <div class="table-contents">
+                                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                                        <thead>
+                                                        <th class="fs-9">w1</th>
+                                                        <th class="fs-9">w2</th>
+                                                        <th class="fs-9">w3</th>
+                                                        <th class="fs-9">w4</th>
+                                                        <th class="fs-9">w5</th>
+                                                        </thead>
+                                                        <tbody>
+                                                        <tr>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                            <td class="fs-9">0</td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                            <p class="fs-9 text-end mt-2 mb-1">월 수익 합계</p>
+                                            <p class="fs-9 text-end">33,522,546 원</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-3 pt-lg-0 flex-container">
+            <div class="col-12 col-lg-6 d-flex flex-1">
+                <div class="card-wrapper w-100 flex-1">
+                    <div class="card-header d-flex justify-content-between">
+                        <p class="fs-8 fw-bold mb-0">기관 매입요청 현황(최근 7일)</p>
+                        <button class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 ps-2 pe-2">></button>
+                    </div>
+                    <div class="card-contents flex-1 w-100 d-flex align-items-center">
+                        <div class="card-row">
+                            <div class="col-12 ps-0 pe-0">
+                                <div class="m-3 p-0">
+                                    <img src="/assets/img/ex_2.png" alt="" style="width: 100%">
+                                </div>
+                            </div>
+                            <p class="fs-8 fw-bold mb-0">대상금액 대비 매입요청 비율(%)</p>
+                            <div class="table-wrapper ps-0 pe-0">
+                                <div class="table-contents m-3 p-0">
+                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                        <thead>
+                                        <th class="fs-8">09/18</th>
+                                        <th class="fs-8">09/18</th>
+                                        <th class="fs-8">09/18</th>
+                                        <th class="fs-8">09/18</th>
+                                        <th class="fs-8">09/18</th>
+                                        <th class="fs-8">09/18</th>
+                                        <th class="fs-8">09/18</th>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="fs-8">00.00</td>
+                                            <td class="fs-8">00.00</td>
+                                            <td class="fs-8">00.00</td>
+                                            <td class="fs-8">00.00</td>
+                                            <td class="fs-8">00.00</td>
+                                            <td class="fs-8">00.00</td>
+                                            <td class="fs-8">00.00</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 pt-3 pt-lg-0 d-flex flex-1">
+                <div class="card-wrapper w-100 flex-1">
+                    <div class="card-header d-flex justify-content-between">
+                        <p class="fs-8 fw-bold mb-0">기관 매입요청 현황(월별)</p>
+                        <button class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 ps-2 pe-2">></button>
+                    </div>
+                    <div class="card-contents flex-1 w-100 d-flex align-items-center">
+                        <div class="card-row">
+                            <div class="col-12 ps-0 pe-0">
+                                <div class="m-3 p-0">
+                                    <img src="/assets/img/ex_2.png" alt="" style="width: 100%">
+                                </div>
+                            </div>
+                            <p class="fs-8 fw-bold mb-0">대상금액 대비 매입요청 비율(%)</p>
+                            <div class="table-wrapper ps-0 pe-0">
+                                <div class="table-contents m-3 p-0">
+                                    <table style="border-bottom: 1px solid #C6CCD8">
+                                        <thead>
+                                        <th class="fs-9">1월</th>
+                                        <th class="fs-9">2월</th>
+                                        <th class="fs-9">3월</th>
+                                        <th class="fs-9">4월</th>
+                                        <th class="fs-9">5월</th>
+                                        <th class="fs-9">6월</th>
+                                        <th class="fs-9">7월</th>
+                                        <th class="fs-9">8월</th>
+                                        <th class="fs-9">9월</th>
+                                        <th class="fs-9">10월</th>
+                                        <th class="fs-9">11월</th>
+                                        <th class="fs-9">12월</th>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="fs-9">0</td>
+                                            <td class="fs-9">0</td>
+                                            <td class="fs-9">0</td>
+                                            <td class="fs-9">0</td>
+                                            <td class="fs-9">0</td>
+                                            <td class="fs-9">0</td>
+                                            <td class="fs-9">0</td>
+                                            <td class="fs-9">0</td>
+                                            <td class="fs-9">0</td>
+                                            <td class="fs-9">0</td>
+                                            <td class="fs-9">0</td>
+                                            <td class="fs-9">0</td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

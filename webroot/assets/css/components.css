@@ -1,0 +1,778 @@
+@charset "UTF-8";
+
+/* ============================================
+   1. UTILITY CLASSES
+   ============================================ */
+
+/* Padding utilities */
+.ps-6 { padding-left: 4rem !important; }
+.ps-7 { padding-left: 5.7rem !important; }
+
+/* Font size utilities */
+.fs-7 { font-size: 0.9rem !important; }
+.fs-8 { font-size: 0.85rem !important; }
+.fs-9 { font-size: 0.8rem !important; }
+.fs-10 { font-size: 0.75rem !important; }
+
+/* Width utilities */
+.w-30 { width: 30% !important; }
+.w-60 { width: 60% !important; }
+.w-70 { width: 70% !important; }
+
+/* Color utilities */
+.text-lightGrey { color: #F1F2F4 !important; }
+.text-grey { color: #9EA1AC !important; }
+.text-darkGrey { color: #545B73 !important; }
+
+/* Border utilities */
+.line-grey { border-top: 1px solid #B8C1CE; }
+
+/* Required field marker */
+.required::after {
+    content: '*';
+    color: #dc3545;
+    font-size: 0.9rem;
+}
+
+/* Border radius utilities */
+.no-right-radius {
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+}
+
+.no-left-radius {
+    border-top-left-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+}
+
+.btn-radius-2 {
+    border-radius: 0.2rem !important;
+}
+
+
+/* ============================================
+   2. FORM CONTROLS
+   ============================================ */
+
+/* Base form control styles */
+.form-control {
+    border-radius: 0.35rem !important;
+    color: #363A43 !important;
+    background-color: #fff !important;
+    border: 1px solid #ABB1BE !important;
+}
+
+.form-control:focus {
+    border-color: #6e727b !important;
+    box-shadow: 0 0 0 0.25rem rgba(159, 164, 171, 0.25) !important;
+}
+
+/* Extra large form controls */
+.form-control.form-control-xl {
+    min-height: calc(1.5em + 1.5rem + 2px);
+    padding: 0.75rem 1rem;
+    font-size: 1.5rem;
+    border-radius: 0.5rem;
+}
+
+.form-control.form-control-xxl {
+    min-height: calc(1.5em + 2rem + 2px);
+    padding: 1rem 1.25rem;
+    font-size: 1.75rem;
+    border-radius: 0.75rem;
+}
+
+/* Form control width variants */
+.form-control.col-8 {
+    flex: 0 0 auto;
+    width: 66.66666667%;
+}
+
+.form-control.col-9 {
+    max-width: 75%;
+    flex: 0 0 75%;
+}
+
+.form-control.w-80 {
+    width: 80%;
+}
+
+@media (max-width: 768px) {
+    .form-control.w-md-100 {
+        width: 100%;
+    }
+}
+
+/* Checkbox styles */
+.form-check-input:focus {
+    outline: 0;
+    border-color: #6e727b !important;
+    box-shadow: 0 0 0 0.25rem rgba(159, 164, 171, 0.25) !important;
+}
+
+.form-check-input:checked {
+    background-color: #3D4E5D !important;
+    border-color: #3D4E5D !important;
+}
+
+.form-check-input.danger {
+    border: 2px solid #dc3545;
+}
+
+.form-check-input.danger:focus {
+    border-color: #dc3545 !important;
+    box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25) !important;
+}
+
+.form-check-input.danger:checked {
+    background-color: #3D4E5D !important;
+    border-color: #dc3545 !important;
+}
+
+/* Select dropdown styles */
+select.form-control {
+    color: #363A43;
+    background-color: #fff;
+    border: 1px solid #ABB1BE;
+    appearance: none;
+    background-image: url("/assets/img/caret-down-fill.svg");
+    background-position: right 8px center;
+    background-repeat: no-repeat;
+    background-size: 12px;
+    padding-right: 24px;
+}
+
+select.form-control:focus {
+    border-color: #6e727b;
+    box-shadow: 0 0 0 0.25rem rgba(159, 164, 171, 0.25);
+}
+
+select.select-grey {
+    background-color: #F5F7FA !important;
+    border: 1px solid #C6CCD8 !important;
+}
+
+select.select-grey:focus {
+    border-color: #bac0cd;
+    box-shadow: 0 0 0 0.25rem rgba(159, 164, 171, 0.25);
+}
+
+/* Email input group */
+.email {
+    display: flex;
+    align-items: center;
+    border-radius: 0.35rem !important;
+    color: #363A43 !important;
+    background-color: #fff !important;
+    border: 1px solid #ABB1BE !important;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.email input {
+    border: 0 !important;
+}
+
+.email input:focus {
+    border: 0 !important;
+    box-shadow: none !important;
+}
+
+.email.on {
+    border-color: #6e727b !important;
+    box-shadow: 0 0 0 0.25rem rgba(159, 164, 171, 0.25) !important;
+}
+
+
+/* ============================================
+   3. BUTTONS
+   ============================================ */
+
+.btn {
+    border-radius: 0.25rem !important;
+}
+
+/* Button size variants */
+.btn.btn-xl {
+    padding: 0.75rem 1.5rem;
+    font-size: 1.5rem;
+    border-radius: 0.2rem !important;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.btn.btn-xxl {
+    padding: 1rem 2rem;
+    font-size: 1.75rem;
+    border-radius: 0.2rem !important;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+/* Button color variants - Grey */
+.btn.btn-grey {
+    background-color: #F1F2F4;
+    color: #8790A0 !important;
+    border: 1px solid #F1F2F4 !important;
+}
+
+.btn.btn-grey:hover {
+    background-color: #e4e7eb;
+    color: #545B73 !important;
+}
+
+.btn.btn-grey:active {
+    background-color: #d7dbe1 !important;
+    color: #545B73 !important;
+}
+
+/* Medium Grey */
+.btn.btn-mediumGrey {
+    background-color: #CCD0DC;
+    color: #545B73;
+    border: 1px solid #CCD0DC !important;
+}
+
+.btn.btn-mediumGrey:hover {
+    background-color: #c4c9d6;
+}
+
+.btn.btn-mediumGrey:active {
+    background-color: #bac0ce !important;
+}
+
+/* Dark Grey */
+.btn.btn-darkGrey {
+    background-color: #3E4E5D;
+    color: #ffffff;
+    border: 1px solid #3E4E5D !important;
+}
+
+.btn.btn-darkGrey:hover {
+    background-color: #344250;
+}
+
+.btn.btn-darkGrey:active {
+    background-color: #353A40 !important;
+}
+
+/* Dark Grey Outline */
+.btn.btn-darkGrey-outline {
+    background-color: #fff;
+    color: #344250;
+    border: 1px solid #3E4E5D !important;
+}
+
+.btn.btn-darkGrey-outline:hover {
+    border-color: #303e4a !important;
+    color: #303e4a;
+}
+
+.btn.btn-darkGrey-outline:active {
+    color: #303e4a !important;
+}
+
+/* Grey Outline */
+.btn.btn-grey-outline {
+    background-color: #fff !important;
+    border: 1px solid #ABB1BE !important;
+    color: #545B73 !important;
+}
+
+.btn.btn-grey-outline:hover {
+    border-color: #9ea4b1 !important;
+}
+
+.btn.btn-grey-outline:active {
+    border-color: #989daa !important;
+    color: #363A43 !important;
+}
+
+/* Green */
+.btn.btn-green {
+    background-color: #EFFFE8;
+    border: 1px solid #56AD32;
+    color: #3D861E;
+}
+
+.btn.btn-green:hover {
+    background-color: #d9f7ce;
+    border-color: #479626;
+    color: #316E17;
+}
+
+.btn.btn-green:active {
+    background-color: #cdedc1 !important;
+    border-color: #438e23 !important;
+    color: #2d6615 !important;
+}
+
+/* Blue */
+.btn.btn-blue {
+    background-color: #1E8FFF;
+    color: #fff;
+    border: 1px solid #1E8FFF !important;
+}
+
+.btn.btn-blue:hover {
+    background-color: #147de6;
+}
+
+.btn.btn-blue:active {
+    background-color: #1174d8 !important;
+}
+
+/* Blue Outline */
+.btn.btn-blue-outline {
+    background-color: #E6EDFE;
+    color: #1F43C2;
+    border: 1px solid #8BA8F9 !important;
+}
+
+.btn.btn-blue-outline:hover {
+    background-color: #dbe5fa;
+    border-color: #85a4f9 !important;
+}
+
+.btn.btn-blue-outline:active {
+    background-color: #d3ddf4 !important;
+    border-color: #84a3f9 !important;
+}
+
+/* Yellow Outline */
+.btn.btn-yellow-outline {
+    background-color: #FCF0CE;
+    color: #AE421D;
+    border: 1px solid #F8CE8F !important;
+}
+
+.btn.btn-yellow-outline:hover {
+    background-color: #f8eac4;
+    border-color: #f8cd8c !important;
+}
+
+.btn.btn-yellow-outline:active {
+    background-color: #f4e3b6 !important;
+}
+
+/* Red Outline */
+.btn.btn-red-outline {
+    background-color: #FAE1DC;
+    color: #A92E17 !important;
+    border: 1px solid #E58876 !important;
+}
+
+.btn.btn-red-outline:hover {
+    background-color: #f6d8d2 !important;
+    border-color: #e4826e !important;
+}
+
+.btn.btn-red-outline:active {
+    background-color: #f5d2cb !important;
+    border-color: #e07c68 !important;
+}
+
+
+/* ============================================
+   4. BADGES
+   ============================================ */
+
+.badge {
+    border-radius: 0.20rem !important;
+    display: inline-block;
+    min-width: 60px;
+    text-align: center;
+}
+
+/* Badge color variants */
+.badge.bg-grey {
+    border: 1px solid #F1F2F4 !important;
+    background-color: #F1F2F4 !important;
+    color: #8790A0 !important;
+}
+
+.badge.bg-mediumGrey {
+    background-color: #CCD0DC;
+    color: #545B73;
+    border: 1px solid #CCD0DC !important;
+}
+
+.badge.bg-darkGrey {
+    background-color: #3E4E5D;
+    color: #ffffff;
+    border: 1px solid #3E4E5D !important;
+}
+
+.badge.bg-darkGrey-outline {
+    background-color: #fff;
+    color: #344250;
+    border: 1px solid #3E4E5D !important;
+}
+
+.badge.bg-grey-outline {
+    background-color: #F0F2F6;
+    border: 1px solid #CCD0DC;
+    color: #545B73;
+}
+
+.badge.bg-green {
+    background-color: #EFFFE8;
+    border: 1px solid #56AD32;
+    color: #3D861E;
+}
+
+.badge.bg-blue {
+    background-color: #1E8FFF;
+    color: #fff;
+    border: 1px solid #1E8FFF !important;
+}
+
+.badge.bg-blue-outline {
+    background-color: #E6EDFE;
+    color: #1F43C2;
+    border: 1px solid #8BA8F9 !important;
+}
+
+.badge.bg-yellow-outline {
+    background-color: #FCF0CE;
+    color: #AE421D;
+    border: 1px solid #F8CE8F !important;
+}
+
+.badge.bg-red-outline {
+    background-color: #FAE1DC;
+    color: #A92E17 !important;
+    border: 1px solid #E58876 !important;
+}
+
+
+/* ============================================
+   5. GROUP COMPONENTS
+   ============================================ */
+
+.group {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+}
+
+.group .group-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+}
+
+@media (max-width: 992px) {
+    .group .group-row {
+        flex-direction: column;
+        gap: 0.7rem;
+    }
+}
+
+.group .group-row .group-col {
+    flex: 1 0 0%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.group .group-row .group-col.w-50 {
+    flex: 0.49 0 0%;
+}
+
+@media (max-width: 992px) {
+    .group .group-row .group-col.w-50.w-md-100 {
+        width: 100% !important;
+    }
+}
+
+.group .group-row .group-col .group-title {
+    font-size: 0.85rem !important;
+    width: 130px;
+}
+
+@media (max-width: 992px) {
+    .group .group-row .group-col .group-title {
+        align-items: flex-start;
+    }
+}
+
+.group .group-row .group-col .group-txt {
+    font-size: 0.85rem !important;
+    width: calc(100% - 130px);
+    gap: 0.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+
+/* ============================================
+   6. MODAL & NAVIGATION TABS
+   ============================================ */
+
+/* Modal navigation - underline style */
+.modal .nav-underline .tab-nav {
+    border-bottom: 1px solid #B8C1CE;
+    padding: 0 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.modal .nav-underline .tab-nav .nav-link:hover,
+.modal .nav-underline .tab-nav .nav-link.active {
+    border: 1px solid #fff;
+}
+
+.modal .nav-underline .tab-nav .tab-button {
+    border: 0;
+    background: none;
+    color: #5B5B6C;
+    font-size: 0.9rem;
+}
+
+.modal .nav-underline .tab-nav .tab-button.active {
+    font-weight: bold;
+    color: #363A43;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.modal .nav-underline .tab-nav .tab-button.active::after {
+    content: '';
+    background-color: #363A43;
+    width: 100%;
+    height: 4px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+.modal .nav-underline .tab-content {
+    background-color: #F8F9FB;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #B8C1CE;
+}
+
+/* Modal navigation - fill style */
+.modal .nav-fill .tab-nav {
+    border-bottom: 1px solid #B8C1CE;
+    padding: 0 1.5rem;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.modal .nav-fill .tab-content {
+    background-color: #F8F9FB;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #B8C1CE;
+}
+
+/* Nav box - underline style */
+.nav-box.nav-underline .tab-nav {
+    padding-bottom: 1rem;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-box.nav-underline .tab-nav .nav-link:hover,
+.nav-box.nav-underline .tab-nav .nav-link.active {
+    border: 1px solid #fff;
+}
+
+.nav-box.nav-underline .tab-nav .tab-button {
+    border: 0;
+    outline: none;
+    background: none;
+    color: #5B5B6C;
+    font-size: 0.9rem;
+    padding: 0;
+}
+
+.nav-box.nav-underline .tab-nav .tab-button.active {
+    font-weight: bold;
+    color: #363A43;
+    position: relative;
+    padding-bottom: 5px;
+}
+
+.nav-box.nav-underline .tab-nav .tab-button.active::after {
+    content: '';
+    background-color: #363A43;
+    width: 100%;
+    height: 4px;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+}
+
+/* Nav box - fill style */
+.nav-box.nav-fill .tab-nav {
+    padding-bottom: 1rem;
+    display: flex;
+    gap: 0.8rem;
+}
+
+.nav-box.nav-fill .tab-nav .tab-button {
+    border: 0;
+    outline: none;
+    background: none;
+    color: #5B5B6C;
+    font-size: 0.9rem;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.nav-box.nav-fill .tab-nav .tab-button.active {
+    font-weight: bold;
+    color: #fff;
+    background-color: #363A43;
+}
+
+/* Modal structure */
+.modal .modal-content .modal-header {
+    padding: 0 1.5rem;
+    border-bottom: 1px solid #B8C1CE;
+}
+
+.modal .modal-content .modal-header .btn-close {
+    background: none !important;
+}
+
+.modal .modal-content .modal-footer {
+    border-top: 1px solid #B8C1CE;
+}
+
+
+/* ============================================
+   7. ERROR ICON
+   ============================================ */
+
+.error-icon {
+    background-color: #F3D1D0;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin: 0 auto;
+    color: #dc3545;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: underline;
+}
+
+.error-icon i {
+    font-size: 28px;
+    padding-bottom: 3px;
+}
+
+
+/* ============================================
+   8. LOADING SPINNERS
+   ============================================ */
+
+/* Spinner type 1 */
+.spinner-1 {
+    width: 40px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    border: 4px solid #d8d8d8;
+    border-right-color: #333;
+    animation: spinner-rotate 0.7s infinite linear;
+}
+
+@keyframes spinner-rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* Spinner type 2 */
+.spinner-2 {
+    width: 40px;
+    padding: 5px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #333;
+    --_m: conic-gradient(#0000 10%, #000), linear-gradient(#000 0 0) content-box;
+    -webkit-mask: var(--_m);
+    mask: var(--_m);
+    -webkit-mask-composite: source-out;
+    mask-composite: subtract;
+    animation: spinner-rotate 1s infinite ease-in-out;
+}
+
+/* Spinner type 3 */
+.spinner-3 {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.spinner-3-dot {
+    width: 25%;
+    height: 25%;
+    background-color: #333;
+    border-radius: 50%;
+    animation: spinner-dot-pulse 1.4s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite both;
+}
+
+.spinner-3-dot:nth-child(1) {
+    animation-delay: -0.30s;
+}
+
+.spinner-3-dot:nth-child(2) {
+    animation-delay: -0.15s;
+}
+
+@keyframes spinner-dot-pulse {
+    0%, 80%, 100% {
+        transform: scale(0.3);
+    }
+    40% {
+        transform: scale(1);
+    }
+}
+
+/* Loading overlay */
+.loading {
+    width: 100%;
+    height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading.on {
+    display: flex;
+}
+
+.loading .spinner-1 {
+    border-color: rgba(0, 0, 0, 0.3);
+    border-right-color: #fff;
+}
+
+.loading .spinner-2 {
+    background: #fff;
+}
+
+.loading .spinner-3-dot {
+    background-color: #fff;
+}
+
+
+/* ============================================
+   9. RESPONSIVE UTILITIES
+   ============================================ */
+
+@media (max-width: 992px) {
+    .m-none {
+        display: none !important;
+    }
+}

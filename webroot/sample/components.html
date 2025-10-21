@@ -1,0 +1,147 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <meta charset="UTF-8" />
+    </head>
+    <body>
+        <div class="row">
+            <div class="col-12">
+                <div class="pt-2">
+
+                    <div th:replace="layout/fragments :: maps('Components')"></div>
+
+                    <div class="card-wrapper">
+                        <div class="card-header">
+                            <p class="fs-6 fw-bold mb-0">Button</p>
+                        </div>
+                        <div class="card-contents">
+                            <div class="card-row m-0">
+                                <div class="col d-flex">
+                                    <div class="card-title"><p class="fs-8 fw-bold">bootstrap</p></div>
+                                    <div class="card-txt">
+                                        <button type="button" class="btn btn-primary mr-2">Primary</button>
+                                        <button type="button" class="btn btn-secondary">Secondary</button>
+                                        <button type="button" class="btn btn-success">Success</button>
+                                        <button type="button" class="btn btn-danger">Danger</button>
+                                        <button type="button" class="btn btn-warning">Warning</button>
+                                        <button type="button" class="btn btn-info">Info</button>
+                                        <button type="button" class="btn btn-light">Light</button>
+                                        <button type="button" class="btn btn-dark">Dark</button>
+                                        <button type="button" class="btn btn-link">Link</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-row m-0">
+                                <div class="col d-flex">
+                                    <div class="card-title"><p class="fs-8 fw-bold">추가</p></div>
+                                    <div class="card-txt">
+                                        <button class="btn btn-grey fs-8">btn-grey</button>
+                                        <button class="btn btn-mediumGrey fs-8">btn-darkGrey</button>
+                                        <button class="btn btn-darkGrey fs-8">btn-darkGrey</button>
+                                        <button class="btn btn-darkGrey-outline fs-8">btn-darkGrey-outline</button>
+                                        <button class="btn btn-grey-outline fs-8">btn-grey-outline</button>
+                                        <button class="btn btn-green fs-8">btn-green</button>
+                                        <button class="btn btn-blue fs-8">btn-blue</button>
+                                        <button class="btn btn-blue-outline fs-8">btn-blue-outline</button>
+                                        <button class="btn btn-yellow-outline fs-8">btn-yellow-outline</button>
+                                        <button class="btn btn-red-outline fs-8">btn-red-outline</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-wrapper mt-3">
+                        <div class="card-header">
+                            <p class="fs-6 fw-bold mb-0">Badges</p>
+                        </div>
+                        <div class="card-contents">
+                            <div class="card-row m-0">
+                                <div class="col d-flex">
+                                    <div class="card-title"><p class="fs-8 fw-bold">bootstrap</p></div>
+                                    <div class="card-txt">
+                                        <span class="badge bg-primary">Primary</span>
+                                        <span class="badge bg-secondary">Secondary</span>
+                                        <span class="badge bg-success">Success</span>
+                                        <span class="badge bg-danger">Danger</span>
+                                        <span class="badge bg-warning text-dark">Warning</span>
+                                        <span class="badge bg-info text-dark">Info</span>
+                                        <span class="badge bg-light text-dark">Light</span>
+                                        <span class="badge bg-dark">Dark</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-row m-0">
+                                <div class="col d-flex">
+                                    <div class="card-title"><p class="fs-8 fw-bold">추가</p></div>
+                                    <div class="card-txt">
+                                        <span class="badge bg-grey fw-normal">bg-grey</span>
+                                        <span class="badge bg-mediumGrey fw-normal">bg-mediumGrey</span>
+                                        <span class="badge bg-darkGrey fw-normal">bg-darkGrey</span>
+                                        <span class="badge bg-darkGrey-outline fw-normal">bg-darkGrey-outline</span>
+                                        <span class="badge bg-grey-outline fw-normal">bg-grey-outline</span>
+                                        <span class="badge bg-green fw-normal">bg-green</span>
+                                        <span class="badge bg-blue fw-normal">bg-blue</span>
+                                        <span class="badge bg-blue-outline fw-normal">bg-blue-outline</span>
+                                        <span class="badge bg-yellow-outline fw-normal">bg-yellow-outline</span>
+                                        <span class="badge bg-red-outline fw-normal">bg-red-outline</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper mt-3">
+                        <div class="card-header">
+                            <p class="fs-6 fw-bold mb-0">Modal</p>
+                        </div>
+                        <div class="card-contents">
+                            <div class="card-row m-0">
+                                <div class="col d-flex">
+                                    <div class="card-title"><p class="fs-8 fw-bold">기본</p></div>
+                                    <div class="card-txt">
+                                        <button class="btn btn-darkGrey fs-8" data-bs-toggle="modal" data-bs-target="#exampleModal">기본 모달</button>
+                                        <button class="btn btn-red-outline fs-8" data-bs-toggle="modal" data-bs-target="#exampleModalFail">실패 모달</button>
+                                        <button class="btn btn-blue fs-8" data-bs-toggle="modal" data-bs-target="#exampleModalTabs">Tabs</button>
+                                        <button class="btn btn-blue-outline fs-8" data-bs-toggle="modal" data-bs-target="#exampleModalForm">Form</button>
+                                        <button class="btn btn-yellow-outline fs-8" data-bs-toggle="modal" data-bs-target="#exampleModalScroll">Scroll</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-wrapper mt-3">
+                        <div class="card-header">
+                            <p class="fs-6 fw-bold mb-0">loading</p>
+                        </div>
+                        <div class="card-contents">
+                            <div class="card-row m-0">
+                                <div class="col d-flex">
+                                    <div class="card-title"><p class="fs-8 fw-bold">loading</p></div>
+                                    <div class="card-txt">
+                                        <div class="spinner-1"></div>
+                                        <div class="spinner-2"></div>
+                                        <div class="spinner-3">
+                                            <div class="spinner-3-dot"></div>
+                                            <div class="spinner-3-dot"></div>
+                                            <div class="spinner-3-dot"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-row m-0">
+                                <div class="col d-flex">
+                                    <div class="card-title"><p class="fs-8 fw-bold">loading</p></div>
+                                    <div class="card-txt">
+                                        <button type="button" class="btn btn-blue fs-8" onclick="loading('spinner1')">로딩 2초 실행-1</button>
+                                        <button type="button" class="btn btn-green fs-8" onclick="loading('spinner2')">로딩 2초 실행-2</button>
+                                        <button type="button" class="btn btn-red-outline fs-8" onclick="loading('spinner3')">로딩 2초 실행-3</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
