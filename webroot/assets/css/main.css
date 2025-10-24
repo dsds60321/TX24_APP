@@ -668,8 +668,9 @@ body {
     gap: 0.5rem;
     background-color: #ffffff;
     border-top: 1px solid #C6CCD8;
-    box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.04);
     z-index: 1030;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .main.sidebarHide .tab-panel {
@@ -678,6 +679,16 @@ body {
 
 .tab-panel.is-empty {
     display: none;
+}
+
+.tab-panel:not(.is-empty) {
+    transform: translateY(calc(100% - 22px));
+}
+
+.tab-panel:not(.is-empty):hover,
+.tab-panel:not(.is-empty):focus-within {
+    transform: translateY(0);
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .tab-bar {
@@ -770,6 +781,12 @@ body {
 
 .tab-feedback .btn {
     margin-top: 12px;
+}
+
+@media (hover: none) {
+    .tab-panel:not(.is-empty) {
+        transform: translateY(0);
+    }
 }
 
 @media (max-width: 768px) {
