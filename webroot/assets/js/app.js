@@ -4,6 +4,7 @@
     const App = {
         init () {
             window.Layout = new Layout();
+            window.Search = new Search();
         }
     }
 

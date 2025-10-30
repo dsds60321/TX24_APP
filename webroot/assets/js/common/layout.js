@@ -23,6 +23,7 @@ class Layout {
         this.bindEmailFocus();
         this.bindCardEdit();
         this.bindModalLoader();
+        // this.blockBrowserEvt();
     }
 
     // 탭 함수
@@ -67,6 +68,12 @@ class Layout {
                 mainElement.classList.add('sidebarHide');
             }
         });
+
+        document.querySelector('.close_sidebar').addEventListener('click', function() {
+            const mainElement = document.querySelector('.main');
+            mainElement.classList.add('sidebarHide');
+        })
+
     }
 
     sideNaviToggle() {
@@ -308,6 +315,9 @@ class Layout {
         this.showTab(root);
     }
 
+    /**
+     * 페이지 탭 생성 컴포넌트
+     */
     createTabManager() {
         const layout = this;
         const state = {
@@ -322,6 +332,68 @@ class Layout {
         let tabBar = null;
         let contentArea = null;
         const hasAxios = typeof axios !== 'undefined';
+        const tabRules = {
+            breakpoint: 767,
+            contexts: {
+                desktop: {
+                    maxTabs: 10,  // PC 최대 탭
+                    overflowStrategy: 'removeOldest'
+                },
+                mobile: {
+                    maxTabs: 3, // 모바일 최대 탭
+                    overflowStrategy: 'removeOldest'
+                }
+            }
+        };
+
+        // 탭 정렬 구조 ( 오래된거 제거 , 최근꺼 제거 )
+        const overflowStrategies = {
+            removeOldest: function() {
+                return state.order[0];
+            },
+            removeNewest: function() {
+                return state.order[state.order.length - 1];
+            }
+        };
+
+        function getViewportContext() {
+            const breakpoint = tabRules.breakpoint;
+            if (typeof window === 'undefined') {
+                return 'desktop';
+            }
+            if (typeof window.matchMedia === 'function') {
+                return window.matchMedia('(max-width: ' + breakpoint + 'px)').matches ? 'mobile' : 'desktop';
+            }
+            return window.innerWidth <= breakpoint ? 'mobile' : 'desktop';
+        }
+
+        function getActivePolicy() {
+            const contextKey = getViewportContext();
+            return tabRules.contexts[contextKey] || tabRules.contexts.desktop;
+        }
+
+        function enforceTabLimit() {
+            const policy = getActivePolicy();
+            if (!policy) {
+                return;
+            }
+            const maxTabs = typeof policy.maxTabs === 'number' ? policy.maxTabs : parseInt(policy.maxTabs, 10);
+            if (!maxTabs || maxTabs <= 0) {
+                return;
+            }
+            if (state.order.length < maxTabs) {
+                return;
+            }
+            const strategyKey = policy.overflowStrategy || 'removeOldest';
+            const selector = overflowStrategies[strategyKey] || overflowStrategies.removeOldest;
+            while (state.order.length >= maxTabs) {
+                const targetId = selector();
+                if (!targetId) {
+                    break;
+                }
+                close(targetId);
+            }
+        }
 
         function init() {
             tabPanel = document.getElementById('bottom-tab-panel');
@@ -348,6 +420,8 @@ class Layout {
                 activate(descriptor.id);
                 return;
             }
+
+            enforceTabLimit();
 
             const tab = {
                 id: descriptor.id,
@@ -608,5 +682,32 @@ class Layout {
             close: close,
             refresh: refresh
         };
+    }
+
+
+    blockBrowserEvt() {
+        document.addEventListener('keydown', function (e) {
+            if (
+                e.key === 'F5' ||
+                (e.ctrlKey && e.key === 'r') ||
+                (e.metaKey && e.key === 'r')
+            ) {
+                e.preventDefault();
+                alert('새로고침이 차단되어 있습니다.');
+            }
+        });
+
+        // 마우스 오른쪽 버튼 새로고침 메뉴 방지 (일부 환경)
+        // window.addEventListener('beforeunload', function (e) {
+        //     // 페이지 이탈 경고
+        //     e.preventDefault();
+        //     e.returnValue = '';
+        // });
+        //
+        // history.pushState(null, '', location.href);
+        // window.onpopstate = function () {
+        //     history.pushState(null, '', location.href);
+        //     alert('뒤로가기가 차단되어 있습니다.');
+        // };
     }
 }

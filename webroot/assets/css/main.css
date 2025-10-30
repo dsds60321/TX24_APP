@@ -795,6 +795,18 @@ body {
         padding: 8px 12px;
     }
 
+    .tab-bar {
+        flex-wrap: wrap;
+    }
+
+    .tab-item {
+        flex: 1 1 calc((100% - 1rem) / 3);
+        max-width: calc((100% - 1rem) / 3);
+        min-width: 0;
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
     .tab-title {
         max-width: 110px;
     }

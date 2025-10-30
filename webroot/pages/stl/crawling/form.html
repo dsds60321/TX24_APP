@@ -1,0 +1,190 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8" />
+</head>
+<body>
+<div class="row">
+    <div class="col-12">
+        <div class="pt-2">
+
+            <div th:replace="~{pages/layout/fragments :: maps('데이터 수집')}"></div>
+
+
+            <div class="card-wrapper search" data-url="/trx/prepare/list" data-target="#search-list" data-detail-mode="true">
+                <form action="">
+                    <div class="card-contents">
+                        <div class="card-row">
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">취급일</p></div>
+                                <div class="card-txt">
+                                    <div class="search-group">
+                                        <input type="text" id="datepicker" class="form-control fs-8">
+                                        <button type="button" class="btn search-btn circle"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">대상거래일</p></div>
+                                <div class="card-txt">
+                                    <div class="search-group">
+                                        <input type="text" id="datepicker2" class="form-control fs-8">
+                                        <button type="button" class="btn search-btn"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                <div class="card-txt">
+                                    <div class="search-group">
+                                        <select name="" id="" class="form-control fs-8">
+                                            <option value="사용">사용</option>
+                                            <option value="중지">중지</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                <div class="card-txt">
+                                    <div class="search-group">
+                                        <input type="text" id="el" class="form-control fs-8">
+                                        <button type="button" class="btn search-btn circle"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-row">
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                <div class="card-txt">
+                                    <div class="search-group">
+                                        <input type="text" id="datepicker" class="form-control fs-8">
+                                        <button type="button" class="btn search-btn circle"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                <div class="card-txt">
+                                    <div class="search-group">
+                                        <select name="" id="" class="form-control fs-8">
+                                            <option value="대기">대기</option>
+                                            <option value="완료">완료</option>
+                                            <option value="실패">실패</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                <div class="card-txt">
+                                    <div class="search-group">
+                                        <input type="text" id="el" class="form-control fs-8">
+                                        <button type="button" class="btn search-btn"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                <div class="card-txt">
+                                    <div class="search-group">
+                                        <input type="text" id="el" class="form-control fs-8">
+                                        <button type="button" class="btn search-btn"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-row">
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                <div class="card-txt">
+                                    <div class="search-group">
+                                        <input type="text" id="datepicker" class="form-control fs-8">
+                                        <button type="button" class="btn search-btn"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex m-none">
+                            </div>
+                            <div class="col d-flex m-none">
+                            </div>
+                            <div class="col d-flex m-none">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tag-contents">
+                        <div class="tag-inner">
+                            <a href="#" class="search-reload">
+                                Reset
+                            </a>
+                            <div class="field">
+                                <div class="tag" data-id="A.trxDay" data-oper="eq" data-oper-sep=" - " data-order="null" data-group="0">
+                                    <a href="#" class="tag-close">
+                                        <i class="fas fa-times-circle"></i>
+                                    </a>
+                                    <span class="tag-label">2025-09-10 - 2025-09-19</span>
+                                </div>
+                                <div class="tag" data-id="A.trxEndDay" data-oper="eq" data-oper-sep=" - " data-order="null" data-group="0">
+                                    <a href="#" class="tag-close">
+                                        <i class="fas fa-times-circle"></i>
+                                    </a>
+                                    <span class="tag-label">2025-09-01 - 2025-09-18</span>
+                                </div>
+                                <div class="tag" data-id="A.trxStatus" data-oper="eq" data-oper-sep="null" data-order="null" data-group="null">
+                                    <a href="#" class="tag-close">
+                                        <i class="fas fa-times-circle"></i>
+                                    </a>
+                                    <span class="tag-label">완료</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="search-btn btn btn-primary" onclick="window.Search.submit(this,'','tag');">검색</button>
+                    </div>
+                </form>
+            </div>
+            <div class="table-wrapper mt-3">
+                <div class="table-header">
+                    <div class="txt-box">
+                        <p class="fs-6 fw-bold mb-0">RESULT</p>
+                        <p class="fs-9 text-grey mb-0 ms-2">0</p>
+                        <p class="fs-9 text-grey mb-0">건 조회됨</p>
+                    </div>
+                    <div class="btn-box">
+                        <select name="" id="" class="form-control select-grey fs-8">
+                            <option value="데이터 수집">데이터 수집</option>
+                            <option value="D+0지급내역수집">D+0지급내역수집</option>
+                        </select>
+                        <select name="" id="" class="form-control select-grey fs-8">
+                            <option value="정산생성">정산생성</option>
+                        </select>
+                        <select name="" id="" class="form-control select-grey fs-8">
+                            <option value="20">show 20</option>
+                            <option value="50">show 50</option>
+                            <option value="100">show 100</option>
+                        </select>
+                        <button type="button" class="badge bg-grey-outline"><i class="fa-solid fa-file-excel"></i></button>
+                    </div>
+                </div>
+
+                <div class="table-contents">
+                    <table>
+                        <thead>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="20">조회된 데이터가 없습니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="table-footer">
+                    <div class="paging">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/assets/js/pages/stl/crawling.js}"></script>
+</body>
+</html>
