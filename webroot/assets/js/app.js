@@ -1,14 +1,12 @@
-(function (window) {
+import Layout from './common/layout.js';
+import Search from './common/search.js';
 
-    // App 공유 컴포넌트
-    const App = {
-        init () {
-            window.Layout = new Layout();
-            window.Search = new Search();
-        }
-    }
+const layout = new Layout();
+const search = new Search();
 
-    // 실행
-    window.App = App;
-    document.addEventListener('DOMContentLoaded', App.init);
-})(window);
+if (!window.search) {
+    window.search = search;
+}
+
+// 필요한 곳에서 layout, search를 사용하도록 export
+export { layout, search };

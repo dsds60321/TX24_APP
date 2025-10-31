@@ -1,6 +1,7 @@
 package kr.tx24.fc.ctl;
 
 import kr.tx24.lib.map.SharedMap;
+import kr.tx24.was.annotation.SessionIgnore;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +40,8 @@ public class ExampleCtl {
     public String dashboard() {
         return "sample/dashboard"; 
     }
-	
+
+    @SessionIgnore
 	@GetMapping("/tables")
     public String table() {
         return "sample/tables"; 

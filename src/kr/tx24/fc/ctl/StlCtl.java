@@ -2,6 +2,7 @@ package kr.tx24.fc.ctl;
 
 import kr.tx24.fc.bean.SearchRequest;
 import kr.tx24.fc.ctl.service.StlService;
+import kr.tx24.was.annotation.SessionIgnore;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,15 +22,16 @@ public class StlCtl {
         this.stlService = stlService;
     }
 
+    @SessionIgnore
     @GetMapping("/crawling")
     public String collectionForm() {
         return "pages/stl/crawling/form";
     }
 
-    @PostMapping("/crawling")
-    public String collectionSubmit(@RequestBody SearchRequest slRequest, Model model){
-        stlService.dummyPaging(model, slRequest.datas, slRequest.page);
-        return "pages/stl/crawling/result";
+    @SessionIgnore
+    @PostMapping(value = "/crawling/list")
+    public String collectionSubmit(@RequestBody SearchRequest searchRequest, Model model){
+        stlService.dummyPaging(model, searchRequest.datas, searchRequest.page);
+        return "pages/stl/crawling/list";
     }
-
 }

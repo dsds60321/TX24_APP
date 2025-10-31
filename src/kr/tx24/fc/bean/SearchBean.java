@@ -9,8 +9,7 @@ public class SearchBean implements Serializable {
     public boolean is       = false; // 검색여부
     public String logical   = null;  // 논리연산자
     public int priority     = 0;     // 검색 우선순위
-    
-    
+
     public SearchBean id(String id) {
     	this.id 	= id;
     	return this;

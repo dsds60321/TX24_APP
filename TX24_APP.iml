@@ -50,11 +50,11 @@
     <libelement value="jar://$MODULE_DIR$/lib/tomcat-embed-jasper-11.0.11.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/tomcat-embed-programmatic-11.0.11.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/tomcat-embed-websocket-11.0.11.jar!/" />
-    <libelement value="jar://$MODULE_DIR$/lib/tx24_lib_251013.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/unbescape-1.1.6.RELEASE.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/univocity-parsers-2.9.1.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/xmlbeans-5.3.0.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/tx24_was_2510.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/tx24_lib_2510.jar!/" />
     <src_description expected_position="1">
       <src_folder value="file://$MODULE_DIR$/src" expected_position="1" />
     </src_description>
@@ -509,15 +509,6 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
-      <library name="tx24_lib_251013.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/tx24_lib_251013.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
       <library name="unbescape-1.1.6.RELEASE.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/unbescape-1.1.6.RELEASE.jar!/" />
@@ -548,6 +539,15 @@
       <library name="tx24_was_2510.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/tx24_was_2510.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="tx24_lib_2510.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/tx24_lib_2510.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

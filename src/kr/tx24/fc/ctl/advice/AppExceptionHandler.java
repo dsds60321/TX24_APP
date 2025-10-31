@@ -1,5 +1,6 @@
 package kr.tx24.fc.ctl.advice;
 
+import kr.tx24.lib.lang.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -15,13 +16,14 @@ public class AppExceptionHandler {
 
 	@ExceptionHandler(NoHandlerFoundException.class)
     public String handleNoHandlerFound(NoHandlerFoundException ex) {
-        logger.error("NoHandlerFoundException - URL: {}", ex.getRequestURL());
+        logger.info("Exception : {}", CommonUtils.getExceptionMessage(ex,1000));
         return "redirect:/";
     }
   
     // (2) 기본 404 처리 (예외 안 던지는 경우 - 직접 ResponseStatusExceptionResolver와 매핑)
     @ExceptionHandler
     public ResponseEntity<String> handleAnyOther(Exception ex) {
+        logger.info("Exception : {}", CommonUtils.getExceptionMessage(ex,1000));
         if (ex instanceof org.springframework.web.servlet.resource.NoResourceFoundException) {
             return ResponseEntity
                     .status(HttpStatus.NOT_FOUND)

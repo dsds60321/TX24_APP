@@ -1,12 +1,17 @@
 /**
  * 공통 레이아웃 JS
  */
-class Layout {
+export default class Layout {
     constructor() {
         // 하위 페이지 탭 매니저
         this.TabManager = this.createTabManager();
         this.modalCache = new Map();
+        this.loadingOverlay = null;
+        this.loadingMessageElem = null;
         this.init();
+        if (typeof window !== 'undefined') {
+            window.layout = this;
+        }
     }
 
     init() {
@@ -224,6 +229,74 @@ class Layout {
                 modalContent.innerHTML = '';
             });
         });
+    }
+
+    /**
+     * 전역 로딩 표시
+     */
+    ensureLoadingOverlay() {
+        if (this.loadingOverlay && document.body.contains(this.loadingOverlay)) {
+            return this.loadingOverlay;
+        }
+
+        const mainContent = document.querySelector('.main .main-content') || document.querySelector('.main');
+        if (!mainContent) {
+            return null;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.className = 'layout-loading-overlay';
+        overlay.innerHTML = '<div class="layout-loading-content" role="status" aria-live="polite">' +
+            '<div class="layout-loading-spinner" aria-hidden="true"></div>' +
+            '<p class="layout-loading-text">로딩 중...</p>' +
+            '</div>';
+
+        mainContent.appendChild(overlay);
+
+        this.loadingOverlay = overlay;
+        this.loadingMessageElem = overlay.querySelector('.layout-loading-text');
+        return overlay;
+    }
+
+    showLoading(message = '로딩 중입니다...') {
+        const overlay = this.ensureLoadingOverlay();
+        if (!overlay) {
+            return;
+        }
+        if (this.loadingMessageElem) {
+            this.loadingMessageElem.textContent = message;
+        }
+        overlay.classList.add('is-active');
+    }
+
+    hideLoading() {
+        if (!this.loadingOverlay) {
+            return;
+        }
+        this.loadingOverlay.classList.remove('is-active');
+    }
+
+    setButtonLoading(button, isLoading) {
+        if (!(button instanceof HTMLElement)) {
+            return;
+        }
+
+        if (isLoading) {
+            if (!button.dataset.prevDisabled) {
+                button.dataset.prevDisabled = button.disabled ? 'true' : 'false';
+            }
+            button.classList.add('is-loading');
+            button.disabled = true;
+        } else {
+            button.classList.remove('is-loading');
+            const prev = button.dataset.prevDisabled;
+            if (typeof prev !== 'undefined') {
+                button.disabled = prev === 'true';
+                delete button.dataset.prevDisabled;
+            } else {
+                button.disabled = false;
+            }
+        }
     }
 
     loadModalContent(url) {
@@ -457,6 +530,7 @@ class Layout {
                 loadContent(id);
                 return;
             }
+
             renderError(id, '데이터 연결이 활성화되어 있지 않습니다.');
         }
 
@@ -597,6 +671,9 @@ class Layout {
                 }
                 contentArea.appendChild(cloned);
             });
+
+            // datepicker
+            layout.datepickerRender();
         }
 
         function renderLoading() {
@@ -664,7 +741,6 @@ class Layout {
                 title: tabTitle || '새 탭',
                 url: url
             });
-
             document.querySelectorAll('.nav-link').forEach(function(link) {
                 link.classList.remove('active');
             });
@@ -709,5 +785,79 @@ class Layout {
         //     history.pushState(null, '', location.href);
         //     alert('뒤로가기가 차단되어 있습니다.');
         // };
+    }
+
+    datepickerRender() {
+        document.querySelectorAll('.fc-datepicker').forEach((elem) => {
+            const picker = layout.setOption(elem, "picker");
+            let val;
+            let pickerOption = {};
+
+            const unit = picker.format === 'yyyy-mm' ? 'month' : 'days';
+            if (unit === 'days') {
+                pickerOption = {
+                    dateFormat: picker.format,
+                    multipleDatesSeparator: picker.separator,
+                    range: picker.range,
+                    onSelect: function (formattedDate, date, inst) {
+
+                        /* search box Input처리 */
+                        if(elem) {
+                            console.log('elem', elem)
+                            if(picker.range){
+                                console.log('date', date)
+                                console.log(elem.value)
+                                console.log(util.dateUtil.toString(date[0]))
+                                if(date.length < 2) {
+                                    elem.value = util.dateUtil.toString(date[0]) + ' - ' + util.dateUtil.toString(date[0]);
+                                } else {
+                                    elem.value = util.dateUtil.toString(date[0]) + ' - ' + util.dateUtil.toString(date[1]);
+                                }
+                            }else{
+                                if(formattedDate){
+                                    elem.value = formattedDate +" - " + formattedDate;
+                                }
+                            }
+
+                            search.addTag(elem);
+                            if(date.length > 1) {inst.hide();}
+                        }
+                    }
+                };
+            }
+
+            $(elem).datepicker(pickerOption);
+
+
+            // 기본값
+            switch (picker.default) {
+                case "today" : val = util.dateUtil.getNowDate(picker.separator); break;
+
+            }
+
+            if (val) {
+                elem.value = val;
+                search.addTag(elem);
+            }
+
+
+        });
+    }
+
+    setOption(elem, type) {
+        let option = {};
+        if (elem) {
+            if(type === "picker"){
+                option['format'] = elem.dataset.format;
+                option['separator'] = elem.dataset.separator;
+                option['range'] = elem.dataset.range === 'Y';
+                option['default'] = elem.dataset.default;
+                // option['option'] = JSON.parse(elem.dataset.option);
+            }
+        }
+
+        console.log(option)
+
+        return option;
     }
 }
