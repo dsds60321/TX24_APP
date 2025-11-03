@@ -1,7 +1,19 @@
-POST http://localhost:8080/stl/test
+POST http://localhost:8080/excel/stl/crawling/list
 Content-Type: application/json
 
-{
-  "test": "test"
-}
-
+[
+  {
+    "value": "20251031",
+    "id": "regDate",
+    "oper": "eq",
+    "operSep": "",
+    "priority": 1
+  },
+  {
+    "value": "20251031",
+    "id": "regDate",
+    "oper": "eq",
+    "operSep": "",
+    "priority": 1
+  }
+]

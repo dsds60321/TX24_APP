@@ -1,7 +1,7 @@
 package kr.tx24.fc.ctl;
 
 import kr.tx24.fc.bean.SearchRequest;
-import kr.tx24.fc.ctl.service.StlService;
+import kr.tx24.fc.service.StlService;
 import kr.tx24.was.annotation.SessionIgnore;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

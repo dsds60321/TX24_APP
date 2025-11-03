@@ -1,7 +1,11 @@
 package kr.tx24.fc.bean;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.io.Serializable;
 
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SearchBean implements Serializable {
     public String id        = null;  // 검색키
     public Object value     = null;  // 검색데이터

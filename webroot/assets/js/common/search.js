@@ -15,7 +15,6 @@ export default class Search {
 			event.preventDefault();
 		}
 
-		console.log('search2 start');
 		const searchContainer = document.querySelector('.card-wrapper.search'); // 검색 HTML
 		const paging = document.querySelector('.paging'); // 페이징
 		const pageContainer = document.querySelector('.page-container'); // 데이터 화면
@@ -23,6 +22,7 @@ export default class Search {
 		const submitButton = elem instanceof HTMLElement
 			? elem
 			: searchContainer?.querySelector('.search-submit-btn') || searchContainer?.querySelector('.search-btn.btn-primary');
+		const contentType = elem.dataset.type || ''; // 컨텐츠 타입
 		const url = searchContainer?.dataset?.url;
 
 		if (!searchContainer || !paging || !tableContent || !submitButton || !url) {
@@ -32,7 +32,7 @@ export default class Search {
 
 		this.bean.datas = [];
 
-		if (option === 'tag') {
+		if (option === 'tag' || contentType === 'excel') {
 			this.setTag();
 		} else {
 			this.setOptions();
@@ -42,13 +42,31 @@ export default class Search {
 			this.bean.page.selectedPage = 0;
 		}
 
-		console.log('searchBean:', JSON.stringify(this.bean));
 		localStorage.setItem('searchBean', JSON.stringify(this.bean.datas));
-
-
 		try {
 			layout.setButtonLoading(submitButton, true);
 			layout.showLoading('데이터를 불러오는 중입니다...');
+
+			// excel ... 등 요청시
+			if (contentType) {
+				const response = await axios.post(url, this.bean.datas, {
+					headers: {
+						'Content-Type': 'application/json',
+						'X-Request-Content': contentType,
+					},
+				});
+
+				console.log('responseData ' , response);
+
+				if (response.data && response.data.link) {
+					window.location.href = response.data.link;
+				} else {
+					console.warn('엑셀 다운로드 링크를 찾을 수 없습니다.');
+				}
+
+				return;
+			}
+
 
 			const { data } = await axios.post(url, this.bean);
 			if (pageContainer) {
@@ -114,7 +132,6 @@ export default class Search {
 					data.oper = 'eq';
 					this.bean.datas.push(data);
 				}
-
 			}
 		});
 
@@ -137,7 +154,7 @@ export default class Search {
 			value: elem.querySelector('.tag-label').innerText,
 			id: elem.getAttribute('data-id'),
 			oper: elem.getAttribute('data-oper') ? elem.getAttribute('data-oper') : 'eq',
-			// operSep: elem.getAttribute('data-oper-sep') == 'null' ? null : elem.getAttribute('data-oper-sep'),
+			operSep: elem.getAttribute('data-oper-sep') ? elem.getAttribute('data-oper-sep') : '',
 			// group: elem.getAttribute('data-group'),
 			priority: elem.getAttribute('data-priority')
 		};
@@ -337,6 +354,7 @@ export default class Search {
 				}
 			});
 		}
+
 	}
 
 

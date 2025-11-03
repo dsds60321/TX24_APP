@@ -788,7 +788,7 @@ export default class Layout {
     }
 
     datepickerRender() {
-        document.querySelectorAll('.fc-datepicker').forEach((elem) => {
+        document.querySelectorAll('.tx-datepicker').forEach((elem) => {
             const picker = layout.setOption(elem, "picker");
             let val;
             let pickerOption = {};

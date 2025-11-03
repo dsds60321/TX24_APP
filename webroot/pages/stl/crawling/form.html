@@ -18,7 +18,7 @@
                                 <div class="card-title"><p class="fs-8 fw-bold">취급일</p></div>
                                 <div class="card-txt">
                                     <div class="search-group">
-                                        <input type="text" class="form-control fs-8 fc-datepicker" name="regDate" data-separator="-" data-format="yyyy-mm-dd" data-default="today" data-range="Y" data-oper="eq"  data-group="0">
+                                        <input type="text" class="form-control fs-8 tx-datepicker" name="regDate" data-oper-sep=" - " data-separator="-" data-format="yyyy-mm-dd" data-default="today" data-range="Y" data-oper="eq"  data-group="0">
                                     </div>
                                 </div>
                             </div>
@@ -26,7 +26,7 @@
                                 <div class="card-title"><p class="fs-8 fw-bold">대상거래일</p></div>
                                 <div class="card-txt">
                                     <div class="search-group">
-                                        <input type="text" id="datepicker2" class="form-control fs-8 fc-datepicker" name="targetDate" data-separator="-" data-format="yyyy-mm-dd" data-range="Y" data-oper="eq"  data-group="0" readonly>
+                                        <input type="text" id="datepicker2" class="form-control fs-8 tx-datepicker" name="targetDate" data-separator="-" data-format="yyyy-mm-dd" data-range="Y" data-oper="eq"  data-group="0" readonly>
                                     </div>
                                 </div>
                             </div>
@@ -149,7 +149,7 @@
                             <option value="50">show 50</option>
                             <option value="100">show 100</option>
                         </select>
-                        <button type="button" class="badge bg-grey-outline"><i class="fa-solid fa-file-excel"></i></button>
+                        <button onclick="search.submit(this)" data-type="excel" type="button" class="badge bg-grey-outline"><i class="fa-solid fa-file-excel"></i></button>
                     </div>
                 </div>
 

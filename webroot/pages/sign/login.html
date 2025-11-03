@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>login</title>
+
+    <!-- CSS -->
+    <link href="/assets/css/components.css" rel="stylesheet" />
+    <link href="/assets/css/login.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Icon -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="login-wrapper">
+      <div class="login d-flex col-12 m-0">
+        
+        <!-- Left: Login Box -->
+        <div class="col-6 login-box-wrapper d-flex align-items-center justify-content-center flex-column">
+          
+          <div class="row logo-box">
+            <img src="/assets/img/syslink.png" alt="" class="p-0">
+            <p class="fs-8 p-0 pt-2 mb-0">Sign in to continue to syslink.</p>
+          </div>
+
+          <form action="" class="login-form pt-3">
+            <div class="mb-3">
+              <label for="id" class="form-label fs-7 fw-bold">User ID</label>
+              <input type="input" id="id" placeholder="" class="form-control form-control-xl fs-7">
+            </div>
+
+            <div class="mb-3">
+              <div class="d-flex justify-content-between">
+                <label for="pw" class="form-label fs-7 fw-bold">Password</label>
+                <a href="#" class="fs-7">Forgot password?</a>
+              </div>
+
+              <div class="position-relative">
+                <input type="password" id="pw" placeholder="" class="form-control pe-5">
+                <button type="button" id="togglePassword" class="btn position-absolute top-50 end-0 translate-middle-y border-0 bg-transparent me-2">
+                  <i class="text-grey mb-2 fa-solid fa-eye fs-9" id="eyeIcon"></i>
+                </button>
+              </div>
+            </div>
+
+            <div>
+              <p class="fs-7 text-danger" style="height: 25px;">
+                <!-- <i class="fa-solid fa-circle-exclamation me-1"></i>입력정보를 입력해주세요. -->
+              </p>
+            </div>
+
+            <button type="button" id="loginBtn" class="btn btn-primary btn-xl fs-7 w-100">Sign In</button>
+            <p class="fs-8 text-primary text-center pt-4">©2025, SYSLINK</p>
+          </form>
+        </div>
+
+        <!-- Right: Background -->
+        <div class="col-6 login-bg d-flex align-items-center justify-content-center">
+          <img src="/assets/img/login-bg.png" alt="">
+        </div>
+      </div>
+    </div>
+
+    <!-- JS -->
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // 패스워드 토글 함수
+      function togglePasswordVisibility(pw, eyeIconId) {
+        var pw = document.getElementById(pw);
+        var eyeIcon = document.getElementById(eyeIconId);
+        if (pw.type === 'password') {
+          pw.type = 'text';
+          eyeIcon.classList.remove('fa-eye');
+          eyeIcon.classList.add('fa-eye-slash');
+        } else {
+          pw.type = 'password';
+          eyeIcon.classList.remove('fa-eye-slash');
+          eyeIcon.classList.add('fa-eye');
+        }
+      }
+
+      // 패스워드 아이콘 이벤트 리스너 추가
+      document.getElementById('togglePassword').addEventListener('click', function() {
+        togglePasswordVisibility('pw', 'eyeIcon');
+      });
+
+      // 로그인 버튼 클릭 이벤트
+      document.getElementById('loginBtn').addEventListener('click', function() {
+        var id = document.getElementById('id');
+        var pw = document.getElementById('pw');
+        if (id.value === '' || pw.value === '') {
+          document.querySelector('.text-danger').innerHTML =
+            '<i class="fa-solid fa-circle-exclamation me-1"></i>입력정보를 입력해주세요.';
+        } else {
+          location.href = '/example/login2fa';
+        }
+      });
+    </script>
+  </body>
+</html>

@@ -33,6 +33,7 @@
     <libelement value="jar://$MODULE_DIR$/lib/pdfbox-3.0.5.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/pdfbox-io-3.0.5.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/poi-5.4.1.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/poi-ooxml-5.4.1.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/poi-ooxml-full-5.4.1.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/reactive-streams-1.0.4.jar!/" />
     <libelement value="jar://$MODULE_DIR$/lib/reactor-core-3.7.11.jar!/" />
@@ -356,6 +357,15 @@
       </library>
     </orderEntry>
     <orderEntry type="module-library">
+      <library name="poi-ooxml-5.4.1.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/poi-ooxml-5.4.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
       <library name="poi-ooxml-full-5.4.1.jar">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/poi-ooxml-full-5.4.1.jar!/" />
@@ -553,5 +563,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="poi-ooxml-lite-5.4.1" level="project" />
+    <orderEntry type="library" name="log4j-api-2.20.0" level="project" />
   </component>
 </module>

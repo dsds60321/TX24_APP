@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>login2fa</title>
+
+    <!-- CSS -->
+    <link href="/assets/css/components.css" rel="stylesheet" />
+    <link href="/assets/css/login.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Icon -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  </head>
+
+  <body>
+    <div class="login-wrapper">
+      <div class="login d-flex col-12 m-0">
+        
+        <!-- Left: Login Box -->
+        <div class="col-6 login-box-wrapper d-flex align-items-center justify-content-center flex-column">
+          
+          <div class="row logo-box">
+            <img src="/assets/img/syslink.png" alt="" class="p-0">
+            <p class="fs-8 p-0 pt-2 mb-0">Sign in to continue to syslink.</p>
+          </div>
+
+          <form action="" class="login-form pt-3">
+
+            <!-- 인증 선택 영역 -->
+            <div class="option-box mb-4 mt-4">
+              <div class="mb-4">
+                <button type="button" id="smsBtn" class="btn btn-grey-outline btn-xl fs-8 w-100 option-Btn">
+                  <i class="fa-solid fa-comment-dots me-2"></i>SMS 인증
+                </button>
+              </div>
+              <div class="mb-4">
+                <button type="button" id="emailBtn" class="btn btn-grey-outline btn-xl fs-8 w-100 option-Btn">
+                  <i class="fa-solid fa-envelope me-2"></i>이메일 인증
+                </button>
+              </div>
+              <div>
+                <button type="button" id="OtpBtn" class="btn btn-grey-outline btn-xl fs-8 w-100 option-Btn">
+                  <i class="fa-brands fa-google me-2"></i>Google OTP 인증
+                </button>
+              </div>
+            </div>
+
+            <!-- 인증번호 입력 영역 -->
+            <div class="auth-box pt-5 pb-3" style="display: none;">
+              <div class="d-flex justify-content-between">
+                <label for="2fa" class="form-label fs-7 fw-bold">인증번호 입력</label>
+                <p class="fs-7 text-primary mb-0">1:17</p>
+              </div>
+
+              <div class="position-relative">
+                <span class="position-absolute top-50 start-0 translate-middle-y ms-2">
+                  <i class="text-grey fs-9 fa-solid fa-lock"></i>
+                </span>
+                <input type="password" id="2fa" placeholder="" class="form-control ps-5">
+              </div>
+
+              <p class="fs-7 text-danger pt-3" style="height: 25px;">
+                <!-- <i class="fa-solid fa-circle-exclamation me-1"></i>에러 문구 입력. -->
+              </p>
+
+              <button type="button" id="authBtn" class="btn btn-primary btn-xl fs-7 w-100 mt-3">Sign In</button>
+            </div>
+
+            <p class="fs-8 text-primary text-center pt-4 mb-0">©2025, tx24</p>
+          </form>
+        </div>
+
+        <!-- Right: Background -->
+        <div class="col-6 login-bg d-flex align-items-center justify-content-center">
+          <img src="/assets/img/login-bg.png" alt="">
+        </div>
+      </div>
+    </div>
+
+    <!-- JS -->
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // 인증 방식 버튼 클릭 시 인증 입력창 표시
+      var optionBtn = document.querySelectorAll('.option-Btn');
+      optionBtn.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          document.querySelector('.option-box').style.display = 'none';
+          document.querySelector('.auth-box').style.display = 'block';
+        });
+      });
+
+      // 인증 버튼 클릭 시 처리
+      document.getElementById('authBtn').addEventListener('click', function () {
+        var input = document.getElementById('2fa');
+        if (input.value === '') {
+          document.querySelector('.text-danger').innerHTML =
+            '<i class="fa-solid fa-circle-exclamation me-1"></i>에러 문구 입력.';
+        } else {
+          // 페이지 이동
+          location.href = '/example/components';
+        }
+      });
+    </script>
+  </body>
+</html>
