@@ -18,7 +18,7 @@ public class StlService {
      * 데이터 수집
      */
     public void dummyPaging(Model model, List<SearchBean> datas, SearchPage pages) {
-        List<SharedMap<String, Object>> rows = DummyRepository.of(MockNames.CRAWL, datas);
+        List<SharedMap<String, Object>> rows = DummyRepository.of(MockNames.CRAWL, datas, pages);
         model.addAttribute("RLIST", new SearchResponse(rows, pages));
     }
 

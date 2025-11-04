@@ -1,19 +1,9 @@
-POST http://localhost:8080/excel/stl/crawling/list
+# 로그인 테스트
+POST http://localhost:8080/sign/in
 Content-Type: application/json
 
-[
-  {
-    "value": "20251031",
-    "id": "regDate",
-    "oper": "eq",
-    "operSep": "",
-    "priority": 1
-  },
-  {
-    "value": "20251031",
-    "id": "regDate",
-    "oper": "eq",
-    "operSep": "",
-    "priority": 1
-  }
-]
+{
+  "id": "ghkang",
+  "password": "12345",
+  "_csrf": "test"
+}

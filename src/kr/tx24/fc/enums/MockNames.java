@@ -2,7 +2,9 @@ package kr.tx24.fc.enums;
 
 public enum MockNames {
 
+	USER("user"),
 	CRAWL("crawl"),
+	TMPL("tmpl"),
 	DFA("dfa");
 
 	private final String key;

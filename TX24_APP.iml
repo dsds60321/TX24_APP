@@ -545,25 +545,8 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="module-library">
-      <library name="tx24_was_2510.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/tx24_was_2510.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
-    <orderEntry type="module-library">
-      <library name="tx24_lib_2510.jar">
-        <CLASSES>
-          <root url="jar://$MODULE_DIR$/lib/tx24_lib_2510.jar!/" />
-        </CLASSES>
-        <JAVADOC />
-        <SOURCES />
-      </library>
-    </orderEntry>
     <orderEntry type="library" name="poi-ooxml-lite-5.4.1" level="project" />
     <orderEntry type="library" name="log4j-api-2.20.0" level="project" />
+    <orderEntry type="library" name="tx24_lib_2511" level="project" />
   </component>
 </module>

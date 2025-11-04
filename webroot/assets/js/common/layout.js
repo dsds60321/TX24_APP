@@ -277,10 +277,6 @@ export default class Layout {
     }
 
     setButtonLoading(button, isLoading) {
-        if (!(button instanceof HTMLElement)) {
-            return;
-        }
-
         if (isLoading) {
             if (!button.dataset.prevDisabled) {
                 button.dataset.prevDisabled = button.disabled ? 'true' : 'false';
@@ -774,17 +770,17 @@ export default class Layout {
         });
 
         // 마우스 오른쪽 버튼 새로고침 메뉴 방지 (일부 환경)
-        // window.addEventListener('beforeunload', function (e) {
-        //     // 페이지 이탈 경고
-        //     e.preventDefault();
-        //     e.returnValue = '';
-        // });
-        //
-        // history.pushState(null, '', location.href);
-        // window.onpopstate = function () {
-        //     history.pushState(null, '', location.href);
-        //     alert('뒤로가기가 차단되어 있습니다.');
-        // };
+        window.addEventListener('beforeunload', function (e) {
+            // 페이지 이탈 경고
+            e.preventDefault();
+            e.returnValue = '';
+        });
+
+        history.pushState(null, '', location.href);
+        window.onpopstate = function () {
+            history.pushState(null, '', location.href);
+            alert('뒤로가기가 차단되어 있습니다.');
+        };
     }
 
     datepickerRender() {

@@ -12,7 +12,8 @@ public class SearchBean implements Serializable {
     public String oper      = "eq";  // 비교연산자
     public boolean is       = false; // 검색여부
     public String logical   = null;  // 논리연산자
-    public int priority     = 0;     // 검색 우선순위
+    public int priority     = 0;     // 검색 우선순위  높은게 우선
+
 
     public SearchBean id(String id) {
     	this.id 	= id;
@@ -33,12 +34,12 @@ public class SearchBean implements Serializable {
     	return this;
     		
     }
-    
+
     public SearchBean is(boolean is) {
     	this.is 	= is;
-    	return this;		
+    	return this;
     }
-    
+
     public SearchBean logical(String logical) {
     	this.logical 	= logical;
     	return this;

@@ -1,5 +1,6 @@
 package kr.tx24.fc.ctl;
 
+import kr.tx24.lib.db.Retrieve;
 import kr.tx24.lib.map.SharedMap;
 import kr.tx24.was.annotation.SessionIgnore;
 import org.springframework.stereotype.Controller;
@@ -24,7 +25,8 @@ public class ExampleCtl {
     public String login() {
         return "sample/login"; 
     }
-	   
+
+    @SessionIgnore
 	@GetMapping("/login2fa")
     public String login2fa() {
         return "sample/login2fa"; 
@@ -95,5 +97,5 @@ public class ExampleCtl {
     public String modalScroll(Model model) {
         return "sample/modal/scroll";
     }
-	
+
 }

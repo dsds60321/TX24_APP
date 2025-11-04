@@ -19,6 +19,7 @@ export default class Search {
 		const paging = document.querySelector('.paging'); // 페이징
 		const pageContainer = document.querySelector('.page-container'); // 데이터 화면
 		const tableContent = document.querySelector('.table-contents'); // 데이터 화면
+
 		const submitButton = elem instanceof HTMLElement
 			? elem
 			: searchContainer?.querySelector('.search-submit-btn') || searchContainer?.querySelector('.search-btn.btn-primary');
@@ -38,13 +39,14 @@ export default class Search {
 			this.setOptions();
 		}
 
-		if (submitButton.classList.contains('active')) {
-			this.bean.page.selectedPage = 0;
-		}
-
 		localStorage.setItem('searchBean', JSON.stringify(this.bean.datas));
 		try {
 			layout.setButtonLoading(submitButton, true);
+			// 검색 버튼시 페이지 초기화
+			if (event.target.classList.contains('search-submit-btn') && submitButton.classList.contains('is-loading')) {
+				this.bean.page.selectedPage = 0;
+			}
+
 			layout.showLoading('데이터를 불러오는 중입니다...');
 
 			// excel ... 등 요청시
@@ -55,8 +57,6 @@ export default class Search {
 						'X-Request-Content': contentType,
 					},
 				});
-
-				console.log('responseData ' , response);
 
 				if (response.data && response.data.link) {
 					window.location.href = response.data.link;
@@ -144,6 +144,29 @@ export default class Search {
 		}
 	}
 
+	selectOption (elem) { // 셀렉트
+		// var elemBoxVal = elem.closest('.box-group').querySelector('.box-val');
+		// if (!elem.value && elem.getAttribute('data-value') != null) {
+		// 	// Search Select
+		// 	elemBoxVal.value = elem.getAttribute('data-value');
+		// 	if(elem.parentElement.getAttribute('data-name')){
+		// 		elemBoxVal.name = elem.parentElement.getAttribute('data-name');
+		// 	}
+		//
+		//
+		// } else {
+		// 	// 일반 Select
+		// 	elemBoxVal.value = elem.value;
+		// 	elemBoxVal.name = elem.name;
+		// }
+
+		// multiselect 리스트와 선택시 싱크 맞지않아 태그 타이머 하드코딩
+		setTimeout(() => {
+			this.addTag(elem);
+		}, 200)
+
+	}
+
 	setOptions() {
 		// TODO: 기존 폼 옵션 반영 로직 필요 시 작성
 		return this.bean.datas;
@@ -182,7 +205,6 @@ export default class Search {
 		let group = Math.ceil(current / 5); //그룹
 		let first = group * 5 - 4; //보여질 첫번째 번호
 		let last = first + 4; //보여질 마지막 번호
-		console.log('paging: ', current, lastNum, first, last);
 
 		//보여질 번호 추가
 		const numberContainer = ctn.querySelector('.paging .num');
@@ -215,7 +237,7 @@ export default class Search {
 				}
 				this.bean.page.selectedPage = targetPage;
 				if (submitButton) {
-					this.submit(submitButton, event, 'paging');
+					this.submit(submitButton, event, 'tag');
 				}
 			});
 			numberContainer.appendChild(link);
@@ -246,7 +268,8 @@ export default class Search {
 
 	addTag (elem, opt) {
 		var ctn = elem.closest('.card-wrapper.search');
-		var boxElem = elem.closest('.search-container').querySelector('input'); // 값 가져오기
+
+		var boxElem = elem.tagName === 'SELECT' ? elem : elem.closest('.search-container').querySelector('input'); // 값 가져오기
 
 		var val = boxElem.value; // 값
 		var id = boxElem.name; // ID
@@ -341,17 +364,9 @@ export default class Search {
 			reloadButton.addEventListener("click", (e) => {
 				e.preventDefault();
 				this.removeTag(tagDiv);
-				document.querySelectorAll('.search-option').forEach(function(optionInput) {
+				document.querySelectorAll('.search-group input, .search-group select').forEach(function(optionInput) {
 					optionInput.value = '';
 				});
-				const searchForm = document.querySelector("form[name='search-contents']");
-				if (searchForm) {
-					searchForm.reset();
-				}
-				const searchInput = elem.closest('.search-container')?.querySelector('input');
-				if (searchInput) {
-					searchInput.disabled = false;
-				}
 			});
 		}
 
@@ -369,4 +384,13 @@ export default class Search {
 			});
 		});
 	}
+
+	sizingbtn (t) {
+		this.bean.page.rowsPerPage = t.value || '20';
+		const tableContent = document.querySelector('.table-contents');
+		tableContent.setAttribute('data-size', t.value);
+		tableContent.setAttribute('data-current', 0);
+		search.submit(t, null, 'tag');
+	}
+
 }

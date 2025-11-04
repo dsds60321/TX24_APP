@@ -14,7 +14,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   </head>
 
-  <body>
+  <body data-page="sign-login">
     <div class="login-wrapper">
       <div class="login d-flex col-12 m-0">
         
@@ -26,10 +26,11 @@
             <p class="fs-8 p-0 pt-2 mb-0">Sign in to continue to syslink.</p>
           </div>
 
-          <form action="" class="login-form pt-3">
+          <form id="loginForm" th:action="@{/sign/in}" method="POST" class="login-form pt-3">
+            <input type="hidden" id="csrf" name="_csrf" th:value="${_csrf}">
             <div class="mb-3">
               <label for="id" class="form-label fs-7 fw-bold">User ID</label>
-              <input type="input" id="id" placeholder="" class="form-control form-control-xl fs-7">
+              <input type="text" id="id" name="id" placeholder="" class="form-control form-control-xl fs-7">
             </div>
 
             <div class="mb-3">
@@ -39,7 +40,7 @@
               </div>
 
               <div class="position-relative">
-                <input type="password" id="pw" placeholder="" class="form-control pe-5">
+                <input type="password" id="pw" name="password" placeholder="" class="form-control pe-5">
                 <button type="button" id="togglePassword" class="btn position-absolute top-50 end-0 translate-middle-y border-0 bg-transparent me-2">
                   <i class="text-grey mb-2 fa-solid fa-eye fs-9" id="eyeIcon"></i>
                 </button>
@@ -52,7 +53,7 @@
               </p>
             </div>
 
-            <button type="button" id="loginBtn" class="btn btn-primary btn-xl fs-7 w-100">Sign In</button>
+            <button type="submit" id="loginBtn" class="btn btn-primary btn-xl fs-7 w-100">Sign In</button>
             <p class="fs-8 text-primary text-center pt-4">©2025, SYSLINK</p>
           </form>
         </div>
@@ -65,39 +66,9 @@
     </div>
 
     <!-- JS -->
-    <script src="/assets/js/bootstrap.bundle.min.js"></script>
-    <script>
-      // 패스워드 토글 함수
-      function togglePasswordVisibility(pw, eyeIconId) {
-        var pw = document.getElementById(pw);
-        var eyeIcon = document.getElementById(eyeIconId);
-        if (pw.type === 'password') {
-          pw.type = 'text';
-          eyeIcon.classList.remove('fa-eye');
-          eyeIcon.classList.add('fa-eye-slash');
-        } else {
-          pw.type = 'password';
-          eyeIcon.classList.remove('fa-eye-slash');
-          eyeIcon.classList.add('fa-eye');
-        }
-      }
-
-      // 패스워드 아이콘 이벤트 리스너 추가
-      document.getElementById('togglePassword').addEventListener('click', function() {
-        togglePasswordVisibility('pw', 'eyeIcon');
-      });
-
-      // 로그인 버튼 클릭 이벤트
-      document.getElementById('loginBtn').addEventListener('click', function() {
-        var id = document.getElementById('id');
-        var pw = document.getElementById('pw');
-        if (id.value === '' || pw.value === '') {
-          document.querySelector('.text-danger').innerHTML =
-            '<i class="fa-solid fa-circle-exclamation me-1"></i>입력정보를 입력해주세요.';
-        } else {
-          location.href = '/example/login2fa';
-        }
-      });
-    </script>
+    <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/assets/js/just-validate.production.min.js}"></script>
+    <script th:src="@{/assets/js/axios.min.js}"></script>
+    <script th:src="@{/assets/js/pages/sign/login.js}"></script>
   </body>
 </html>

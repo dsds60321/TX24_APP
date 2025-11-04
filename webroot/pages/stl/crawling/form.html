@@ -1,6 +1,6 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8"/>
 </head>
 <body>
 <div class="row">
@@ -10,7 +10,8 @@
             <div th:replace="~{pages/layout/fragments :: maps('데이터 수집')}"></div>
 
 
-            <div class="card-wrapper search" data-url="/stl/crawling/list" data-target="#search-list" data-detail-mode="true">
+            <div class="card-wrapper search" data-url="/stl/crawling/list" data-target="#search-list"
+                 data-detail-mode="true">
                 <form action="">
                     <div class="card-contents">
                         <div class="card-row">
@@ -18,7 +19,9 @@
                                 <div class="card-title"><p class="fs-8 fw-bold">취급일</p></div>
                                 <div class="card-txt">
                                     <div class="search-group">
-                                        <input type="text" class="form-control fs-8 tx-datepicker" name="regDate" data-oper-sep=" - " data-separator="-" data-format="yyyy-mm-dd" data-default="today" data-range="Y" data-oper="eq"  data-group="0">
+                                        <input type="text" class="form-control fs-8 tx-datepicker" name="trxDay"
+                                               data-oper-sep=" - " data-separator="-" data-format="yyyy-mm-dd"
+                                               data-default="today" data-range="Y" data-oper="eq" data-group="0">
                                     </div>
                                 </div>
                             </div>
@@ -26,46 +29,18 @@
                                 <div class="card-title"><p class="fs-8 fw-bold">대상거래일</p></div>
                                 <div class="card-txt">
                                     <div class="search-group">
-                                        <input type="text" id="datepicker2" class="form-control fs-8 tx-datepicker" name="targetDate" data-separator="-" data-format="yyyy-mm-dd" data-range="Y" data-oper="eq"  data-group="0" readonly>
+                                        <input type="text" id="datepicker2" class="form-control fs-8 tx-datepicker"
+                                               name="trxEndDay" data-separator="-" data-format="yyyy-mm-dd"
+                                               data-range="Y" data-oper="eq" data-group="0" readonly>
                                     </div>
                                 </div>
                             </div>
                             <div class="col d-flex search-container">
-                                <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                                <div class="card-title"><p class="fs-8 fw-bold">수집상태</p></div>
                                 <div class="card-txt">
                                     <div class="search-group">
-                                        <select name="" id="" class="form-control fs-8">
-                                            <option value="사용">사용</option>
-                                            <option value="중지">중지</option>
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col d-flex search-container">
-                                <div class="card-title"><p class="fs-8 fw-bold">태그테스트</p></div>
-                                <div class="card-txt">
-                                    <div class="search-group">
-                                        <input type="text" name="appId" data-oper="eq" class="form-control fs-8">
-                                        <button type="button" class="btn search-btn circle" onclick="search.addTag(this)"></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-row search-container">
-                            <div class="col d-flex">
-                                <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
-                                <div class="card-txt">
-                                    <div class="search-group">
-                                        <input type="text" id="datepicker" class="form-control fs-8">
-                                        <button type="button" class="btn search-btn circle"></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col d-flex">
-                                <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
-                                <div class="card-txt">
-                                    <div class="search-group">
-                                        <select name="" id="" class="form-control fs-8">
+                                        <select onchange="search.selectOption(this)" name="status" id="" data-oper="eq" class="form-control fs-8">
+                                            <option value="">----</option>
                                             <option value="대기">대기</option>
                                             <option value="완료">완료</option>
                                             <option value="실패">실패</option>
@@ -73,48 +48,25 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col d-flex">
-                                <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
+                            <div class="col d-flex search-container">
+                                <div class="card-title"><p class="fs-8 fw-bold">고객사명</p></div>
                                 <div class="card-txt">
                                     <div class="search-group">
-                                        <input type="text" id="el" class="form-control fs-8">
-                                        <button type="button" class="btn search-btn"></button>
+                                        <input type="text" name="mchtName" data-oper="eq" class="form-control fs-8">
+                                        <button type="button" class="btn search-btn circle"
+                                                onclick="search.addTag(this)"></button>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col d-flex">
-                                <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
-                                <div class="card-txt">
-                                    <div class="search-group">
-                                        <input type="text" id="el" class="form-control fs-8">
-                                        <button type="button" class="btn search-btn"></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-row">
-                            <div class="col d-flex">
-                                <div class="card-title"><p class="fs-8 fw-bold">옵션</p></div>
-                                <div class="card-txt">
-                                    <div class="search-group">
-                                        <input type="text" id="datepicker" class="form-control fs-8">
-                                        <button type="button" class="btn search-btn"></button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col d-flex m-none">
-                            </div>
-                            <div class="col d-flex m-none">
-                            </div>
-                            <div class="col d-flex m-none">
                             </div>
                         </div>
                     </div>
                     <div class="tag-contents">
                         <div class="tag-inner">
-                            <a href="#" class="search-reload">
-                                Reset
-                            </a>
+                            <div class="card-title" style="padding: 12px 8px;">
+                                <a href="#" class="search-reload fs-8 fw-bold">
+                                    Reset
+                                </a>
+                            </div>
                             <div class="field">
                             </div>
 
@@ -125,7 +77,9 @@
                                 <span class="tag-label"></span>
                             </div>
                         </div>
-                        <button type="button" class="search-btn btn btn-primary search-submit-btn" onclick="search.submit(this, event, 'tag');">검색</button>
+                        <button type="button" class="search-btn btn btn-primary search-submit-btn"
+                                onclick="search.submit(this, event, 'tag');">검색
+                        </button>
                     </div>
                 </form>
             </div>
@@ -144,12 +98,13 @@
                         <select name="" id="" class="form-control select-grey fs-8">
                             <option value="정산생성">정산생성</option>
                         </select>
-                        <select name="" id="" class="form-control select-grey fs-8 rows-per-page">
+                        <select onchange="search.sizingbtn(this)" name="" id="" class="form-control select-grey fs-8 rows-per-page">
                             <option value="20">show 20</option>
                             <option value="50">show 50</option>
                             <option value="100">show 100</option>
                         </select>
-                        <button onclick="search.submit(this)" data-type="excel" type="button" class="badge bg-grey-outline"><i class="fa-solid fa-file-excel"></i></button>
+                        <button onclick="search.submit(this)" data-type="excel" type="button"
+                                class="badge bg-grey-outline"><i class="fa-solid fa-file-excel"></i></button>
                     </div>
                 </div>
 

@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import kr.tx24.fc.bean.SearchBean;
 import kr.tx24.fc.bean.SearchPage;
 import kr.tx24.fc.enums.MockNames;
+import kr.tx24.fc.enums.TxResultCode;
+import kr.tx24.fc.exception.TxException;
 import kr.tx24.lib.lang.CommonUtils;
 import kr.tx24.lib.map.SharedMap;
 import kr.tx24.lib.mapper.JacksonUtils;
@@ -23,28 +25,57 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * 더미 데이터 repository
+ */
 @Repository
 public class DummyRepository {
 
-	private static final Logger log = LoggerFactory.getLogger(DummyRepository.class);
+	private static final Logger looger = LoggerFactory.getLogger(DummyRepository.class);
+
+	private static final JacksonUtils jacksonUtils = new JacksonUtils();
 	private static final Path MOCK_DATA_PATH = Path.of("mock", "mock-data.json");
 	private static final long DEFAULT_ROWS_PER_PAGE = 20L;
+
+
+	public static SharedMap<String, Object> of(MockNames mockName) {
+		return loadMockOne(mockName.getKey());
+	}
+
+	public static List<SharedMap<String, Object>> list(MockNames mockName) {
+		return loadMock(mockName.getKey());
+	}
 
 	/**
 	 * 더미 데이터 조회
 	 */
 	public static List<SharedMap<String, Object>> of(MockNames mockName, List<SearchBean> datas) {
 		List<SharedMap<String, Object>> rows = loadMock(mockName.getKey());
-		return rows.stream()
+
+		// 검색
+		rows = rows.stream()
 				.filter(row -> datas.stream().allMatch(data -> matches(row, data)))
-				.collect(Collectors.toList());
+				.toList();
+
+
+		for (int i = 0; i < rows.size(); i++) {
+			rows.get(i).put("idx", i + 1);
+		}
+
+		return rows;
 	}
 
 	/**
 	 * 더미 데이터 페이징 조회
 	 */
 	public static List<SharedMap<String, Object>> of(MockNames mockName, List<SearchBean> datas, SearchPage page) {
-		return search(loadMock(mockName.getKey()), datas, page);
+		List<SharedMap<String, Object>> rows = search(loadMock(mockName.getKey()), datas, page);
+
+		for (int i = 0; i < rows.size(); i++) {
+			rows.get(i).put("idx", i + 1);
+		}
+
+		return rows;
 	}
 
 
@@ -56,24 +87,55 @@ public class DummyRepository {
 
 	private static List<SharedMap<String, Object>> loadMock(String key) {
 		if (!Files.exists(MOCK_DATA_PATH)) {
-			log.warn("Mock data file not found: {}", MOCK_DATA_PATH.toAbsolutePath());
+			looger.warn("Mock data file not found: {}", MOCK_DATA_PATH.toAbsolutePath());
 			return Collections.emptyList();
 		}
 
 		try {
-			JsonNode root = new JacksonUtils().fromJson(MOCK_DATA_PATH, JsonNode.class);
+			JsonNode root = jacksonUtils.fromJson(MOCK_DATA_PATH, JsonNode.class);
 			JsonNode rowsNode = root.path(key).path("rows");
 			List<SharedMap<String, Object>> loadedRows = new ArrayList<>();
 			rowsNode.forEach(node -> {
-				SharedMap map = new JacksonUtils().fromJson(node.toString(), SharedMap.class);
+				SharedMap map = jacksonUtils.fromJson(node.toString(), SharedMap.class);
 				loadedRows.add(map);
 			});
 			return Collections.unmodifiableList(loadedRows);
 		} catch (Exception e) {
-			log.info("Mock Data 불러오기 실패 : {} ", CommonUtils.getExceptionMessage(e, 1000));
+			looger.info("Mock Data 불러오기 실패 : {} ", CommonUtils.getExceptionMessage(e, 1000));
 			return Collections.emptyList();
 		}
 	}
+
+	/**
+	 * 더미 데이터 단건 조회
+	 */
+	private static SharedMap<String, Object> loadMockOne(String key) {
+		if (!Files.exists(MOCK_DATA_PATH)) {
+			looger.warn("Mock data file not found: {}", MOCK_DATA_PATH.toAbsolutePath());
+			throw new TxException(TxResultCode.NO_CONTENTS, "Mock 데이터 파일을 찾을 수 없습니다.");
+		}
+
+		try {
+			JsonNode root = jacksonUtils.fromJson(MOCK_DATA_PATH, JsonNode.class);
+			JsonNode targetNode = root.path(key);
+			if (targetNode.isMissingNode() || targetNode.isNull() || targetNode.isEmpty()) {
+				throw new TxException(TxResultCode.NO_CONTENTS, "요청한 Mock 데이터를 찾을 수 없습니다.");
+			}
+
+			SharedMap map = jacksonUtils.fromJson(targetNode.toString(), SharedMap.class);
+			if (map == null || map.isEmpty()) {
+				throw new TxException(TxResultCode.NO_CONTENTS, "Mock 데이터가 비어 있습니다.");
+			}
+
+			return new SharedMap<String, Object>(map);
+		} catch (TxException ex) {
+			throw ex;
+		} catch (Exception e) {
+			looger.info("Mock Data 불러오기 실패 : {} ", CommonUtils.getExceptionMessage(e, 1000));
+			throw new TxException(TxResultCode.INTERNAL_ERROR, "Mock 데이터 로딩 중 오류가 발생했습니다.", e);
+		}
+	}
+
 
 	/**
 	 * 검색
@@ -86,6 +148,7 @@ public class DummyRepository {
 				.collect(Collectors.toList());
 		}
 
+		// 페이징 계산
 		long rowsPerPage = page.rowsPerPage > 0 ? page.rowsPerPage : DEFAULT_ROWS_PER_PAGE;
 		page.rowsPerPage = rowsPerPage;
 		page.totalSize = filtered.size();
@@ -102,6 +165,9 @@ public class DummyRepository {
 			.collect(Collectors.toList());
 	}
 
+	/**
+	 * 검색
+	 */
 	private static boolean matches(SharedMap<String, Object> row, SearchBean data) {
 		if (row == null || data == null || CommonUtils.isEmpty(data.id)) {
 			return false;
@@ -151,7 +217,7 @@ public class DummyRepository {
 	}
 
 	private static boolean isDateField(String field) {
-		return field != null && field.toLowerCase().contains("date");
+		return field != null && (field.toLowerCase().contains("date") || field.toLowerCase().contains("day"));
 	}
 
 	private static LocalDate parseDate(Object value) {
@@ -180,4 +246,5 @@ public class DummyRepository {
 			}
 		}
 	}
+
 }

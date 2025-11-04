@@ -70,6 +70,7 @@
 
             <p class="fs-8 text-primary text-center pt-4 mb-0">©2025, tx24</p>
           </form>
+
         </div>
 
         <!-- Right: Background -->
@@ -80,28 +81,10 @@
     </div>
 
     <!-- JS -->
-    <script src="/assets/js/bootstrap.bundle.min.js"></script>
-    <script>
-      // 인증 방식 버튼 클릭 시 인증 입력창 표시
-      var optionBtn = document.querySelectorAll('.option-Btn');
-      optionBtn.forEach(function (btn) {
-        btn.addEventListener('click', function () {
-          document.querySelector('.option-box').style.display = 'none';
-          document.querySelector('.auth-box').style.display = 'block';
-        });
-      });
+    <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/assets/js/just-validate.production.min.js}"></script>
+    <script th:src="@{/assets/js/axios.min.js}"></script>
+    <script th:src="@{/assets/js/pages/sign/twoFactor.js}"></script>
 
-      // 인증 버튼 클릭 시 처리
-      document.getElementById('authBtn').addEventListener('click', function () {
-        var input = document.getElementById('2fa');
-        if (input.value === '') {
-          document.querySelector('.text-danger').innerHTML =
-            '<i class="fa-solid fa-circle-exclamation me-1"></i>에러 문구 입력.';
-        } else {
-          // 페이지 이동
-          location.href = '/example/components';
-        }
-      });
-    </script>
   </body>
 </html>

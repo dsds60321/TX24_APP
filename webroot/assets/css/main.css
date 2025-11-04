@@ -670,6 +670,8 @@ body {
 }
 
 .card-wrapper.search .tag-contents .tag-inner {
+    display: flex;
+    align-items: center;
     width: calc(100% - 120px);
 }
 
@@ -687,9 +689,7 @@ body {
 
 /* Tag styles */
 .card-wrapper.search .tag-contents .tag-inner .field .tag {
-    border: 1px solid #BDC3CE;
     padding: 2px 8px;
-    border-radius: 100px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -713,6 +713,7 @@ body {
 }
 
 .card-wrapper.search .tag-contents .tag-inner .field .tag .tag-label {
+    border-bottom: 1px solid #fff;
     color: #727A86;
     font-size: 0.8rem;
     position: relative;

@@ -46,6 +46,19 @@ body {
     max-width: 600px;
 }
 
+.auth-box .auth-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    width: 100%;
+    margin-top: 12px;
+}
+
+.auth-box .auth-actions .btn {
+    flex: 1 1 0;
+    min-width: 120px;
+}
+
 @media (max-width: 992px) {
     .login-wrapper .login-box-wrapper {
         width: 100% !important;

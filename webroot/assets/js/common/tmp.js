@@ -505,7 +505,7 @@ var search = {
         }
     },
     selectOption: function(elem) { // 셀렉트
-        var elemBoxVal = elem.closest('.box-group').querySelector('.box-val');
+        var elemBoxVal = elem.value;
         if (!elem.value && elem.getAttribute('data-value') != null) {
             // Search Select
             elemBoxVal.value = elem.getAttribute('data-value');

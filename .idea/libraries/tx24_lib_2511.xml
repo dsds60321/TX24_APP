@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="tx24_lib_2511">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/tx24_lib_2511.jar!/" />
+      <root url="jar://$PROJECT_DIR$/lib/tx24_was_2511.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
