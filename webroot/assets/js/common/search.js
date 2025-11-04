@@ -326,14 +326,15 @@ export default class Search {
 				tagDiv.classList.add('fixed');
 			}
 			// tagDiv.style.cssFloat = 'left';
-			tagDiv.querySelector('.tag-label').innerText = val;
+			tagDiv.querySelector('.tag-label').innerText = name + ' : ' + val;
 
-			tagDiv.addEventListener("mouseover", () => {
-				tagDiv.querySelector('.tag-label').innerText = name + ' : ' + val;
-			});
-			tagDiv.addEventListener("mouseleave", () => {
-				tagDiv.querySelector('.tag-label').innerText = val;
-			});
+			//  11.04 기본 css 효과 삭제
+			// tagDiv.addEventListener("mouseover", () => {
+			// 	tagDiv.querySelector('.tag-label').innerText = name + ' : ' + val;
+			// });
+			// tagDiv.addEventListener("mouseleave", () => {
+			// 	tagDiv.querySelector('.tag-label').innerText = val;
+			// });
 
 			tagDiv.querySelector('.tag-close').addEventListener("click", (e) => {
 				e.preventDefault();
