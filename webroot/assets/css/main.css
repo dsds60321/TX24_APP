@@ -1214,3 +1214,24 @@ body {
         top: 9px;
     }
 }
+
+@keyframes toastify-slide-in-right {
+	from {
+		transform: translateX(120%);
+		opacity: 0;
+	}
+
+	to {
+		transform: translateX(0);
+		opacity: 1;
+	}
+}
+
+.toastify.toastify-right {
+	animation: toastify-slide-in-right 0.35s ease forwards;
+}
+
+.toastify.toastify-top.toastify-right {
+	top: 24px !important;
+	right: 24px;
+}

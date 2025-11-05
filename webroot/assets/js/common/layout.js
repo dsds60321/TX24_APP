@@ -387,16 +387,17 @@ export default class Layout {
     }
 
     blockBrowserEvt() {
-        document.addEventListener('keydown', function (e) {
-            if (
-                e.key === 'F5' ||
-                (e.ctrlKey && e.key === 'r') ||
-                (e.metaKey && e.key === 'r')
-            ) {
-                e.preventDefault();
-                alert('새로고침이 차단되어 있습니다.');
-            }
-        });
+
+        // document.addEventListener('keydown', function (e) {
+        //     if (
+        //         e.key === 'F5' ||
+        //         (e.ctrlKey && e.key === 'r') ||
+        //         (e.metaKey && e.key === 'r')
+        //     ) {
+        //         e.preventDefault();
+        //         alert('새로고침이 차단되어 있습니다.');
+        //     }
+        // });
 
         // 마우스 오른쪽 버튼 새로고침 메뉴 방지 (일부 환경)
         window.addEventListener('beforeunload', function (e) {
@@ -627,6 +628,7 @@ export default class Layout {
                 })
                 .catch(error => {
                     console.error('loadContent ERROR ', error)
+                    util.toastify.warning('컨텐츠를 불러오는데 실패했습니다.');
                     state.tabs.delete(url);
                     renderError(tab.url);
                 });
@@ -659,8 +661,16 @@ export default class Layout {
             });
         }
 
-        function deleteApp(url) {
+        function deleteApp(elem) {
+            const card = elem.closest('.app-card');
+            const url = card.dataset.url;
+
+            if (!card && !url) {
+                return;
+            }
+
             if (state.tabs.size === 1) {
+                util.toastify.info('최소 1개에 페이지는 남겨두어야 합니다.');
                 return;
             }
 
@@ -668,6 +678,7 @@ export default class Layout {
                 state.tabs.delete(url);
                 state.cache.delete(url);
                 state.images.delete(url);
+                card.remove();
             }
 
         }
@@ -677,7 +688,8 @@ export default class Layout {
             init,
             open,
             activate,
-            getState
+            getState,
+            deleteApp
         }
     }
 
@@ -763,7 +775,7 @@ export default class Layout {
                 const image = images.get(url) || "";
                 return `
                       <div class="app-card" data-url="${url}" onclick="layout.TabManager.activate('${url}')">
-                        <button class="delete-app-btn" onclick="event.stopPropagation(); deleteApp('${url}');">×</button>
+                        <button class="delete-app-btn" onclick="event.stopPropagation(); layout.TabManager.deleteApp(this);">×</button>
                         <div class="app-title">${title}</div>
                         <div class="app-preview"><img src='${image}' alt='${title}'></div>
                       </div>

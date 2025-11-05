@@ -6,6 +6,7 @@
         <title th:text="${pageTitle} ?: 'TX24'">TX24</title>
 
         <!-- CSS -->
+        <link th:href="@{/assets/css/toastify.min.css}" rel="stylesheet" />
         <link th:href="@{/assets/css/components.css}" rel="stylesheet" />
         <link th:href="@{/assets/css/main.css}" rel="stylesheet" />
         <link th:href="@{/assets/css/datepicker.min.css}" rel="stylesheet" />
@@ -34,24 +35,8 @@
                         </div>
                     </div>
 
+                    <!-- 레이아웃 HTML -->
                     <div class="main-overlay" id="launcherModal">
-<!--                        <div class="launcher-content">-->
-<!--                            <button class="close-launcher" onclick="overlay.close()">×</button>-->
-<!--                            <div class="launcher-header-section">-->
-<!--                                <h1 class="launcher-title">Apps History</h1>-->
-<!--                                <p class="launcher-subtitle">방문한 페이지를 선택하여 빠르게 이동하세요</p>-->
-<!--                                <button class="clear-all-btn" onclick="clearAllHistory()" id="clearAllBtn" style="display: none;">-->
-<!--                                    🗑️ 전체 기록 삭제-->
-<!--                                </button>-->
-<!--                            </div>-->
-<!--                            <div class="apps-grid" id="appsGrid">-->
-<!--                                <div class="empty-state">-->
-<!--                                    <div class="empty-state-icon">📭</div>-->
-<!--                                    <div class="empty-state-title">아직 방문한 페이지가 없습니다</div>-->
-<!--                                    <div class="empty-state-text">사이드바 메뉴에서 페이지를 방문해보세요!</div>-->
-<!--                                </div>-->
-<!--                            </div>-->
-<!--                        </div>-->
                     </div>
                 </main>
             </div>
@@ -66,6 +51,7 @@
         <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
         <script th:src="@{/assets/js/axios.min.js}"></script>
         <script th:src="@{/assets/js/datepicker.js}"></script>
+        <script th:src="@{/assets/js/common/toastify.js}"></script>
         <script th:src="@{/assets/js/common/util.js}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <script th:src="@{/assets/js/just-validate.production.min.js}"></script>
