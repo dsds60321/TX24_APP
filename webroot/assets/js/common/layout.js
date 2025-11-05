@@ -4,18 +4,18 @@
 export default class Layout {
     constructor() {
         // 하위 페이지 탭 매니저
-        this.pages = new Set(); // 페이지 기록될 저장소
+        this.TabManager = this.createTabManager();
+        this.Overlay = this.overlay();
         this.loadingOverlay = null;
         this.loadingMessageElem = null;
         this.init();
-        if (typeof window !== 'undefined') {
-            window.layout = this;
-        }
     }
 
     init() {
         this.bindEvents();
         this.mobileSize();
+        this.TabManager.init();
+        this.Overlay.init();
     }
 
     bindEvents() {
@@ -26,7 +26,7 @@ export default class Layout {
         this.bindEmailFocus();
         this.bindCardEdit();
         this.bindModalLoader();
-        // this.blockBrowserEvt();
+        this.blockBrowserEvt();
     }
 
     // 탭 함수
@@ -35,7 +35,7 @@ export default class Layout {
 
         tabAllButtons.forEach(elem => {
 
-            elem.addEventListener('click', function({target}) {
+            elem.addEventListener('click', function ({target}) {
                 var nav = target.closest('.nav-box');
                 const tabId = target.dataset.tabTarget;
                 if (!tabId) return;
@@ -60,7 +60,7 @@ export default class Layout {
             return;
         }
         sideMenuToggle.dataset.boundSidebarToggle = 'true';
-        sideMenuToggle.addEventListener('click', function() {
+        sideMenuToggle.addEventListener('click', function () {
             const mainElement = document.querySelector('.main');
             if (!mainElement) {
                 return;
@@ -72,7 +72,7 @@ export default class Layout {
             }
         });
 
-        document.querySelector('.close_sidebar').addEventListener('click', function() {
+        document.querySelector('.close_sidebar').addEventListener('click', function () {
             const mainElement = document.querySelector('.main');
             mainElement.classList.add('sidebarHide');
         })
@@ -87,12 +87,12 @@ export default class Layout {
         if (!root) {
             return;
         }
-        root.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(toggle) {
+        root.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function (toggle) {
             if (toggle.dataset.boundCollapseIcon === 'true') {
                 return;
             }
             toggle.dataset.boundCollapseIcon = 'true';
-            toggle.addEventListener('click', function() {
+            toggle.addEventListener('click', function () {
                 const chevron = this.querySelector('.fa-caret-down');
                 if (chevron) {
                     const nextRotation = chevron.style.transform === 'rotate(0deg)' ? 'rotate(-90deg)' : 'rotate(0deg)';
@@ -108,12 +108,12 @@ export default class Layout {
         if (!root) {
             return;
         }
-        root.querySelectorAll('.select-to-input').forEach(function(select) {
+        root.querySelectorAll('.select-to-input').forEach(function (select) {
             if (select.dataset.boundSelectToInput === 'true') {
                 return;
             }
             select.dataset.boundSelectToInput = 'true';
-            select.addEventListener('change', function() {
+            select.addEventListener('change', function () {
                 const targetId = this.getAttribute('data-target');
                 const targetInput = document.getElementById(targetId);
                 if (targetInput) {
@@ -130,17 +130,17 @@ export default class Layout {
         if (!root) {
             return;
         }
-        root.querySelectorAll('.email').forEach(function(container) {
+        root.querySelectorAll('.email').forEach(function (container) {
             if (container.dataset.boundEmail === 'true') {
                 return;
             }
             container.dataset.boundEmail = 'true';
             const textInputs = container.querySelectorAll('input');
-            textInputs.forEach(function(input) {
-                input.addEventListener('focus', function() {
+            textInputs.forEach(function (input) {
+                input.addEventListener('focus', function () {
                     container.classList.add('on');
                 });
-                input.addEventListener('blur', function() {
+                input.addEventListener('blur', function () {
                     container.classList.remove('on');
                 });
             });
@@ -185,13 +185,13 @@ export default class Layout {
         const layout = this;
         const modals = root.querySelectorAll('.modal');
 
-        modals.forEach(function(modal) {
+        modals.forEach(function (modal) {
             if (modal.dataset.boundModalAjax === 'true') {
                 return;
             }
             modal.dataset.boundModalAjax = 'true';
 
-            modal.addEventListener('show.bs.modal', function(event) {
+            modal.addEventListener('show.bs.modal', function (event) {
                 const trigger = event.relatedTarget;
                 if (!trigger) {
                     return;
@@ -207,16 +207,16 @@ export default class Layout {
                 }
 
                 modalContent.innerHTML = layout.buildModalLoading();
-                layout.loadModalContent(requestUrl).then(function(html) {
+                layout.loadModalContent(requestUrl).then(function (html) {
                     modalContent.innerHTML = html;
                     layout.rebindDynamic(modal);
                     layout.syncModalLabel(modal);
-                }).catch(function(error) {
+                }).catch(function (error) {
                     modalContent.innerHTML = layout.buildModalError(error);
                 });
             });
 
-            modal.addEventListener('hidden.bs.modal', function() {
+            modal.addEventListener('hidden.bs.modal', function () {
                 const modalContent = modal.querySelector('.modal-content');
                 if (!modalContent) {
                     return;
@@ -306,7 +306,7 @@ export default class Layout {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             }
-        }).then(function(response) {
+        }).then(function (response) {
             if (!response.ok) {
                 const message = '모달 데이터를 불러오지 못했습니다. (' + response.status + ')';
                 throw new Error(message);
@@ -334,7 +334,7 @@ export default class Layout {
     buildModalUrl(baseUrl, trigger) {
         const url = new URL(baseUrl, window.location.origin);
         const params = this.collectModalParams(trigger);
-        params.forEach(function(value, key) {
+        params.forEach(function (value, key) {
             url.searchParams.append(key, value);
         });
         return url.toString();
@@ -399,21 +399,22 @@ export default class Layout {
         });
 
         // 마우스 오른쪽 버튼 새로고침 메뉴 방지 (일부 환경)
-        // window.addEventListener('beforeunload', function (e) {
-        //     // 페이지 이탈 경고
-        //     e.preventDefault();
-        //     e.returnValue = '';
-        // });
-        //
-        // history.pushState(null, '', location.href);
-        // window.onpopstate = function () {
-        //     history.pushState(null, '', location.href);
-        //     alert('뒤로가기가 차단되어 있습니다.');
-        // };
+        window.addEventListener('beforeunload', function (e) {
+            // 페이지 이탈 경고
+            e.preventDefault();
+            e.returnValue = '';
+        });
+
+        history.pushState(null, '', location.href);
+        window.onpopstate = function () {
+            history.pushState(null, '', location.href);
+            layout.Overlay.tabOpen();
+        };
     }
 
     datepickerRender() {
-        document.querySelectorAll('.fc-datepicker').forEach((elem) => {
+        console.log('datepickerRender datepickerRender')
+        document.querySelectorAll('.tx-datepicker').forEach((elem) => {
             const picker = layout.setOption(elem, "picker");
             let val;
             let pickerOption = {};
@@ -427,25 +428,27 @@ export default class Layout {
                     onSelect: function (formattedDate, date, inst) {
 
                         /* search box Input처리 */
-                        if(elem) {
+                        if (elem) {
                             console.log('elem', elem)
-                            if(picker.range){
+                            if (picker.range) {
                                 console.log('date', date)
                                 console.log(elem.value)
                                 console.log(util.dateUtil.toString(date[0]))
-                                if(date.length < 2) {
+                                if (date.length < 2) {
                                     elem.value = util.dateUtil.toString(date[0]) + ' - ' + util.dateUtil.toString(date[0]);
                                 } else {
                                     elem.value = util.dateUtil.toString(date[0]) + ' - ' + util.dateUtil.toString(date[1]);
                                 }
-                            }else{
-                                if(formattedDate){
-                                    elem.value = formattedDate +" - " + formattedDate;
+                            } else {
+                                if (formattedDate) {
+                                    elem.value = formattedDate + " - " + formattedDate;
                                 }
                             }
 
                             search.addTag(elem);
-                            if(date.length > 1) {inst.hide();}
+                            if (date.length > 1) {
+                                inst.hide();
+                            }
                         }
                     }
                 };
@@ -456,7 +459,9 @@ export default class Layout {
 
             // 기본값
             switch (picker.default) {
-                case "today" : val = util.dateUtil.getNowDate(picker.separator); break;
+                case "today" :
+                    val = util.dateUtil.getNowDate(picker.separator);
+                    break;
 
             }
 
@@ -472,7 +477,7 @@ export default class Layout {
     setOption(elem, type) {
         let option = {};
         if (elem) {
-            if(type === "picker"){
+            if (type === "picker") {
                 option['format'] = elem.dataset.format;
                 option['separator'] = elem.dataset.separator;
                 option['range'] = elem.dataset.range === 'Y';
@@ -484,5 +489,291 @@ export default class Layout {
         console.log(option)
 
         return option;
+    }
+
+
+    /*
+     * 페이지 히스토리
+     */
+    createTabManager() {
+        let contentArea = null;
+        const state = {
+            tabs: new Map(),
+            activeUrl: null,
+            cache: new Map(),
+            images: new Map()
+        }
+
+        function getState() {
+            return state;
+        }
+
+        function init() {
+            contentArea = document.getElementById('main-content-area');
+
+            if (!contentArea) {
+                return;
+            }
+
+            document.addEventListener('click', onTriggerClick);
+        }
+
+        // NavLink 혹은 , 탭 선택시 open 함수
+        function open({title, url}) {
+            if (!title && !url) {
+                return;
+            }
+
+
+            const tab = {
+                title: title,
+                url: url,
+            };
+
+            state.tabs.set(url, tab);
+            state.activeUrl = url;
+            activate(url);
+        }
+
+        function activate(tabUrl) {
+            layout.Overlay.close();
+
+            if (!state.tabs.has(tabUrl)) {
+                return;
+            }
+
+            state.activeUrl = tabUrl;
+            const cached = state.cache.get(tabUrl); // 이미 가지고 있는 페이지인 경우
+
+            if (cached) {
+                renderContent(cached);
+                return;
+            }
+
+            loadContent(tabUrl);
+        }
+
+
+        function onTriggerClick(event) {
+            event.preventDefault();
+
+            // tab생성에 필요한 데이터
+            const linkElem = event.target.closest('.nav-link');
+            if (!linkElem) {
+                return;
+            }
+
+            const {tabUrl, tabTitle} = linkElem.dataset;
+            if (!tabUrl || !tabTitle) {
+                return;
+            }
+
+            open({
+                title: tabTitle,
+                url: tabUrl,
+            });
+
+            document.querySelectorAll('.nav-link').forEach(function (link) {
+                link.classList.remove('active');
+            });
+
+            linkElem.classList.add('active');
+        }
+
+        function renderContent(html) {
+            if (!contentArea) {
+                return;
+            }
+
+            const template = document.createElement('template');
+            template.innerHTML = html;
+
+            // JS 동적 로딩
+            const fragment = template.content.cloneNode(true);
+            const scripts = Array.from(fragment.querySelectorAll('script'));
+            scripts.forEach(function (script) {
+                script.parentNode.removeChild(script);
+            });
+
+            contentArea.innerHTML = '';
+            contentArea.appendChild(fragment);
+            layout.rebindDynamic(contentArea);
+
+            scripts.forEach(function (script) {
+                const cloned = document.createElement('script');
+                Array.from(script.attributes).forEach(function (attr) {
+                    cloned.setAttribute(attr.name, attr.value);
+                });
+                if (script.textContent) {
+                    cloned.textContent = script.textContent;
+                }
+                contentArea.appendChild(cloned);
+            });
+
+            // datepicker
+            layout.datepickerRender();
+            capturePage(state.activeUrl);
+            console.log('----------- state', state)
+        }
+
+
+        function loadContent(url) {
+            const tab = state.tabs.get(url);
+            console.log('loadContent ' ,tab)
+            axios.get(tab.url)
+                .then(({data}) => {
+                    state.cache.set(url, data);
+                    renderContent(data);
+                })
+                .catch(error => {
+                    console.error('loadContent ERROR ', error)
+                    state.tabs.delete(url);
+                    renderError(tab.url);
+                });
+        }
+
+        function renderError(id, message) {
+            if (!contentArea) {
+                return;
+            }
+            const errorText = message || '컨텐츠를 불러오는 데 실패했습니다.';
+            contentArea.innerHTML = '' +
+                '<div class="tab-feedback error">' +
+                '<p>' + errorText + '</p>' +
+                '<button type="button" class="btn btn-blue tab-retry-btn" data-tab-retry="' + id + '">다시 시도</button>' +
+                '</div>';
+        }
+
+        function capturePage(url) {
+            html2canvas(contentArea, {
+                backgroundColor: '#F1F2F4',
+                scale: 1.5,
+                logging: false,
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                const imageData = canvas.toDataURL('image/png', 0.95);
+                state.images.set(url, imageData);
+            }).catch(err => {
+                console.error('캡처 실패:', err);
+            });
+        }
+
+        function deleteApp(url) {
+            if (state.tabs.size === 1) {
+                return;
+            }
+
+            if (state.tabs.has(url)) {
+                state.tabs.delete(url);
+                state.cache.delete(url);
+                state.images.delete(url);
+            }
+
+        }
+
+
+        return {
+            init,
+            open,
+            activate,
+            getState
+        }
+    }
+
+
+    /**
+     * overlay 함수
+     */
+    overlay() {
+        let overlayLayer = null;
+
+        function init() {
+            overlayLayer = document.getElementById('launcherModal');
+        }
+
+        function open() {
+            console.log(layout.TabManager.getState())
+            if (!overlayLayer) return;
+            overlayLayer.classList.add('active');
+        }
+
+        function close() {
+            if (!overlayLayer) return;
+            overlayLayer.classList.remove('active');
+        }
+
+        function loading(isLoading, message = 'Loading...') {
+            if (!overlayLayer) return;
+            if (isLoading) {
+                open();
+                overlayLayer.classList.add('loading');
+                // TODO css 및 html 추가 필요
+            } else {
+                overlayLayer.classList.remove('loading');
+                close();
+            }
+        }
+
+
+        function tabOpen() {
+            open();
+            renderTabHeader();
+            renderTabContent();
+        }
+
+
+        function renderTabHeader() {
+            overlayLayer.innerHTML = `<div class="launcher-content">
+               <button class="close-launcher" onClick="layout.Overlay.close()">×</button>
+               <div class="launcher-header-section">
+                   <h1 class="launcher-title">Apps History</h1>
+                   <p class="launcher-subtitle">방문한 페이지를 선택하여 빠르게 이동하세요</p>
+                   <button class="clear-all-btn" onClick="" id="clearAllBtn"
+                           style="display: none;">
+                       🗑️ 전체 기록 삭제
+                   </button>
+               </div>`;
+        }
+
+        function renderTabContent() {
+            const {tabs, images} = layout.TabManager.getState();
+            document.querySelector('.launcher-content')
+                .insertAdjacentHTML('beforeend', `
+                  <div class="apps-grid" id="appsGrid">
+                    ${renderTab()}
+                  </div>
+                `);
+        }
+
+        function renderTab() {
+            const {tabs, images} = layout.TabManager.getState();
+
+            if (tabs.size === 0) {
+                return `
+                      <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <div class="empty-state-title">아직 방문한 페이지가 없습니다</div>
+                        <div class="empty-state-text">사이드바 메뉴에서 페이지를 방문해보세요!</div>
+                      </div>
+                    `;
+            }
+
+            return [...tabs].map(([url, {title}]) => {
+                const image = images.get(url) || "";
+                return `
+                      <div class="app-card" data-url="${url}" onclick="layout.TabManager.activate('${url}')">
+                        <button class="delete-app-btn" onclick="event.stopPropagation(); deleteApp('${url}');">×</button>
+                        <div class="app-title">${title}</div>
+                        <div class="app-preview"><img src='${image}' alt='${title}'></div>
+                      </div>
+                    `;
+            }).join('');
+        }
+
+
+        return {
+            init, open, close, tabOpen
+        }
     }
 }

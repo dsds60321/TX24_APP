@@ -34,19 +34,24 @@
                         </div>
                     </div>
 
-                    <div class="apps-overlay is-open" id="apps-overlay" aria-hidden="true">
-                        <div class="apps-overlay-inner" role="dialog" aria-modal="true" aria-label="저장된 화면">
-                            <div class="apps-overlay-header">
-                                <h2 class="apps-overlay-title mb-0">저장된 화면</h2>
-                                <div class="apps-overlay-actions">
-                                    <button type="button" class="btn btn-outline-light btn-sm" data-apps-clear>전체 삭제</button>
-                                    <button type="button" class="btn btn-light btn-sm apps-overlay-close" data-apps-close aria-label="닫기">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="apps-overlay-grid" data-apps-grid></div>
-                        </div>
+                    <div class="main-overlay" id="launcherModal">
+<!--                        <div class="launcher-content">-->
+<!--                            <button class="close-launcher" onclick="overlay.close()">×</button>-->
+<!--                            <div class="launcher-header-section">-->
+<!--                                <h1 class="launcher-title">Apps History</h1>-->
+<!--                                <p class="launcher-subtitle">방문한 페이지를 선택하여 빠르게 이동하세요</p>-->
+<!--                                <button class="clear-all-btn" onclick="clearAllHistory()" id="clearAllBtn" style="display: none;">-->
+<!--                                    🗑️ 전체 기록 삭제-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                            <div class="apps-grid" id="appsGrid">-->
+<!--                                <div class="empty-state">-->
+<!--                                    <div class="empty-state-icon">📭</div>-->
+<!--                                    <div class="empty-state-title">아직 방문한 페이지가 없습니다</div>-->
+<!--                                    <div class="empty-state-text">사이드바 메뉴에서 페이지를 방문해보세요!</div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </div>-->
                     </div>
                 </main>
             </div>
@@ -62,6 +67,7 @@
         <script th:src="@{/assets/js/axios.min.js}"></script>
         <script th:src="@{/assets/js/datepicker.js}"></script>
         <script th:src="@{/assets/js/common/util.js}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <script th:src="@{/assets/js/just-validate.production.min.js}"></script>
         <script type="module" th:src="@{/assets/js/common/layout.js}"></script>
         <script type="module" th:src="@{/assets/js/common/search.js}"></script>

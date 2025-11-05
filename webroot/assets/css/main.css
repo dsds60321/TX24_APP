@@ -58,6 +58,7 @@ body {
     position: relative;
 }
 
+/* 필요 없는듯 */
 .main .layout-loading-overlay {
     position: absolute;
     inset: 0;
@@ -763,313 +764,263 @@ body {
 /* ============================================
    6. APPS OVERLAY
    ============================================ */
-
-body.apps-overlay-open {
-    overflow: hidden;
-}
-
-.apps-overlay {
+/* Apps Launcher Modal */
+.main-overlay {
+    display: none;
     position: fixed;
-    inset: 0;
-    background: rgba(9, 12, 24, 0.92);
-    backdrop-filter: blur(28px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: clamp(24px, 4vw, 64px);
-    opacity: 0;
-    visibility: hidden;
-    pointer-events: none;
-    transition: opacity 0.2s ease, visibility 0.2s ease;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
     z-index: 2000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    backdrop-filter: blur(5px);
 }
 
-.apps-overlay.is-open {
-    background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(8px);
+.main-overlay.active {
+    display: flex;
     opacity: 1;
-    visibility: visible;
-    pointer-events: auto;
 }
 
-.apps-overlay-inner {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    padding: 5% 10%;
-    background: transparent;
-    box-shadow: none;
-}
-
-.apps-overlay-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: clamp(16px, 3vh, 32px);
-    color: #f8fafc;
-}
-
-.apps-overlay-title {
-    font-size: clamp(1.2rem, 2vw, 1.6rem);
-    font-weight: 600;
-    color: #f8fafc;
-}
-
-.apps-overlay-actions {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-}
-
-.apps-overlay-close {
-    width: 36px;
-    height: 36px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-}
-
-
-.apps-overlay-grid {
-    flex: 1;
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    grid-template-rows: repeat(3, minmax(0, 1fr));
-    gap: clamp(16px, 2vw, 32px);
-    padding: clamp(8px, 2vh, 24px) 0;
-    overflow-y: auto;
-    align-content: stretch;
-    justify-items: stretch;
-}
-
-.apps-overlay-grid::-webkit-scrollbar {
-    width: 8px;
-}
-
-.apps-overlay-grid::-webkit-scrollbar-thumb {
-    background-color: rgba(148, 163, 184, 0.4);
-    border-radius: 999px;
-}
-
-.apps-tile {
-    border-radius: 16px;
-    background-color: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(148, 163, 184, 0.25);
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-    cursor: pointer;
-    color: #e2e8f0;
-    min-height: 0;
-}
-
-.apps-tile.is-empty {
-    cursor: default;
-    background-color: rgba(255, 255, 255, 0.04);
-    border: 1px dashed rgba(148, 163, 184, 0.3);
-    color: #cbd5f5;
-}
-
-.apps-tile.is-filled:hover {
-    transform: scale(1.03);
-    box-shadow: 0 18px 36px rgba(15, 23, 42, 0.35);
-    border-color: rgba(99, 102, 241, 0.6);
-}
-
-.apps-tile-body {
-    flex: 1;
-    padding: clamp(12px, 1.5vw, 20px);
-    overflow: hidden;
-    display: flex;
-    min-height: 0;
-}
-
-.apps-tile-preview {
+.launcher-content {
+    margin: auto;
+    max-width: 1100px;
+    width: 90%;
     position: relative;
-    width: 100%;
-    height: clamp(200px, 20vh, 260px);
-    border-radius: 14px;
-    border: 1px solid rgba(148, 163, 184, 0.25);
-    background: rgba(15, 23, 42, 0.65);
-    overflow: hidden;
-    padding: clamp(10px, 1.2vw, 16px);
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-    flex: 1;
+    animation: slideUp 0.4s ease;
 }
 
-.apps-preview-frame {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    border-radius: 10px;
-    box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.2);
-    background-color: rgba(15, 23, 42, 0.75);
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
+@keyframes slideUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
 }
 
-.apps-preview-content {
-    display: inline-block;
-    transform-origin: top left;
-    pointer-events: none;
-}
-
-.apps-preview-empty {
-    font-size: 0.85rem;
-    color: rgba(226, 232, 240, 0.7);
+.launcher-header-section {
     text-align: center;
-    width: 100%;
-    line-height: 1.4;
+    margin-bottom: 30px;
 }
 
-.apps-tile-footer {
+.launcher-title {
+    color: white;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.launcher-subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+.close-launcher {
+    position: absolute;
+    top: -50px;
+    right: 0;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-size: 28px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 18px;
-    gap: 0.75rem;
-    border-top: 1px solid rgba(148, 163, 184, 0.2);
-}
-
-.apps-tile-title {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #f8fafc;
-    flex: 1;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.apps-tile-delete {
-    display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    color: #f87171;
-    background-color: rgba(248, 113, 113, 0.08);
-    border: 1px solid transparent;
+    line-height: 1;
 }
 
-.apps-tile-delete:hover {
-    background-color: rgba(248, 113, 113, 0.18);
-    border-color: rgba(248, 113, 113, 0.5);
+.close-launcher:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
 }
 
-.apps-tile-placeholder {
-    height: 100%;
-    width: 100%;
-    border: 1px dashed rgba(148, 163, 184, 0.35);
-    border-radius: 12px;
+.clear-all-btn {
+    background: rgba(239, 68, 68, 0.9);
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.clear-all-btn:hover {
+    background: rgba(239, 68, 68, 1);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+}
+
+.apps-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.app-card {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 16px;
+    cursor: pointer;
+    border: 2px solid rgba(255, 255, 255, 0.12);
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 0.65rem;
-    color: #cbd5f5;
-    font-size: 0.9rem;
-    text-align: center;
-    padding: 16px;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    width: 200px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
 }
 
-.apps-slot-index {
-    display: inline-flex;
+.app-card:hover {
+    transform: translateY(-15px) scale(1.06);
+    border-color: rgba(255, 255, 255, 0.5);
+    background: #242424;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+}
+
+.app-title {
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    width: 100%;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.app-card:hover .app-title {
+    color: #ffffff;
+    font-size: 15px;
+    font-weight: 700;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+    transform: translateY(-2px);
+}
+
+.app-preview {
+    width: 100%;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+    position: relative;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+}
+
+.app-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: top center;
+}
+
+.delete-app-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 26px;
+    height: 26px;
+    background: rgba(239, 68, 68, 0.95);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+    opacity: 0;
+    transition: all 0.3s ease;
+    display: flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: rgba(99, 102, 241, 0.25);
-    color: #e0e7ff;
-    font-weight: 600;
-    font-size: 0.9rem;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
-.apps-slot-empty {
-    font-size: 0.8rem;
+.app-card:hover .delete-app-btn {
+    opacity: 1;
 }
 
-.apps-slot-empty-label {
-    font-size: 0.85rem;
-    color: #cbd5f5;
+.delete-app-btn:hover {
+    background: rgba(239, 68, 68, 1);
+    transform: scale(1.2);
 }
 
-.app-error-state {
-    padding: 48px 16px;
+.empty-state {
     text-align: center;
-    color: #f8fafc;
+    padding: 60px 20px;
+    color: white;
 }
 
-.app-error-icon {
-    font-size: 2rem;
-    color: #f87171;
-    margin-bottom: 12px;
+.empty-state-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
 }
 
-.app-error-title {
-    font-size: 1.1rem;
+.empty-state-title {
+    font-size: 18px;
+    margin-bottom: 10px;
     font-weight: 600;
-    margin-bottom: 6px;
 }
 
-.app-error-message {
-    font-size: 0.95rem;
-    color: #cbd5f5;
-}
-
-@media (max-width: 992px) {
-    .apps-overlay {
-        padding: 16px;
-    }
-
-    .apps-overlay-inner {
-        padding: 24px;
-    }
-}
-
-@media (max-width: 1400px) and (min-width: 993px) {
-    .apps-overlay-grid {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        grid-template-rows: repeat(4, minmax(0, 1fr));
-    }
+.empty-state-text {
+    font-size: 13px;
+    opacity: 0.7;
 }
 
 @media (max-width: 992px) {
-    .apps-overlay-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        grid-template-rows: repeat(6, minmax(0, 1fr));
+    .main .sidebar {
+        width: 200px !important;
     }
 
-    .apps-tile-preview {
-        height: clamp(180px, 28vh, 220px);
+    .main .main-content {
+        width: calc(100% - 200px);
+        margin-left: 200px;
+    }
+
+    .app-card {
+        width: 170px;
+    }
+
+    .app-preview {
+        height: 100px;
     }
 }
 
-@media (max-width: 600px) {
-    .apps-overlay {
-        padding: 12px;
+@media (max-width: 768px) {
+    .launcher-title {
+        font-size: 24px;
     }
 
-    .apps-overlay-inner {
-        padding: 16px;
+    .app-card {
+        width: 150px;
     }
 
-    .apps-overlay-grid {
-        grid-template-columns: 1fr;
-        grid-template-rows: repeat(12, minmax(0, 1fr));
-        gap: 16px;
+    .app-preview {
+        height: 90px;
     }
 
-    .apps-tile-preview {
-        height: clamp(220px, 36vh, 320px);
+    .delete-app-btn {
+        opacity: 1;
     }
 }
+
+
 
 /* ============================================
    7. TABLE COMPONENTS

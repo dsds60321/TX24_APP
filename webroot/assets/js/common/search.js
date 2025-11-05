@@ -7,7 +7,6 @@ export default class Search {
 				selectedPage: 0
 			}
 		};
-		this.layout = typeof window !== 'undefined' ? window.layout : null;
 	}
 
 	async submit(elem, event, option) {
