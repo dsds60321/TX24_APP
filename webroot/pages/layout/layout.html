@@ -34,10 +34,19 @@
                         </div>
                     </div>
 
-
-                    <!--  html 팝업 토글  -->
-                    <div class="tab-panel tab-line is-empty" id="bottom-tab-panel">
-                        <div class="tab-bar" id="bottom-tab-bar" aria-label="Popup Tabs"></div>
+                    <div class="apps-overlay" id="apps-overlay" aria-hidden="true">
+                        <div class="apps-overlay-inner" role="dialog" aria-modal="true" aria-label="저장된 화면">
+                            <div class="apps-overlay-header">
+                                <h2 class="apps-overlay-title mb-0">저장된 화면</h2>
+                                <div class="apps-overlay-actions">
+                                    <button type="button" class="btn btn-outline-light btn-sm" data-apps-clear>전체 삭제</button>
+                                    <button type="button" class="btn btn-light btn-sm apps-overlay-close" data-apps-close aria-label="닫기">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="apps-overlay-grid" data-apps-grid></div>
+                        </div>
                     </div>
                 </main>
             </div>

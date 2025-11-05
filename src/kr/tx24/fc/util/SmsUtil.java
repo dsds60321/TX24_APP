@@ -7,9 +7,10 @@ import org.slf4j.LoggerFactory;
 public class SmsUtil {
 
     private static Logger logger = LoggerFactory.getLogger(SmsUtil.class);
+    private static final String SENDER_NUMBER = "16004191";
 
-    public static boolean sendSms(String phoneNumber, SharedMap<String,Object> tmplMap) {
-        logger.info("phoneNumber : {} , tmplMap : {}", phoneNumber, tmplMap);
+    public static boolean sendSms(String receiver, String message) {
+        logger.info(" receiver : {}, message : {}", receiver, message);
         return true;
     }
 }

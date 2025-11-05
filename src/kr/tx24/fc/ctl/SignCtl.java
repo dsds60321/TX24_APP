@@ -54,12 +54,12 @@ public class SignCtl {
         signService.twoFactorAuth(key);
         return "pages/sign/twoFactor";
     }
-//
-//    @SessionIgnore
-//    @PostMapping("/two-factor/code/send")
-//    public TxResponse<?> sendTwoFactorAuthCode(@RequestBody SharedMap<String, Object> param) {
-//        return signService.isTwoFactorAuth(param) ? TxResponse.ok("2차 인증번호를 발송했습니다.") : TxResponse.fail("2차 인증번호 발송에 실패했습니다.");
-//    }
+
+    @SessionIgnore
+    @PostMapping("/two-factor/code/send")
+    public TxResponse<?> sendTwoFactorAuthCode(@RequestBody SharedMap<String, Object> param) {
+        return signService.isTwoFactorAuth(param) ? TxResponse.ok("2차 인증번호를 발송했습니다.") : TxResponse.fail("2차 인증번호 발송에 실패했습니다.");
+    }
 
     @SessionIgnore
     @PostMapping("/two-factor/code/confirm")

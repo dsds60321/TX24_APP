@@ -3,21 +3,26 @@
  */
 export default class Layout {
     constructor() {
-        // 하위 페이지 탭 매니저
-        this.TabManager = this.createTabManager();
-        this.modalCache = new Map();
         this.loadingOverlay = null;
         this.loadingMessageElem = null;
+        this.appsState = this.createAppsState();
+        this.currentView = null;
+        this.currentDescriptor = null;
+        this.appsOverlay = null;
+        this.appsGrid = null;
+        this.appsClearButton = null;
+        this.appsCloseButton = null;
+        this.handleAppsOverlayKeyDown = this.handleAppsOverlayKeyDown.bind(this);
         this.init();
-        if (typeof window !== 'undefined') {
-            window.layout = this;
-        }
+        window.apps = () => this.openTab(true);
     }
 
     init() {
         this.bindEvents();
         this.mobileSize();
-        this.TabManager.init();
+        this.initAppsOverlay();
+        this.bindAppLaunchers();
+        this.restoreSavedApps();
     }
 
     bindEvents() {
@@ -381,379 +386,596 @@ export default class Layout {
         this.bindEmailFocus(root);
         this.bindCardEdit(root);
         this.bindModalLoader(root);
+        this.bindAppLaunchers(root);
         this.showTab(root);
     }
 
-    /**
-     * 페이지 탭 생성 컴포넌트
-     */
-    createTabManager() {
-        const layout = this;
-        const state = {
-            tabs: new Map(),
-            order: [],
-            activeId: null,
-            cache: new Map(),
-            initialContent: ''
+    createAppsState() {
+        return {
+            storageKey: 'tx24:apps',
+            maxItems: 12,
+            items: []
+        };
+    }
+
+    bindAppLaunchers(root = document) {
+        if (!root) {
+            return;
+        }
+        root.querySelectorAll('[data-tab-url]').forEach((trigger) => {
+            if (trigger.dataset.boundAppLauncher === 'true') {
+                return;
+            }
+            trigger.dataset.boundAppLauncher = 'true';
+            trigger.addEventListener('click', (event) => {
+                event.preventDefault();
+                this.openAppFromTrigger(trigger);
+            });
+        });
+    }
+
+    openAppFromTrigger(trigger) {
+        if (!trigger) {
+            return;
+        }
+        const url = trigger.getAttribute('data-tab-url') || trigger.getAttribute('href');
+        if (!url) {
+            return;
+        }
+        const tabIdAttr = trigger.getAttribute('data-tab-id');
+        const tabTitle = trigger.getAttribute('data-tab-title') || trigger.textContent.trim();
+        const descriptor = {
+            id: tabIdAttr || this.sanitizeId(url),
+            title: tabTitle || '저장된 화면',
+            url: url
         };
 
-        let tabPanel = null;
-        let tabBar = null;
-        let contentArea = null;
-        const hasAxios = typeof axios !== 'undefined';
-        const tabRules = {
-            breakpoint: 767,
-            contexts: {
-                desktop: {
-                    maxTabs: 10,  // PC 최대 탭
-                    overflowStrategy: 'removeOldest'
-                },
-                mobile: {
-                    maxTabs: 3, // 모바일 최대 탭
-                    overflowStrategy: 'removeOldest'
-                }
+        document.querySelectorAll('.nav-link').forEach((link) => {
+            if (link !== trigger) {
+                link.classList.remove('active');
             }
-        };
+        });
+        trigger.classList.add('active');
 
-        // 탭 정렬 구조 ( 오래된거 제거 , 최근꺼 제거 )
-        const overflowStrategies = {
-            removeOldest: function() {
-                return state.order[0];
-            },
-            removeNewest: function() {
-                return state.order[state.order.length - 1];
-            }
-        };
+        this.syncCurrentViewSnapshot();
+        this.currentDescriptor = descriptor;
+        this.loadAppContent(descriptor);
+    }
 
-        function getViewportContext() {
-            const breakpoint = tabRules.breakpoint;
-            if (typeof window === 'undefined') {
-                return 'desktop';
-            }
-            if (typeof window.matchMedia === 'function') {
-                return window.matchMedia('(max-width: ' + breakpoint + 'px)').matches ? 'mobile' : 'desktop';
-            }
-            return window.innerWidth <= breakpoint ? 'mobile' : 'desktop';
+    loadAppContent(descriptor) {
+        if (!descriptor || !descriptor.url) {
+            return;
         }
 
-        function getActivePolicy() {
-            const contextKey = getViewportContext();
-            return tabRules.contexts[contextKey] || tabRules.contexts.desktop;
+        if (typeof axios === 'undefined') {
+            window.location.href = descriptor.url;
+            return;
         }
 
-        function enforceTabLimit() {
-            const policy = getActivePolicy();
-            if (!policy) {
-                return;
+        this.showLoading('화면을 불러오는 중입니다...');
+        axios.get(descriptor.url, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
             }
-            const maxTabs = typeof policy.maxTabs === 'number' ? policy.maxTabs : parseInt(policy.maxTabs, 10);
-            if (!maxTabs || maxTabs <= 0) {
-                return;
-            }
-            if (state.order.length < maxTabs) {
-                return;
-            }
-            const strategyKey = policy.overflowStrategy || 'removeOldest';
-            const selector = overflowStrategies[strategyKey] || overflowStrategies.removeOldest;
-            while (state.order.length >= maxTabs) {
-                const targetId = selector();
-                if (!targetId) {
-                    break;
-                }
-                close(targetId);
-            }
-        }
-
-        function init() {
-            tabPanel = document.getElementById('bottom-tab-panel');
-            tabBar = document.getElementById('bottom-tab-bar');
-            contentArea = document.getElementById('main-content-area');
-
-            if (!tabPanel || !tabBar || !contentArea) {
-                return;
-            }
-
-            state.initialContent = contentArea.innerHTML;
-
-            tabBar.addEventListener('click', onTabBarClick);
-            contentArea.addEventListener('click', onContentAreaClick);
-            document.addEventListener('click', onTriggerClick);
-        }
-
-        function open(descriptor) {
-            if (!descriptor || !descriptor.id || !descriptor.url) {
-                return;
-            }
-
-            if (state.tabs.has(descriptor.id)) {
-                activate(descriptor.id);
-                return;
-            }
-
-            enforceTabLimit();
-
-            const tab = {
+        }).then((response) => {
+            this.hideLoading();
+            const html = response.data;
+            const snapshot = {
                 id: descriptor.id,
-                title: (descriptor.title || '').trim() || '새 탭',
-                url: descriptor.url
+                title: descriptor.title,
+                url: descriptor.url,
+                html: ''
             };
-
-            state.tabs.set(descriptor.id, tab);
-            state.order.push(descriptor.id);
-            state.activeId = descriptor.id;
-            state.cache.delete(descriptor.id);
-
-            renderTabs();
-            if (hasAxios) {
-                loadContent(descriptor.id);
-            } else {
-                renderError(descriptor.id, '데이터 연결이 활성화되어 있지 않습니다.');
+            this.currentDescriptor = descriptor;
+            this.currentView = snapshot;
+            this.renderMainContent(html, { resetForms: true, source: 'server' });
+            const hydratedHtml = this.getCurrentContentHTML();
+            snapshot.html = hydratedHtml;
+            const record = this.saveApp(snapshot);
+            if (record) {
+                this.currentView = record;
             }
+        }).catch((error) => {
+            this.hideLoading();
+            const message = error && error.message ? error.message : '콘텐츠를 불러오지 못했습니다.';
+            this.renderMainContent(this.buildAppError(message), { resetForms: false, source: 'error' });
+        });
+    }
+
+    renderMainContent(html, options = {}) {
+        const { resetForms = false } = options;
+        const contentArea = document.getElementById('main-content-area');
+        if (!contentArea) {
+            return;
         }
 
-        function activate(id) {
-            if (!state.tabs.has(id)) {
-                return;
-            }
-            state.activeId = id;
-            renderTabs();
-            const cached = state.cache.get(id);
-            if (cached) {
-                renderContent(cached);
-                return;
-            }
-            if (hasAxios) {
-                loadContent(id);
-                return;
-            }
+        const template = document.createElement('template');
+        template.innerHTML = html;
 
-            renderError(id, '데이터 연결이 활성화되어 있지 않습니다.');
-        }
+        const fragment = template.content.cloneNode(true);
+        const scripts = Array.from(fragment.querySelectorAll('script'));
+        scripts.forEach((script) => {
+            script.parentNode.removeChild(script);
+        });
 
-        function close(id) {
-            if (!state.tabs.has(id)) {
-                return;
-            }
-
-            state.tabs.delete(id);
-            state.cache.delete(id);
-            state.order = state.order.filter(function(tabId) {
-                return tabId !== id;
-            });
-
-            const wasActive = state.activeId === id;
-            if (wasActive) {
-                state.activeId = state.order[state.order.length - 1] || null;
-            }
-
-            renderTabs();
-
-            if (state.activeId) {
-                activate(state.activeId);
-            } else if (wasActive) {
-                renderContent(state.initialContent);
-            }
-        }
-
-        function refresh(id) {
-            if (!state.tabs.has(id) || !hasAxios) {
-                return;
-            }
-            state.cache.delete(id);
-            if (state.activeId === id) {
-                loadContent(id);
-            }
-        }
-
-        function loadContent(id) {
-            const tab = state.tabs.get(id);
-            if (!tab) {
-                return;
-            }
-
-            renderLoading();
-
-            axios.get(tab.url, {
-            }).then(function(response) {
-                state.cache.set(id, response.data);
-                if (state.activeId === id) {
-                    renderContent(response.data);
-                }
-            }).catch(function() {
-                if (state.activeId === id) {
-                    renderError(id);
+        contentArea.innerHTML = '';
+        contentArea.appendChild(fragment);
+        if (resetForms) {
+            contentArea.querySelectorAll('form').forEach((form) => {
+                try {
+                    form.reset();
+                } catch (error) {
+                    console.warn('폼 리셋 중 오류가 발생했습니다.', error);
                 }
             });
         }
+        this.rebindDynamic(contentArea);
+        this.datepickerRender();
 
-        function renderTabs() {
-            if (!tabBar) {
+        scripts.forEach((script) => {
+            const cloned = document.createElement('script');
+            Array.from(script.attributes).forEach((attr) => {
+                cloned.setAttribute(attr.name, attr.value);
+            });
+            if (script.textContent) {
+                cloned.textContent = script.textContent;
+            }
+            contentArea.appendChild(cloned);
+        });
+    }
+
+    buildAppError(message) {
+        const safeMessage = message || '잠시 후 다시 시도해 주세요.';
+        return '<div class="app-error-state" role="alert">' +
+            '<div class="app-error-icon" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></div>' +
+            '<div class="app-error-body">' +
+            '<p class="app-error-title">콘텐츠를 가져오지 못했습니다.</p>' +
+            '<p class="app-error-message">' + safeMessage + '</p>' +
+            '</div>' +
+            '</div>';
+    }
+
+    saveApp(app) {
+        if (!app || !app.id) {
+            return;
+        }
+        const items = this.appsState.items;
+        const existingIndex = items.findIndex((item) => item.id === app.id);
+        if (existingIndex !== -1) {
+            items.splice(existingIndex, 1);
+        }
+        const record = {
+            id: app.id,
+            title: (app.title || '').trim() || '저장된 화면',
+            url: app.url || '',
+            html: app.html || '',
+            savedAt: Date.now(),
+            snapshotAt: Date.now()
+        };
+        items.unshift(record);
+
+        if (items.length > this.appsState.maxItems) {
+            items.length = this.appsState.maxItems;
+        }
+
+        this.persistApps();
+        if (this.isAppsOverlayOpen()) {
+            this.renderAppsOverlay();
+        }
+        this.currentView = record;
+        return record;
+    }
+
+    removeSavedApp(appId) {
+        if (!appId) {
+            return;
+        }
+        this.appsState.items = this.appsState.items.filter((item) => item.id !== appId);
+        this.persistApps();
+        this.renderAppsOverlay();
+        if (this.currentView && this.currentView.id === appId) {
+            this.currentView = null;
+        }
+    }
+
+    clearSavedApps() {
+        this.appsState.items = [];
+        this.persistApps();
+        this.renderAppsOverlay();
+        this.currentView = null;
+    }
+
+    activateSavedApp(appId) {
+        if (!appId) {
+            return;
+        }
+        const items = this.appsState.items;
+        const index = items.findIndex((item) => item.id === appId);
+        if (index === -1) {
+            return null;
+        }
+        let app;
+        if (index === 0) {
+            app = items[0];
+        } else {
+            [app] = items.splice(index, 1);
+            items.unshift(app);
+        }
+        this.persistApps();
+        return app;
+    }
+
+    persistApps() {
+        if (typeof localStorage === 'undefined') {
+            return;
+        }
+        try {
+            localStorage.setItem(this.appsState.storageKey, JSON.stringify(this.appsState.items));
+        } catch (error) {
+            console.warn('앱 정보를 저장하지 못했습니다.', error);
+        }
+    }
+
+    restoreSavedApps() {
+        if (typeof localStorage !== 'undefined') {
+            try {
+                const raw = localStorage.getItem(this.appsState.storageKey);
+                if (raw) {
+                    const parsed = JSON.parse(raw);
+                    if (Array.isArray(parsed)) {
+                        this.appsState.items = parsed.slice(0, this.appsState.maxItems);
+                    }
+                }
+            } catch (error) {
+                console.warn('저장된 앱 정보를 불러오지 못했습니다.', error);
+            }
+        }
+        this.renderAppsOverlay();
+    }
+
+    initAppsOverlay() {
+        if (this.appsOverlay && document.body.contains(this.appsOverlay)) {
+            return;
+        }
+        this.appsOverlay = document.getElementById('apps-overlay');
+        if (!this.appsOverlay) {
+            return;
+        }
+        this.appsGrid = this.appsOverlay.querySelector('[data-apps-grid]');
+        this.appsClearButton = this.appsOverlay.querySelector('[data-apps-clear]');
+        this.appsCloseButton = this.appsOverlay.querySelector('[data-apps-close]');
+
+        if (!this.appsOverlay.dataset.boundAppsOverlay) {
+            this.appsOverlay.dataset.boundAppsOverlay = 'true';
+            this.appsOverlay.addEventListener('click', (event) => {
+                if (event.target === this.appsOverlay) {
+                    this.closeAppsOverlay();
+                }
+            });
+        }
+
+        if (this.appsClearButton && this.appsClearButton.dataset.boundAppsClear !== 'true') {
+            this.appsClearButton.dataset.boundAppsClear = 'true';
+            this.appsClearButton.addEventListener('click', () => {
+                this.clearSavedApps();
+            });
+        }
+
+        if (this.appsCloseButton && this.appsCloseButton.dataset.boundAppsClose !== 'true') {
+            this.appsCloseButton.dataset.boundAppsClose = 'true';
+            this.appsCloseButton.addEventListener('click', () => {
+                this.closeAppsOverlay();
+            });
+        }
+    }
+
+    renderAppsOverlay() {
+        if (!this.appsGrid) {
+            return;
+        }
+        this.appsGrid.innerHTML = '';
+        const { items, maxItems } = this.appsState;
+        for (let index = 0; index < maxItems; index += 1) {
+            const app = items[index];
+            const tile = this.createAppTile(app, index);
+            this.appsGrid.appendChild(tile);
+        }
+    }
+
+    getSavedApp(appId) {
+        if (!appId) {
+            return null;
+        }
+        return this.appsState.items.find((item) => item.id === appId) || null;
+    }
+
+    updateSavedApp(appId, updater, { rerender = false } = {}) {
+        if (!appId) {
+            return null;
+        }
+        const items = this.appsState.items;
+        const index = items.findIndex((item) => item.id === appId);
+        if (index === -1) {
+            return null;
+        }
+        const base = items[index];
+        const next = typeof updater === 'function' ? updater({ ...base }) : { ...base, ...updater };
+        items[index] = next;
+        this.persistApps();
+        if (rerender && this.isAppsOverlayOpen()) {
+            this.renderAppsOverlay();
+        }
+        return next;
+    }
+
+    getCurrentContentHTML() {
+        const contentArea = document.getElementById('main-content-area');
+        if (!contentArea) {
+            return '';
+        }
+        const clone = contentArea.cloneNode(true);
+        const originalControls = contentArea.querySelectorAll('input, textarea, select');
+        const cloneControls = clone.querySelectorAll('input, textarea, select');
+        originalControls.forEach((control, index) => {
+            const cloneControl = cloneControls[index];
+            if (!cloneControl) {
                 return;
             }
-
-            tabBar.innerHTML = '';
-
-            state.order.forEach(function(id) {
-                const tab = state.tabs.get(id);
-                if (!tab) {
-                    return;
+            if (control instanceof HTMLInputElement && cloneControl instanceof HTMLInputElement) {
+                switch (control.type) {
+                    case 'checkbox':
+                    case 'radio':
+                        cloneControl.checked = control.checked;
+                        if (control.checked) {
+                            cloneControl.setAttribute('checked', 'checked');
+                        } else {
+                            cloneControl.removeAttribute('checked');
+                        }
+                        break;
+                    case 'file':
+                        cloneControl.value = '';
+                        cloneControl.removeAttribute('value');
+                        break;
+                    default:
+                        cloneControl.value = control.value;
+                        cloneControl.setAttribute('value', control.value);
+                        break;
                 }
-
-                const tabElement = document.createElement('div');
-                tabElement.className = 'tab-item' + (state.activeId === id ? ' active' : '');
-                tabElement.setAttribute('data-tab-id', id);
-                tabElement.setAttribute('role', 'tab');
-                tabElement.setAttribute('tabindex', '0');
-
-                const title = document.createElement('span');
-                title.className = 'tab-title';
-                title.textContent = tab.title || '새 탭';
-
-                const closeButton = document.createElement('button');
-                closeButton.type = 'button';
-                closeButton.className = 'tab-close';
-                closeButton.setAttribute('data-tab-close', id);
-                closeButton.setAttribute('aria-label', '탭 닫기');
-                closeButton.innerHTML = '&times;';
-
-                tabElement.appendChild(title);
-                tabElement.appendChild(closeButton);
-
-                tabElement.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        activate(id);
+            } else if (control instanceof HTMLTextAreaElement && cloneControl instanceof HTMLTextAreaElement) {
+                cloneControl.value = control.value;
+                cloneControl.textContent = control.value;
+            } else if (control instanceof HTMLSelectElement && cloneControl instanceof HTMLSelectElement) {
+                const options = cloneControl.options;
+                Array.from(options).forEach((option, idx) => {
+                    option.selected = control.options[idx] ? control.options[idx].selected : option.selected;
+                    if (option.selected) {
+                        option.setAttribute('selected', 'selected');
+                    } else {
+                        option.removeAttribute('selected');
                     }
                 });
-
-                tabBar.appendChild(tabElement);
-            });
-
-            if (tabPanel) {
-                if (state.order.length === 0) {
-                    tabPanel.classList.add('is-empty');
-                } else {
-                    tabPanel.classList.remove('is-empty');
-                }
             }
+        });
+
+        clone.querySelectorAll('[data-skip-app-snapshot]').forEach((node) => node.remove());
+        clone.querySelectorAll('script').forEach((node) => node.remove());
+        return clone.innerHTML.trim();
+    }
+
+    syncCurrentViewSnapshot() {
+        if (!this.currentView || !this.currentView.id) {
+            return;
         }
-
-        function renderContent(html) {
-            if (!contentArea) {
-                return;
-            }
-
-            const template = document.createElement('template');
-            template.innerHTML = html;
-
-            // JS 동적 로딩
-            const fragment = template.content.cloneNode(true);
-            const scripts = Array.from(fragment.querySelectorAll('script'));
-            scripts.forEach(function(script) {
-                script.parentNode.removeChild(script);
-            });
-
-            contentArea.innerHTML = '';
-            contentArea.appendChild(fragment);
-            layout.rebindDynamic(contentArea);
-
-            scripts.forEach(function(script) {
-                const cloned = document.createElement('script');
-                Array.from(script.attributes).forEach(function(attr) {
-                    cloned.setAttribute(attr.name, attr.value);
-                });
-                if (script.textContent) {
-                    cloned.textContent = script.textContent;
-                }
-                contentArea.appendChild(cloned);
-            });
-
-            // datepicker
-            layout.datepickerRender();
+        const html = this.getCurrentContentHTML();
+        if (!html) {
+            return;
         }
-
-        function renderLoading() {
-            if (!contentArea) {
-                return;
-            }
-            contentArea.innerHTML = '<div class="tab-feedback loading">로딩 중...</div>';
+        this.currentView.html = html;
+        const updated = this.updateSavedApp(this.currentView.id, { html, snapshotAt: Date.now() });
+        if (updated) {
+            this.currentView = updated;
         }
+    }
 
-        function renderError(id, message) {
-            if (!contentArea) {
-                return;
-            }
-            const errorText = message || '컨텐츠를 불러오는 데 실패했습니다.';
-            contentArea.innerHTML = '' +
-                '<div class="tab-feedback error">' +
-                '<p>' + errorText + '</p>' +
-                '<button type="button" class="btn btn-blue tab-retry-btn" data-tab-retry="' + id + '">다시 시도</button>' +
-                '</div>';
+    buildPreviewHTML(html) {
+        if (!html) {
+            return '<div class="apps-preview-empty">미리보기 없음</div>';
         }
+        const template = document.createElement('template');
+        template.innerHTML = html;
+        template.content.querySelectorAll('script').forEach((node) => node.remove());
+        const container = document.createElement('div');
+        container.appendChild(template.content.cloneNode(true));
+        const sanitized = container.innerHTML.trim();
+        if (!sanitized) {
+            return '<div class="apps-preview-empty">미리보기 없음</div>';
+        }
+        return '<div class="apps-preview-frame"><div class="apps-preview-content">' + sanitized + '</div></div>';
+    }
 
-        function onTabBarClick(event) {
-            const closeTarget = event.target.closest('[data-tab-close]');
-            if (closeTarget) {
+    createAppTile(app, index) {
+        const tile = document.createElement('div');
+        tile.className = 'apps-tile' + (app ? ' is-filled' : ' is-empty');
+        tile.setAttribute('data-app-slot', String(index + 1));
+
+        const body = document.createElement('div');
+        body.className = 'apps-tile-body';
+
+        if (app) {
+            tile.setAttribute('data-app-id', app.id);
+            const preview = document.createElement('div');
+            preview.className = 'apps-tile-preview';
+            preview.innerHTML = this.buildPreviewHTML(app.html);
+            this.schedulePreviewFit(preview);
+            body.appendChild(preview);
+
+            const footer = document.createElement('div');
+            footer.className = 'apps-tile-footer';
+
+            const title = document.createElement('span');
+            title.className = 'apps-tile-title';
+            title.textContent = app.title || '저장된 화면';
+
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.className = 'apps-tile-delete btn btn-sm btn-light';
+            deleteButton.setAttribute('data-app-delete', app.id);
+            deleteButton.setAttribute('aria-label', '저장된 화면 삭제');
+            deleteButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
+
+            footer.appendChild(title);
+            footer.appendChild(deleteButton);
+            tile.appendChild(body);
+            tile.appendChild(footer);
+
+            deleteButton.addEventListener('click', (event) => {
                 event.stopPropagation();
-                const tabId = closeTarget.getAttribute('data-tab-close');
-                close(tabId);
-                return;
-            }
-
-            const tabTarget = event.target.closest('[data-tab-id]');
-            if (tabTarget) {
-                const tabId = tabTarget.getAttribute('data-tab-id');
-                activate(tabId);
-            }
-        }
-
-        function onContentAreaClick(event) {
-            const retryButton = event.target.closest('[data-tab-retry]');
-            if (retryButton) {
-                const tabId = retryButton.getAttribute('data-tab-retry');
-                refresh(tabId);
-            }
-        }
-
-        function onTriggerClick(event) {
-            const trigger = event.target.closest('[data-tab-id]');
-            if (!trigger) {
-                return;
-            }
-
-            const url = trigger.getAttribute('data-tab-url') || trigger.getAttribute('href');
-            if (!url) {
-                return;
-            }
-
-            event.preventDefault();
-
-            const tabIdAttr = trigger.getAttribute('data-tab-id');
-            const tabTitle = trigger.getAttribute('data-tab-title') || trigger.textContent.trim();
-            const tabId = tabIdAttr || sanitizeId(url);
-
-            open({
-                id: tabId,
-                title: tabTitle || '새 탭',
-                url: url
+                this.removeSavedApp(app.id);
             });
-            document.querySelectorAll('.nav-link').forEach(function(link) {
-                link.classList.remove('active');
+
+            tile.addEventListener('click', () => {
+                const activeApp = this.activateSavedApp(app.id) || app;
+                if (activeApp) {
+                    this.currentDescriptor = {
+                        id: activeApp.id,
+                        title: activeApp.title,
+                        url: activeApp.url
+                    };
+                    this.currentView = { ...activeApp };
+                    this.renderMainContent(activeApp.html || '', { resetForms: false, source: 'snapshot' });
+                    const hydratedHtml = this.getCurrentContentHTML();
+                    this.currentView.html = hydratedHtml;
+                    this.updateSavedApp(activeApp.id, { html: hydratedHtml, snapshotAt: Date.now() });
+                }
+                this.closeAppsOverlay();
             });
-            trigger.classList.add('active');
+        } else {
+            const placeholder = document.createElement('div');
+            placeholder.className = 'apps-tile-placeholder';
+            placeholder.innerHTML = '<span class="apps-slot-index">' + (index + 1) + '</span>' +
+                '<span class="apps-slot-empty">저장된 화면이 없습니다.</span>';
+            body.appendChild(placeholder);
+            tile.appendChild(body);
+
+            const footer = document.createElement('div');
+            footer.className = 'apps-tile-footer';
+            const title = document.createElement('span');
+            title.className = 'apps-slot-empty-label';
+            title.textContent = '빈 슬롯';
+            footer.appendChild(title);
+            tile.appendChild(footer);
         }
 
-        function sanitizeId(value) {
-            return value.replace(/[^\w-]/g, '_');
-        }
+        return tile;
+    }
 
-        return {
-            init: init,
-            open: open,
-            activate: activate,
-            close: close,
-            refresh: refresh
-        };
+    schedulePreviewFit(preview) {
+        if (!preview) {
+            return;
+        }
+        requestAnimationFrame(() => {
+            this.fitPreview(preview);
+        });
+    }
+
+    fitPreview(preview) {
+        if (!preview) {
+            return;
+        }
+        const frame = preview.querySelector('.apps-preview-frame');
+        const content = frame ? frame.querySelector('.apps-preview-content') : null;
+        if (!frame || !content) {
+            return;
+        }
+        content.style.transform = 'scale(1)';
+        content.style.margin = '0';
+        const frameStyles = window.getComputedStyle(frame);
+        const frameWidth = Math.max(
+            0,
+            frame.clientWidth - parseFloat(frameStyles.paddingLeft || '0') - parseFloat(frameStyles.paddingRight || '0')
+        );
+        const frameHeight = Math.max(
+            0,
+            frame.clientHeight - parseFloat(frameStyles.paddingTop || '0') - parseFloat(frameStyles.paddingBottom || '0')
+        );
+        const contentRect = content.getBoundingClientRect();
+        const contentWidth = content.scrollWidth || contentRect.width;
+        const contentHeight = content.scrollHeight || contentRect.height;
+        if (!contentWidth || !contentHeight || !frameWidth || !frameHeight) {
+            return;
+        }
+        const scale = Math.min(frameWidth / contentWidth, frameHeight / contentHeight, 1);
+        const scaledWidth = contentWidth * scale;
+        const scaledHeight = contentHeight * scale;
+        const offsetX = Math.max(0, (frameWidth - scaledWidth) / 2);
+        const offsetY = Math.max(0, (frameHeight - scaledHeight) / 2);
+        const translateX = offsetX / scale;
+        const translateY = offsetY / scale;
+        content.style.transformOrigin = 'top left';
+        content.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
+    }
+
+    handleAppsResize() {
+        if (!this.isAppsOverlayOpen() || !this.appsGrid) {
+            return;
+        }
+        this.appsGrid.querySelectorAll('.apps-tile-preview').forEach((preview) => this.fitPreview(preview));
+    }
+
+    openTab(force) {
+        if (!this.appsOverlay) {
+            return;
+        }
+        const shouldOpen = typeof force === 'boolean' ? force : !this.isAppsOverlayOpen();
+        if (shouldOpen) {
+            this.openAppsOverlay();
+        } else {
+            this.closeAppsOverlay();
+        }
+    }
+
+    openAppsOverlay() {
+        if (!this.appsOverlay) {
+            return;
+        }
+        this.syncCurrentViewSnapshot();
+        this.renderAppsOverlay();
+        this.appsOverlay.classList.add('is-open');
+        this.appsOverlay.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('apps-overlay-open');
+        document.addEventListener('keydown', this.handleAppsOverlayKeyDown);
+        window.addEventListener('resize', this.handleAppsResize);
+        requestAnimationFrame(() => {
+            if (!this.appsGrid) {
+                return;
+            }
+            this.appsGrid.querySelectorAll('.apps-tile-preview').forEach((preview) => this.fitPreview(preview));
+        });
+    }
+
+    closeAppsOverlay() {
+        if (!this.appsOverlay) {
+            return;
+        }
+        this.appsOverlay.classList.remove('is-open');
+        this.appsOverlay.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('apps-overlay-open');
+        document.removeEventListener('keydown', this.handleAppsOverlayKeyDown);
+        window.removeEventListener('resize', this.handleAppsResize);
+    }
+
+    isAppsOverlayOpen() {
+        return this.appsOverlay ? this.appsOverlay.classList.contains('is-open') : false;
+    }
+
+    handleAppsOverlayKeyDown(event) {
+        if (event.key === 'Escape') {
+            this.closeAppsOverlay();
+        }
+    }
+
+    sanitizeId(value) {
+        return (value || '').replace(/[^\w-]/g, '_');
     }
 
 

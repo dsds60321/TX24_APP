@@ -5,7 +5,6 @@ import kr.tx24.fc.enums.MockNames;
 import kr.tx24.fc.enums.TxResultCode;
 import kr.tx24.fc.exception.TxException;
 import kr.tx24.fc.repository.DummyRepository;
-import kr.tx24.fc.repository.SignRps;
 import kr.tx24.lib.crypt.Argon2;
 import kr.tx24.lib.lang.CommonUtils;
 import kr.tx24.lib.map.SharedMap;
@@ -23,14 +22,15 @@ public class SignService {
 
     private static final Logger logger = LoggerFactory.getLogger(SignService.class);
 
-    private final SignRps signRps;
     private final NotificationService notificationService;
 
-    public SignService(SignRps signRps, NotificationService notificationService) {
-        this.signRps = signRps;
+    public SignService(NotificationService notificationService) {
         this.notificationService = notificationService;
     }
 
+    /**
+     * 로그인
+     */
     public TxResponse<?> in(SharedMap<String, Object> param, TxResponse<?> response) {
 		if (CommonUtils.hasEmptyValue(param, List.of("id", "password", "_csrf"))) {
 			throw new TxException(TxResultCode.INVALID_REQUEST, "필수 값이 누락되었습니다.");
@@ -92,23 +92,23 @@ public class SignService {
     /**
      * 2차인증 발송
      */
-//    public boolean isTwoFactorAuth(SharedMap<String,Object param>) {
-//        if (CommonUtils.hasEmptyValue(param, List.of("key", "type"))) {
-//            throw new TxException(TxResultCode.INVALID_REQUEST, "요청 파라미터가 유효하지 않습니다. 관리자에게 문의해주시기 바랍니다.");
-//        }
-//
-//        String key = param.getString("key");
-//        String type = param.getString("type");
-//
-//        SharedMap<String,Object> userMap = RedisUtils.get(key, TypeRegistry.MAP_SHAREDMAP_OBJECT);
-//        if (CommonUtils.isEmpty(userMap)) {
-//            logger.info("2차 인증 유효기간 초과");
-//            throw new TxException(TxResultCode.SECURITY_VIOLATION, "인증 유효시간을 초과했습니다.");
-//        }
-//
-//        notificationService.sendTwoFactorAuth(type, type.equalsIgnoreCase("email") ? userMap.getString("email") : userMap.getString("phone"));
-//        return true;
-//    }
+    public boolean isTwoFactorAuth(SharedMap<String,Object> param) {
+        if (CommonUtils.hasEmptyValue(param, List.of("key", "type"))) {
+            throw new TxException(TxResultCode.INVALID_REQUEST, "요청 파라미터가 유효하지 않습니다. 관리자에게 문의해주시기 바랍니다.");
+        }
+
+        String key = param.getString("key");
+        String type = param.getString("type");
+
+        SharedMap<String,Object> userMap = RedisUtils.get(key, TypeRegistry.MAP_SHAREDMAP_OBJECT);
+        if (CommonUtils.isEmpty(userMap)) {
+            logger.info("2차 인증 유효기간 초과");
+            throw new TxException(TxResultCode.SECURITY_VIOLATION, "인증 유효시간을 초과했습니다.");
+        }
+
+        notificationService.sendTwoFactorAuth(type, type.equalsIgnoreCase("email") ? userMap.getString("email") : userMap.getString("phone"));
+        return true;
+    }
 
     /**
      * 2차 인증 검증

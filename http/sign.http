@@ -1,4 +1,4 @@
-# 로그인 테스트
+# 로그인
 POST http://localhost:8080/sign/in
 Content-Type: application/json
 

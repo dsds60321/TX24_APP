@@ -6,6 +6,7 @@ import kr.tx24.fc.exception.TxException;
 import kr.tx24.fc.repository.DummyRepository;
 import kr.tx24.fc.util.EmailUtil;
 import kr.tx24.fc.util.SmsUtil;
+import kr.tx24.lib.lang.IDUtils;
 import kr.tx24.lib.lang.MsgUtils;
 import kr.tx24.lib.map.MapFactory;
 import kr.tx24.lib.map.SharedMap;
@@ -30,6 +31,10 @@ public class NotificationService {
         type = type.toUpperCase();
 
         try {
+            if (RedisUtils.exists(TWO_FACTOR.formatted(to))) {
+                throw new TxException(TxResultCode.INVALID_REQUEST, "이미 발송된 요청입니다.");
+            }
+
             List<SharedMap<String, Object>> rows = DummyRepository.list(MockNames.TMPL);
             String finalType = type;
 
@@ -41,15 +46,27 @@ public class NotificationService {
                     .findFirst()
                     .orElseThrow(() -> new TxException(TxResultCode.INTERNAL_ERROR, "2차인증 요청에 가능한 타입이 없습니다."));
 
+            String content = tmplMap.getString("tmpl");
+            String randomKey = IDUtils.genKey(6);
+            logger.info("TWO_FACTOR SEND | TO : {} : value : {} ", to, randomKey);
+            content = MsgUtils.format(content, IDUtils.genKey(6));
 
+
+            // 2차인증 전송
             switch (type) {
-//                case "EMAIL" -> EmailUtil.sendEmail(List.of(to), );
-                case "SMS" -> SmsUtil.sendSms(to, tmplMap);
+                case "EMAIL" -> EmailUtil.sendEmail(List.of(to)
+                        , tmplMap.getString("from")
+                        , tmplMap.getString("subject")
+                        , content);
+
+                case "SMS" -> SmsUtil.sendSms(tmplMap.getString("sender")
+                        , content);
+
                 default -> logger.info("sendTwoFactorAuth");
             }
 
             // 2차 인증 번호 REDIS 5분
-            RedisUtils.set(MsgUtils.format(TWO_FACTOR, to), "", 300);
+            RedisUtils.set(MsgUtils.format(TWO_FACTOR, randomKey), "", 300);
         } catch (Exception e) {
             logger.info("sendTwoFactorAuth error : {} ", e.getMessage());
             RedisUtils.del(MsgUtils.format(TWO_FACTOR, to));

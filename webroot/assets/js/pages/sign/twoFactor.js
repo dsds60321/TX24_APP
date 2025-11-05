@@ -1,5 +1,7 @@
 (function (window, document) {
 	const ERROR_ICON_HTML = '<i class="fa-solid fa-circle-exclamation me-1"></i>';
+	let TIME_OUT = 180;
+
 
 	const TwoFactorPage = {
 		init() {
@@ -21,7 +23,7 @@
 		bindEvents() {
 			if (this.optionButtons.length > 0) {
 				this.optionButtons.forEach((button) => {
-					button.addEventListener('click', () => this.showAuthBox());
+					button.addEventListener('click', () => this.showAuthBox(button));
 				});
 			}
 
@@ -34,7 +36,13 @@
 			}
 		},
 
-		showAuthBox() {
+		showAuthBox(button) {
+
+			if (!confirm(button.innerText + ' 요청을 진행하시겠습니까?')) {
+				return;
+			}
+
+
 			if (this.authBox) {
 				this.authBox.style.display = 'block';
 			}
@@ -44,6 +52,9 @@
 				this.codeInput.value = '';
 				this.codeInput.focus();
 			}
+
+
+
 		},
 
 		handleBack() {
