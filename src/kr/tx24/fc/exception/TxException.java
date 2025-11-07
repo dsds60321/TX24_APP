@@ -3,6 +3,7 @@ package kr.tx24.fc.exception;
 import kr.tx24.fc.enums.TxResultCode;
 
 public class TxException extends RuntimeException {
+	private static final long serialVersionUID = 1L;
 
 	private final TxResultCode resultCode;
 	private final String errorMessage;

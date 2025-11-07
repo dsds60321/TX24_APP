@@ -10,13 +10,11 @@
 		},
 
 		cacheElements() {
-			this.form = document.querySelector('.login-form');
-			this.optionBox = document.querySelector('.option-box');
+			this.form = document.twoFactor,
 			this.authBox = document.querySelector('.auth-box');
 			this.optionButtons = document.querySelectorAll('.option-Btn');
-			this.backButton = document.querySelector('#backBtn');
 			this.submitButton = document.querySelector('#submitBtn');
-			this.codeInput = document.querySelector('#twoFactor');
+			this.codeInput = document.querySelector('#code');
 			this.errorField = this.authBox ? this.authBox.querySelector('.text-danger') : null;
 		},
 
@@ -27,47 +25,59 @@
 				});
 			}
 
-			if (this.backButton) {
-				this.backButton.addEventListener('click', () => this.handleBack());
-			}
-
+			// 인증 버튼
 			if (this.submitButton) {
 				this.submitButton.addEventListener('click', () => this.handleSubmit());
 			}
 		},
 
-		showAuthBox(button) {
+		async showAuthBox(button) {
 
 			if (!confirm(button.innerText + ' 요청을 진행하시겠습니까?')) {
 				return;
 			}
 
 
+			const type = button.dataset.type;
+			if (!type) {
+				util.toastify.warning('타입 지정에 오류가 발생했습니다. 관리자에게 문의해주시기 바랍니다.');
+				return;
+			}
+
+			this.form.type.value = type;
+
+
+			if (type === 'otp') {
+				this.openCodeInput();
+				return;
+			}
+
+			const formData = new FormData(this.form);
+
+			try {
+				const {data} = await axios.post('/sign/two-factor/code/send', {
+					type,
+					csrf: formData.get('_csrf') || ''
+				});
+				console.log(data);
+
+				alert(data.msg);
+				this.openCodeInput();
+			} catch (error) {
+				console.log(error);
+				alert('서버로부터 오류가 발생했습니다.');
+				return;
+			}
+
+
+		},
+
+		openCodeInput() {
 			if (this.authBox) {
 				this.authBox.style.display = 'block';
 			}
-
-			this.clearError();
-			if (this.codeInput) {
-				this.codeInput.value = '';
-				this.codeInput.focus();
-			}
-
-
-
 		},
 
-		handleBack() {
-			if (this.optionBox) {
-				this.optionBox.style.display = 'block';
-			}
-
-			if (this.authBox) {
-				this.authBox.style.display = 'none';
-			}
-
-			this.clearError();
-		},
 
 		handleSubmit() {
 			if (!this.codeInput) {
@@ -80,8 +90,20 @@
 				return;
 			}
 
-			this.clearError();
-			window.location.href = '/example/components';
+			const frm = new FormData(this.form);
+			try {
+				const { data } = axios.post('/sign/two-factor/code/verify', {
+					code,
+					csrf: frm.get('_csrf') || '',
+					type: frm.get('type') || ''
+				});
+
+				alert(data.msg);
+			} catch (e) {
+				alert('서버로부터 오류가 발생했습니다.');
+				return;
+			}
+
 		},
 
 		showError(message) {
@@ -90,14 +112,6 @@
 			}
 
 			this.errorField.innerHTML = ERROR_ICON_HTML + message;
-		},
-
-		clearError() {
-			if (!this.errorField) {
-				return;
-			}
-
-			this.errorField.textContent = '';
 		}
 	};
 

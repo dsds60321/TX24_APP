@@ -1,5 +1,6 @@
 /**
  * 공통 레이아웃 JS
+ * 모달 + 오버레이 + 탭
  */
 export default class Layout {
     constructor() {
@@ -27,6 +28,7 @@ export default class Layout {
         this.bindCardEdit();
         this.bindModalLoader();
         this.blockBrowserEvt();
+        this.simpleSelectEvt();
     }
 
     // 탭 함수
@@ -208,7 +210,8 @@ export default class Layout {
 
                 modalContent.innerHTML = layout.buildModalLoading();
                 layout.loadModalContent(requestUrl).then(function (html) {
-                    modalContent.innerHTML = html;
+                    console.log('---- ' , html);
+                    modalContent.innerHTML = html || layout.buildModalError();
                     layout.rebindDynamic(modal);
                     layout.syncModalLabel(modal);
                 }).catch(function (error) {
@@ -371,6 +374,37 @@ export default class Layout {
         }
     }
 
+    simpleSelectEvt() {
+        document.querySelectorAll('.simple-select').forEach(function (select) {
+            const trigger = select.querySelector('.simple-select-trigger');
+            const options = select.querySelector('.simple-select-options');
+            const label   = select.querySelector('.selected-label');
+            const hidden  = select.querySelector('input[type="hidden"]');
+
+            trigger.addEventListener('click', function () {
+                options.classList.toggle('show');
+            });
+
+            options.querySelectorAll('li').forEach(li => {
+                li.addEventListener('click', () => {
+                    select.querySelectorAll('li').forEach(l => l.classList.remove('active'));
+                    li.classList.add('active');
+
+                    label.textContent = li.textContent;
+                    if (hidden) {
+                        hidden.value = li.dataset.value;
+                    }
+
+                    options.classList.remove('show');
+                });
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!select.contains(e.target)) options.classList.remove('show');
+            });
+        })
+    }
+
     /**
      * content 로드 후 이벤트 동작
      */
@@ -384,6 +418,7 @@ export default class Layout {
         this.bindCardEdit(root);
         this.bindModalLoader(root);
         this.showTab(root);
+        this.simpleSelectEvt();
     }
 
     blockBrowserEvt() {
@@ -398,13 +433,6 @@ export default class Layout {
         //         alert('새로고침이 차단되어 있습니다.');
         //     }
         // });
-
-        // 마우스 오른쪽 버튼 새로고침 메뉴 방지 (일부 환경)
-        window.addEventListener('beforeunload', function (e) {
-            // 페이지 이탈 경고
-            e.preventDefault();
-            e.returnValue = '';
-        });
 
         history.pushState(null, '', location.href);
         window.onpopstate = function () {
@@ -614,7 +642,6 @@ export default class Layout {
             // datepicker
             layout.datepickerRender();
             capturePage(state.activeUrl);
-            console.log('----------- state', state)
         }
 
 
@@ -728,6 +755,12 @@ export default class Layout {
         }
 
 
+        function renderContent(content) {
+            if (!overlayLayer) return;
+            overlayLayer.innerHTML = content;
+        }
+
+
         function tabOpen() {
             open();
             renderTabHeader();
@@ -785,7 +818,7 @@ export default class Layout {
 
 
         return {
-            init, open, close, tabOpen
+            init, open, close, tabOpen, renderContent
         }
     }
 }

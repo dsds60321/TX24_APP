@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tx24</title>
+    <link th:href="@{/assets/css/login2.css}" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.cdnfonts.com/css/metropolis-2" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+</head>
+<body>
+    <!-- Fixed Logo at Top Left -->
+    <div class="logo">
+        <div class="logo-content">
+            <div class="logo-image">
+                <img src="data:image/png;base64,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" alt="tx24 Logo">
+            </div>
+            <div>
+                <div style="display: flex; align-items: center;">
+                    <span class="logo-text"></span>
+                    <span class="edition-badge">Professional</span>
+                </div>
+            </div>
+        </div>
+        <div class="logo-subtitle">Transaction Management</div>
+    </div>
+
+    <!-- Top Right Link -->
+    <a href="#" class="top-right-link">계정이 없으신가요?</a>
+
+    <div class="container">
+        <div class="content">
+            <!-- Left Section -->
+            <div class="header">
+                <h1 class="header-heading">
+                    All your transactions,<br>
+                    securely managed in one place.
+                </h1>
+                <p class="header-subtitle">
+                    Collaborate with your team in real-time.<br>
+                    Stay connected, organized, and productive.
+                </p>
+            </div>
+
+            <!-- Right Section - Form -->
+            <div class="form-container">
+                <div class="form">
+                    <!-- Login Form -->
+                    <div id="loginForm">
+                        <div class="form-title-wrapper">
+                            <h2 class="form-title">Team Collaboration</h2>
+                            <a href="#" class="forgot-password-link" onclick="showForgotPassword(event)">비밀번호 찾기</a>
+                        </div>
+                        
+                        <div class="form-content">
+                            <!-- Username Input -->
+                            <div class="input-wrapper">
+                                <input 
+                                    type="text" 
+                                    id="username"
+                                    placeholder=" "
+                                >
+                                <label for="username">전자우편 or 사용자 이름</label>
+                            </div>
+
+                            <!-- Password Input -->
+                            <div class="input-wrapper">
+                                <div class="password-wrapper">
+                                    <input 
+                                        type="password" 
+                                        id="password"
+                                        placeholder=" "
+                                    >
+                                    <label for="password">Password</label>
+                                    <button class="password-toggle-btn" type="button" onclick="togglePassword()">
+                                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M10 5C5.5 5 2 10 2 10s3.5 5 8 5 8-5 8-5-3.5-5-8-5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <circle cx="10" cy="10" r="2.5" stroke="currentColor" stroke-width="1.5"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Error Alert (moved below password) -->
+                            <div class="error-alert" id="errorAlert">
+                                <svg class="error-alert-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 1.5L15.5 14.5H0.5L8 1.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+                                    <path d="M8 6V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                    <circle cx="8" cy="12" r="0.75" fill="currentColor"/>
+                                </svg>
+                                <span class="error-alert-text">The email/username or password is invalid.</span>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" onclick="validateLogin()">Log in</button>
+                    </div>
+
+                    <!-- Forgot Password Form -->
+                    <div id="forgotPasswordForm" class="hidden">
+                        <div class="form-title-wrapper">
+                            <h2 class="form-title">비밀번호 재설정</h2>
+                            <a href="#" class="forgot-password-link" onclick="backToLoginFromReset(event)">로그인 돌아가기</a>
+                        </div>
+                        
+                        <div class="form-content">
+                            <!-- ID Input -->
+                            <div class="input-wrapper">
+                                <input 
+                                    type="text" 
+                                    id="resetId"
+                                    placeholder=" "
+                                >
+                                <label for="resetId">아이디</label>
+                            </div>
+
+                            <!-- Email or Phone Input -->
+                            <div class="input-wrapper">
+                                <input 
+                                    type="text" 
+                                    id="resetContact"
+                                    placeholder=" "
+                                >
+                                <label for="resetContact">이메일 또는 전화번호</label>
+                            </div>
+
+                            <!-- Info/Error Alert for Reset -->
+                            <div class="error-alert info-mode show" id="resetErrorAlert" style="margin-top: 0;">
+                                <svg class="error-alert-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M8 1.5L15.5 14.5H0.5L8 1.5Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" fill="none"/>
+                                    <path d="M8 6V10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                                    <circle cx="8" cy="12" r="0.75" fill="currentColor"/>
+                                </svg>
+                                <span class="error-alert-text" id="resetErrorText">계정 정보를 입력하시면 비밀번호 재설정 링크를 보내드립니다.</span>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary" onclick="submitPasswordReset()">재설정 링크 보내기</button>
+                    </div>
+
+                    <!-- 2FA Method Selection -->
+                    <div id="twoFASelection" class="hidden">
+                        <h2 class="form-title">Two-Factor Authentication</h2>
+                        
+                        <div class="form-content">
+                            <p class="info-text">인증 방법을 선택하세요</p>
+                            
+                            <div class="two-fa-options">
+                                <div class="two-fa-option" onclick="selectMethod('sms')">
+                                    <input type="radio" name="twofa" id="sms" value="sms">
+                                    <label for="sms">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 4px;">
+                                            <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                                            <path d="M7 9H17M7 13H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        </svg>
+                                        <div>SMS</div>
+                                    </label>
+                                </div>
+                                <div class="two-fa-option" onclick="selectMethod('email')">
+                                    <input type="radio" name="twofa" id="email" value="email">
+                                    <label for="email">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 4px;">
+                                            <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                                            <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                        </svg>
+                                        <div>EMAIL</div>
+                                    </label>
+                                </div>
+                                <div class="two-fa-option" onclick="selectMethod('otp')">
+                                    <input type="radio" name="twofa" id="otp" value="otp">
+                                    <label for="otp">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 4px;">
+                                            <rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" stroke-width="2" fill="none"/>
+                                            <path d="M9 6H15M9 10H15M9 14H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                            <circle cx="12" cy="18" r="1.5" fill="currentColor"/>
+                                        </svg>
+                                        <div>OTP</div>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Code Input Section (Initially Hidden) -->
+                            <div id="codeInputSection" class="hidden">
+                                <p class="info-text" id="codeInfo"></p>
+                                <div class="input-wrapper">
+                                    <input 
+                                        type="text" 
+                                        class="code-input" 
+                                        id="verificationCode"
+                                        placeholder=" "
+                                        maxlength="6"
+                                    >
+                                    <label for="verificationCode">인증 코드</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Primary Action Buttons (Same Position) -->
+                        <button class="btn btn-primary" onclick="sendCode()" id="sendCodeBtn">Send</button>
+                        
+                        <!-- Verify Button and Secondary Actions (Initially Hidden) -->
+                        <div id="codeButtonSection" class="hidden">
+                            <button class="btn btn-primary" onclick="verifyCode()">확인</button>
+                            <div class="button-group">
+                                <button class="btn btn-primary btn-outline-primary" onclick="resendCode()">다시 보내기</button>
+                                <button class="btn btn-primary btn-outline-primary" onclick="backToLogin()">뒤로 가기</button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let selectedMethod = '';
+
+        function closeError() {
+            document.getElementById('errorAlert').classList.remove('show');
+        }
+
+        function showError() {
+            document.getElementById('errorAlert').classList.add('show');
+        }
+
+        function closeResetError() {
+            const resetErrorAlert = document.getElementById('resetErrorAlert');
+            resetErrorAlert.classList.add('info-mode');
+            resetErrorAlert.classList.add('show');
+            document.getElementById('resetErrorText').textContent = '계정 정보를 입력하시면 비밀번호 재설정 링크를 보내드립니다.';
+        }
+
+        function showResetError(message) {
+            const resetErrorAlert = document.getElementById('resetErrorAlert');
+            resetErrorAlert.classList.remove('info-mode');
+            resetErrorAlert.classList.add('show');
+            document.getElementById('resetErrorText').textContent = message;
+        }
+
+        function showForgotPassword(event) {
+            event.preventDefault();
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('forgotPasswordForm').classList.remove('hidden');
+            closeError();
+        }
+
+        function backToLoginFromReset(event) {
+            event.preventDefault();
+            document.getElementById('forgotPasswordForm').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            closeResetError();
+            // Reset inputs
+            document.getElementById('resetId').value = '';
+            document.getElementById('resetContact').value = '';
+        }
+
+        function submitPasswordReset() {
+            const id = document.getElementById('resetId').value;
+            const contact = document.getElementById('resetContact').value;
+
+            if (!id || !contact) {
+                showResetError('모든 필드를 입력해주세요.');
+                return;
+            }
+
+            // 간단한 이메일/전화번호 형식 검증
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            const phoneRegex = /^[0-9-+()]{10,}$/;
+            
+            if (!emailRegex.test(contact) && !phoneRegex.test(contact)) {
+                showResetError('올바른 이메일 주소 또는 전화번호를 입력해주세요.');
+                return;
+            }
+
+            // 실제 구현에서는 서버로 정보를 전송
+            // 여기서는 성공 메시지만 표시
+            closeResetError();
+            alert('비밀번호 재설정 링크가 전송되었습니다.\n이메일 또는 SMS를 확인해주세요.');
+            
+            // 로그인 폼으로 돌아가기
+            backToLoginFromReset(new Event('click'));
+        }
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.type === 'password' ? 'text' : 'password';
+            passwordInput.type = type;
+        }
+
+        function validateLogin() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            if (!username || !password) {
+                showError();
+                return;
+            }
+
+            // admin/admin 체크
+            if (username !== 'admin' || password !== 'admin') {
+                showError();
+                return;
+            }
+
+            // 로그인 성공 - 2FA로 이동
+            closeError();
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('twoFASelection').classList.remove('hidden');
+            
+            // 2FA 화면에서는 height 고정
+            document.querySelector('.form').classList.add('fixed-height');
+        }
+
+        function selectMethod(method) {
+            selectedMethod = method;
+            document.getElementById(method).checked = true;
+            
+            // Remove selected class from all options
+            document.querySelectorAll('.two-fa-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Add selected class to clicked option
+            event.currentTarget.classList.add('selected');
+        }
+
+        function sendCode() {
+            if (!selectedMethod) {
+                alert('인증 방법을 선택해주세요.');
+                return;
+            }
+
+            let message = '';
+            switch(selectedMethod) {
+                case 'sms':
+                    message = 'SMS로 인증 코드가 전송되었습니다.';
+                    break;
+                case 'email':
+                    message = 'Email로 인증 코드가 전송되었습니다.';
+                    break;
+                case 'otp':
+                    message = 'OTP 앱에서 인증 코드를 확인하세요.';
+                    break;
+            }
+
+            // Show code input section
+            document.getElementById('codeInfo').textContent = message;
+            document.getElementById('codeInputSection').classList.remove('hidden');
+            
+            // Switch buttons - Hide Send, Show Verify
+            document.getElementById('sendCodeBtn').classList.add('hidden');
+            document.getElementById('codeButtonSection').classList.remove('hidden');
+            
+            // Disable method selection
+            document.querySelectorAll('.two-fa-option').forEach(opt => {
+                opt.classList.add('disabled');
+            });
+        }
+
+        function backToLogin() {
+            document.getElementById('twoFASelection').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            
+            // 로그인 화면에서는 height 자동
+            document.querySelector('.form').classList.remove('fixed-height');
+            
+            // Reset 2FA form
+            selectedMethod = '';
+            document.getElementById('codeInputSection').classList.add('hidden');
+            document.getElementById('sendCodeBtn').classList.remove('hidden');
+            document.getElementById('codeButtonSection').classList.add('hidden');
+            document.getElementById('verificationCode').value = '';
+            
+            // Reset radio buttons and options
+            document.querySelectorAll('input[name="twofa"]').forEach(radio => {
+                radio.checked = false;
+            });
+            document.querySelectorAll('.two-fa-option').forEach(opt => {
+                opt.classList.remove('selected');
+                opt.classList.remove('disabled');
+            });
+
+            // Reset error
+            closeError();
+        }
+
+        function verifyCode() {
+            const code = document.getElementById('verificationCode').value;
+
+            if (code.length !== 6) {
+                alert('6자리 인증 코드를 입력해주세요.');
+                return;
+            }
+
+            // 실제 구현에서는 서버로 코드를 전송하여 검증
+            alert('인증이 완료되었습니다! 로그인 중...');
+            
+            // Reset form after successful verification
+            document.getElementById('twoFASelection').classList.add('hidden');
+            document.getElementById('loginForm').classList.remove('hidden');
+            
+            // 로그인 화면에서는 height 자동
+            document.querySelector('.form').classList.remove('fixed-height');
+            
+            // Reset 2FA form
+            selectedMethod = '';
+            document.getElementById('codeInputSection').classList.add('hidden');
+            document.getElementById('sendCodeBtn').classList.remove('hidden');
+            document.getElementById('codeButtonSection').classList.add('hidden');
+            document.getElementById('verificationCode').value = '';
+            
+            // Reset options
+            document.querySelectorAll('input[name="twofa"]').forEach(radio => {
+                radio.checked = false;
+            });
+            document.querySelectorAll('.two-fa-option').forEach(opt => {
+                opt.classList.remove('selected');
+                opt.classList.remove('disabled');
+            });
+
+            // Reset inputs
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            
+            // 여기서 실제 로그인 처리를 진행
+            // window.location.href = '/dashboard';
+        }
+
+        function resendCode() {
+            // Clear the input
+            document.getElementById('verificationCode').value = '';
+            
+            // Show confirmation
+            let message = '';
+            switch(selectedMethod) {
+                case 'sms':
+                    message = 'SMS로 인증 코드가 재전송되었습니다.';
+                    break;
+                case 'email':
+                    message = 'Email로 인증 코드가 재전송되었습니다.';
+                    break;
+                case 'otp':
+                    message = 'OTP 앱에서 새로운 인증 코드를 확인하세요.';
+                    break;
+            }
+            
+            document.getElementById('codeInfo').textContent = message;
+            
+            // 실제 구현에서는 서버에 재전송 요청
+            alert('인증 코드가 재전송되었습니다.');
+        }
+
+        // Only allow numbers in verification code
+        document.addEventListener('DOMContentLoaded', function() {
+            const codeInput = document.getElementById('verificationCode');
+            if (codeInput) {
+                codeInput.addEventListener('input', function(e) {
+                    this.value = this.value.replace(/[^0-9]/g, '');
+                });
+            }
+        });
+    </script>
+</body>
+</html>

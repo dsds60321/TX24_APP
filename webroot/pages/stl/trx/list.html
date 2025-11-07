@@ -1,0 +1,169 @@
+<div th:fragment="list" th:remove="tag">
+    <div class="table-contents" th:data-current=${RLIST.page.selectedPage} th:data-lastnum=${RLIST.page.lastPage} th:data-total=${RLIST.page.totalSize} th:data-size=${RLIST.page.rowsPerPage}>
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2" class="chk excel-hide"><input type="checkbox" class="check_all list-chk" id="check_all" onclick="checkbox.checkAll(this);" />
+                        <label for="check_all" class="list-checkbox"></label>
+                    </th>
+                    <th rowspan="2">No</th>
+                    <th rowspan="2">대상거래일</th>
+                    <th rowspan="2">정산번호</th>
+                    <th rowspan="2">상품</th>
+                    <th rowspan="2" title="승인일 기준 D+1 영업일">취급일</th>
+                    <th rowspan="2" title="지급일기준이며 매입시는 D+1 영업일, 미매입시는 PG 입금예정일자">정산일자</th>
+                    <th rowspan="2" title="PG사의 입금 예정일자">PG</br>입금예정일</th>
+                    <th rowspan="2">PG</th>
+                    <th rowspan="2">고객사</th>
+                    <th rowspan="2">APP</th>
+                    <th rowspan="2" title="고객사의 총 거래금액">PG</br>거래금액</th>
+                    <th rowspan="2" title="PG 사의 입금(정산) 예정금액">대상금액</th>
+                    <th rowspan="2" title="PG 사의 입금(정산) 예정금액">채권매입</br>요청금액</th>
+                    <th colspan="5">수수료</th>
+                    <th rowspan="2">산출</br>정산금액</th>
+                    <th rowspan="2" title="입금정산 완료 후 차액을 의미함.">입금정산</br>반영금액</th>
+                    <th rowspan="2" title="정산사 임의 차감건에 대한 반환 금액">정산사</br>차감금액</th>
+                    <th rowspan="2" title="정산사 임의 차감 설정 금액">정산사</br>반환금액</th>
+                    <th rowspan="2" title="정산사에서 고객사로 정산 금액">최종</br>정산금액</th>
+                    <th rowspan="2" title="매입,미매입 여부">매입여부</th>
+                    <th rowspan="2" title="대기,확정,지급완료 건으로 대기시는 삭제가능하며 확정은 대기로 변경가능합니다. 단, 지급완료건은 설정 불가 합니다. !확정시 지급예정내역에 생성됩니다.">정산상태</th>
+                </tr>
+                <tr>
+                    <th style="min-width: 60px;" title="할인제공기간 x 일별할인율">할인율</th>
+                    <th style="min-width: 60px;" title="정산사의 할인금액">서비스</th>
+                    <th style="min-width: 60px;" title="부가세 부과 대상">기타수수료</th>
+                    <th style="min-width: 60px;" title="정산사의 할인금액에 대한 부가세">부가세</th>
+                    <th style="min-width: 60px;" title="정산사 수수료합">합계</th>
+                </tr>
+            </thead>
+            <tbody>
+            <th:block th:if="${#lists.size(RLIST.datas) eq 0}">
+                <tr>
+                    <td colspan="99">조회된 데이터가 없습니다.</td>
+                </tr>
+            </th:block>
+            <th:block th:unless="${#lists.size(RLIST.datas) eq 0}">
+                <tr class="excel-hide">
+                    <td colspan="11" class="text-right" style="padding-right: 15px;">합계</td>
+                    <td class="amount text-right font-weight-700">[[${#aggregates.sum(RLIST.datas.![trxAmt])}]]</td>
+                    <td class="amount text-right font-weight-700">[[${#aggregates.sum(RLIST.datas.![dtPayAmt])}]]</td>
+                    <td class="amount text-right font-weight-700">[[${#aggregates.sum(RLIST.datas.![bondAmt])}]]</td>
+                    <td></td>
+                    <td class="amount text-right font-weight-700">[[${#aggregates.sum(RLIST.datas.![fee])}]]</td>
+                    <td class="amount text-right font-weight-700">[[${#aggregates.sum(RLIST.datas.![otherFee])}]]</td>
+                    <td class="amount text-right font-weight-700">[[${#aggregates.sum(RLIST.datas.![feeVat]) + #aggregates.sum(RLIST.datas.![otherFeeVat])}]] </td>
+                    <td class="amount text-right font-weight-700">[[${#aggregates.sum(RLIST.datas.![feeTot]) + #aggregates.sum(RLIST.datas.![otherFeeTot])}]] </td>
+                    <td class="amount text-right font-weight-700">
+                        [[${#aggregates.sum(RLIST.datas.![pdtType == 'D+0' ? (dtPayAmt - bondAmt - feeTot - otherFeeTot) : (dtPayAmt - feeTot - otherFeeTot)])}]]
+                    </td>
+
+                    <td class="amount text-right font-weight-700">[[${#aggregates.sum(RLIST.datas.![dtOverAmt])}]]</td>
+                    <td class="amount text-right font-weight-700">[[${#aggregates.sum(RLIST.datas.![holdAmt])}]]</td>
+                    <td class="amount text-right font-weight-700">[[${#aggregates.sum(RLIST.datas.![releaseAmt])}]]</td>
+                    <td class="amount text-right font-weight-700">[[${#aggregates.sum(RLIST.datas.![payAmt])}]]</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+
+                <tr th:each="entry : ${RLIST.datas}" th:data-id="${entry.trxId}">
+                    <td class="excel-hide">
+                        <th:block th:if="${entry.status ne '지급완료' && entry.status ne '미수확정'}">
+                            <input type="checkbox" class="list-chk row-check" th:id="${'check_'+ entry.trxId}"/><label th:for="${'check_'+ entry.trxId}" class="list-checkbox"/>
+                        </th:block>
+                    </td>
+                    <td>[[${entry['@INDEX']}]]</td>
+                    <td>[[${entry['trxEndDay']}]]</td>
+                    <td>
+                        <!-- <a th:attr="onclick='edit(\'/trx/modal/view/' + ${entry.trxId} +'\')'">[[${entry.trxId}]]</a> -->
+                        <th:block th:if="${entry.handle eq '미매입'}">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#default" th:data-modal-url="${'/stl/trx/'+ entry.trxId}">[[${entry.trxId}]]</a>
+                        </th:block>
+                        <th:block th:if="${entry.handle eq '매입'}">
+                            <a href="#" data-bs-toggle="modal" data-bs-target="#default" th:data-modal-url="${'/stl/trx/'+ entry.trxId}">[[${entry.trxId}]]</a>
+                        </th:block>
+                        </br>[[${entry.trxStartDay}]] - [[${entry.trxEndDay}]]
+                    </td>
+                    <td>[[${entry.pdtType}]]</td>
+                    <td>[[${entry.trxDay}]]</td>
+                    <td class="font-weight-700">[[${entry.stlDay}]]</td>
+                    <td>[[${entry.dtStlDay}]]</td>
+                    <td th:title="${entry.dtId}">[[${entry.dtName}]]</td>
+                    <td th:title="${entry.mchtId}">[[${entry.mchtName}]]</td>
+                    <td th:title="${entry.appId}">[[${entry.appName}]]</td>
+                    <td class="amount text-right">[[${entry.trxAmt}]]</td>
+                    <td class="amount text-right font-weight-700">[[${entry.dtPayAmt}]]</td>
+                    <td class="amount text-right font-weight-700">[[${entry.bondAmt}]]</td>
+                    <td>
+                        <div th:if="${entry.mchtRateId.startsWith('F')}">
+                            <span class="rate text-right">[[${entry.rate}]]</span>
+                        </div>
+                        <div th:if="${entry.mchtRateId.startsWith('D')}">
+                            <span class="rate text-right">[[${entry.period * entry.rate}]]</span>
+                        </div>
+                    </td>
+                    <td class="amount text-right">[[${entry.fee}]]</td>
+                    <td th:title="${entry.otherFeeName}" class="amount text-right">[[${entry.otherFee}]]</td>
+                    <td class="amount text-right">[[${entry.feeVat + entry.otherFeeVat}]]</td>
+                    <td class="amount text-right">[[${entry.feeTot + entry.otherFeeTot}]]</td>
+                    <td class="amount text-right font-weight-700">
+                        <div th:if = "${entry.pdtType eq 'D+0'}">
+                            [[${entry.dtPayAmt - entry.bondAmt - entry.feeTot - entry.otherFeeTot}]]
+                        </div>
+                        <div th:if = "${entry.pdtType ne 'D+0'}">
+                            [[${entry.dtPayAmt - entry.feeTot - entry.otherFeeTot}]]
+                        </div>
+                    </td>
+                    <td class="amount text-right">[[${entry.dtOverAmt}]]</td>
+                    <div th:if = "${entry.handle eq '매입' && entry.status eq '대기'}">
+                        <!-- <td class="amount text-right" style="border-bottom:1px solid #5d72f7;" th:attr="onclick='edit(\'/trx/hold/action/holdform/' + ${entry.trxId} +'\')'" th:title="${entry.holdId}"> -->
+                        <td class="amount text-right" style="border-bottom:1px solid #5d72f7;" ondblclick="handleEdit(this);" th:data-url="${'/trx/hold/action/holdform/'+ entry.trxId}" th:title="${entry.holdId}"> [[${entry.holdAmt}]] </td>
+                        <!-- <td class="amount text-right" style="border-bottom:1px solid #5d72f7;" th:attr="onclick='edit(\'/trx/hold/action/releaseform/' + ${entry.trxId} +'\')'" th:title="${entry.releaseId}">[[${entry.releaseAmt}]]</td> -->
+                        <td class="amount text-right" style="border-bottom:1px solid #5d72f7;" ondblclick="handleEdit(this);" th:data-url="${'/trx/hold/action/releaseform/'+ entry.trxId}" th:title="${entry.releaseId}">[[${entry.releaseAmt}]]</td>
+                    </div>
+                    <div th:if = "${entry.handle eq '매입' && entry.status ne '대기'}">
+                        <td class="amount text-right">[[${entry.holdAmt}]]</td>
+                        <td class="amount text-right">[[${entry.releaseAmt}]]</td>
+                    </div>
+                    <div th:if = "${entry.handle ne '매입'}">
+                        <td class="amount text-right">[[${entry.holdAmt}]]</td>
+                        <td class="amount text-right">[[${entry.releaseAmt}]]</td>
+                    </div>
+                    <td class="amount text-right font-weight-700" th:data-payAmt="${entry.payAmt}">[[${entry.payAmt}]]</td>
+                    <!--
+                    <td>[[${entry.fcId}]]</td>
+                    <td class="amount text-right font-weight-700">
+                    <div th:if = "${entry.handle eq '매입'}">[[${entry.dtPayAmt}]]</div>
+                    <div th:if = "${entry.handle ne '매입'}"> 0 </div>
+                    </td>
+                    -->
+                    <td>
+                        <div th:if = "${entry.handle eq '미매입'}"> <span class="badge bg-dark">[[${entry.handle}]]</span> </div>
+                        <div th:if = "${entry.handle eq '매입'}"> <span class="badge bg-primary">[[${entry.handle}]]</span> </div>
+                        <div th:if = "${entry.handle eq 'N/A'}"> <span class="badge bg-danger">[[${entry.handle}]]</span> </div>
+                    </td>
+                    <td>
+                        <div th:if = "${entry.status eq '대기'}"> <span class="badge bg-dark">[[${entry.status}]]</span> </div>
+                        <div th:if = "${entry.status eq '확정'}"> <span class="badge bg-primary">[[${entry.status}]]</span> </div>
+                        <div th:if = "${entry.status eq '지급완료'}"> <span class="badge bg-success">[[${entry.status}]]</span> </div>
+                        <div th:if = "${entry.status eq '미수확정'}"> <span class="badge bg-info">[[${entry.status}]]</span> </div>
+                    </td>
+
+                </tr>
+            </th:block>
+            </tbody>
+        </table>
+        <div class="table-footer">
+            <div class="paging">
+                <button type="button" class="arrow-btn prev-btn" onclick="search.pagingbtn('prev', this)">
+                    <i class="fas fa-angle-left"></i>
+                </button>
+                <div class="num">
+                </div>
+                <button type="button" class="arrow-btn next-btn" onclick="search.pagingbtn('next', this)">
+                    <i class="fas fa-angle-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

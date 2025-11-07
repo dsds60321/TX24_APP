@@ -7,10 +7,10 @@
     <div class="col-12">
         <div class="pt-2">
 
-            <div th:replace="~{pages/layout/fragments :: maps('데이터 수집')}"></div>
+            <div th:replace="~{pages/layout/fragments :: maps('정산관리')}"></div>
 
 
-            <div class="card-wrapper search" data-url="/stl/crawling/list" data-target="#search-list"
+            <div class="card-wrapper search" data-url="/stl/trx/list" data-target="#search-list"
                  data-detail-mode="true">
                 <form action="">
                     <div class="card-contents">
@@ -26,33 +26,41 @@
                                 </div>
                             </div>
                             <div class="col d-flex search-container">
-                                <div class="card-title"><p class="fs-8 fw-bold">대상거래일</p></div>
+                                <div class="card-title"><p class="fs-8 fw-bold">정산일자</p></div>
                                 <div class="card-txt">
                                     <div class="search-group">
-                                        <input type="text" id="datepicker2" class="form-control fs-8 tx-datepicker"
-                                               name="trxEndDay" data-separator="-" data-format="yyyy-mm-dd"
+                                        <input type="text" class="form-control fs-8 tx-datepicker"
+                                               name="stlDay" data-separator="-" data-format="yyyy-mm-dd"
                                                data-range="Y" data-oper="eq" data-group="0" readonly>
                                     </div>
                                 </div>
                             </div>
                             <div class="col d-flex search-container">
-                                <div class="card-title"><p class="fs-8 fw-bold">수집상태</p></div>
+                                <div class="card-title"><p class="fs-8 fw-bold">PG입금예정일</p></div>
                                 <div class="card-txt">
                                     <div class="search-group">
-                                        <select onchange="search.selectOption(this)" name="status" id="" data-oper="eq" class="form-control fs-8">
-                                            <option value="">----</option>
-                                            <option value="대기">대기</option>
-                                            <option value="완료">완료</option>
-                                            <option value="실패">실패</option>
-                                        </select>
+                                        <input type="text" class="form-control fs-8 tx-datepicker"
+                                               name="dtStlDay" data-separator="-" data-format="yyyy-mm-dd"
+                                               data-range="Y" data-oper="eq" data-group="0" readonly>
                                     </div>
                                 </div>
                             </div>
                             <div class="col d-flex search-container">
-                                <div class="card-title"><p class="fs-8 fw-bold">고객사명</p></div>
+                                <div class="card-title"><p class="fs-8 fw-bold">대상거래일</p></div>
                                 <div class="card-txt">
                                     <div class="search-group">
-                                        <input type="text" name="mchtName" data-oper="eq" class="form-control fs-8">
+                                        <input type="text" class="form-control fs-8 tx-datepicker"
+                                               name="trxEndDay" data-separator="-" data-format="yyyy-mm-dd"
+                                               data-range="Y" data-oper="eq" data-group="0" readonly>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col d-flex search-container">
+                                <div class="card-title"><p class="fs-8 fw-bold">정산번호</p></div>
+                                <div class="card-txt">
+                                    <div class="search-group">
+                                        <input type="text" name="trxId" data-oper="eq" class="form-control fs-8">
                                         <button type="button" class="btn search-btn circle"
                                                 onclick="search.addTag(this)"></button>
                                     </div>
@@ -92,35 +100,8 @@
                         <p class="search-total fs-9 text-grey mb-0 ms-3">0</p>
                         <p class="fs-9 text-grey mb-0">건 조회됨</p>
                     </div>
+
                     <div class="btn-box">
-
-                        <!--    신규 select box   -->
-                        <div class="simple-select">
-                            <div class="simple-select-trigger">
-                                <span class="selected-label" data-placeholder="선택하세요">선택하세요</span>
-                                <span>▾</span>
-                            </div>
-
-                            <ul class="simple-select-options">
-                                <li data-value="데이터 수집">데이터 수집</li>
-                                <li data-value="D+0지급내역수집">D+0지급내역수집</li>
-                            </ul>
-
-                            <input type="hidden" name="type" value="">
-                        </div>
-
-                        <div class="simple-select">
-                            <div class="simple-select-trigger">
-                                <span class="selected-label" data-placeholder="선택하세요">선택하세요</span>
-                                <span>▾</span>
-                            </div>
-
-                            <ul class="simple-select-options">
-                                <li data-value="정산생성">정산생성</li>
-                            </ul>
-
-                            <input type="hidden" name="type" value="">
-                        </div>
 
                         <div class="simple-select">
                             <div class="simple-select-trigger">
@@ -136,14 +117,12 @@
                             <input type="hidden" id="perPage" value="20" oninput="search.sizingbtn(this)">
                         </div>
 
-<!--                        <select onchange="search.sizingbtn(this)" name="" id="" class="form-control select-grey fs-8 rows-per-page">-->
-<!--                            <option value="20">show 20</option>-->
-<!--                            <option value="50">show 50</option>-->
-<!--                            <option value="100">show 100</option>-->
-<!--                        </select>-->
+
                         <button onclick="search.submit(this)" data-type="excel" type="button"
                                 class="badge bg-grey-outline"><i class="fa-solid fa-file-excel"></i></button>
                     </div>
+
+
                 </div>
 
                 <div class="page-container">
@@ -166,7 +145,8 @@
             </div>
         </div>
     </div>
+
+    <div th:replace="~{pages/layout/fragments :: modal('default', 'modal-lg')}"></div>
 </div>
-<script th:src="@{/assets/js/pages/stl/crawling.js}"></script>
 </body>
 </html>

@@ -1,863 +1,410 @@
-/**
- * 공통 레이아웃 JS
- */
-export default class Layout {
-    constructor() {
-        // 하위 페이지 탭 매니저
-        this.TabManager = this.createTabManager();
-        this.modalCache = new Map();
-        this.loadingOverlay = null;
-        this.loadingMessageElem = null;
-        this.init();
-        if (typeof window !== 'undefined') {
-            window.layout = this;
-        }
+export default class SessionManager {
+    constructor(options = {}) {
+        this.layout = options.layout || window.layout;
+        this.rootElement = options.rootElement || null;
+        this.infoUrl = options.infoUrl || null;
+        this.extendUrl = options.extendUrl || null;
+        this.displaySelector = options.displaySelector || '[data-session-remaining]';
+        this.warningThresholdSeconds = Number(options.warningThresholdSeconds) || 180;
+
+        this.remainingSeconds = null;
+        this.countdownTimerId = null;
+        this.overlayShown = false;
+        this.overlayContentSelector = '[data-session-overlay]';
+        this.overlayCountdownSelector = '[data-session-overlay-remaining]';
+        this.isFetching = false;
     }
 
     init() {
-        this.bindEvents();
-        this.mobileSize();
-        this.TabManager.init();
-    }
-
-    bindEvents() {
-        // menuToggle
-        this.menuToggle();
-        this.sideNaviToggle();
-        this.bindSelectToInput();
-        this.bindEmailFocus();
-        this.bindCardEdit();
-        this.bindModalLoader();
-        // this.blockBrowserEvt();
-    }
-
-    // 탭 함수
-    showTab(root = document) {
-        const tabAllButtons = root.querySelectorAll('.tab-button');
-
-        tabAllButtons.forEach(elem => {
-
-            elem.addEventListener('click', function({target}) {
-                var nav = target.closest('.nav-box');
-                const tabId = target.dataset.tabTarget;
-                if (!tabId) return;
-
-                const buttons = nav.querySelectorAll('.tab-button');
-                const panes = nav.querySelectorAll('.tab-pane');
-
-                // tab 활성화
-                buttons.forEach(btn => btn.classList.remove('active'));
-                elem.classList.add('active');
-
-                // content 활성화
-                panes.forEach(pane => pane.classList.remove('active'));
-                Array.from(panes).filter(pane => pane.id === tabId).forEach(pane => pane.classList.add('active'));
-            });
-        })
-    }
-
-    menuToggle() {
-        const sideMenuToggle = document.querySelector('.btn-menu');
-        if (!sideMenuToggle || sideMenuToggle.dataset.boundSidebarToggle === 'true') {
+        if (!this.rootElement) {
+            this.rootElement = document.querySelector('[data-session-info-url]');
+        }
+        if (!this.rootElement) {
             return;
         }
-        sideMenuToggle.dataset.boundSidebarToggle = 'true';
-        sideMenuToggle.addEventListener('click', function() {
-            const mainElement = document.querySelector('.main');
-            if (!mainElement) {
-                return;
-            }
-            if (mainElement.classList.contains('sidebarHide')) {
-                mainElement.classList.remove('sidebarHide');
-            } else {
-                mainElement.classList.add('sidebarHide');
-            }
-        });
+        this.infoUrl = this.rootElement.dataset.sessionInfoUrl || this.infoUrl;
+        this.extendUrl = this.rootElement.dataset.sessionExtendUrl || this.extendUrl;
 
-        document.querySelector('.close_sidebar').addEventListener('click', function() {
-            const mainElement = document.querySelector('.main');
-            mainElement.classList.add('sidebarHide');
-        })
-
-    }
-
-    sideNaviToggle() {
-        this.bindCollapseIconToggle(document);
-    }
-
-    bindCollapseIconToggle(root = document) {
-        if (!root) {
-            return;
+        const threshold = Number(this.rootElement.dataset.sessionWarningThreshold);
+        if (!Number.isNaN(threshold) && threshold > 0) {
+            this.warningThresholdSeconds = threshold;
         }
-        root.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(toggle) {
-            if (toggle.dataset.boundCollapseIcon === 'true') {
-                return;
-            }
-            toggle.dataset.boundCollapseIcon = 'true';
-            toggle.addEventListener('click', function() {
-                const chevron = this.querySelector('.fa-caret-down');
-                if (chevron) {
-                    const nextRotation = chevron.style.transform === 'rotate(0deg)' ? 'rotate(-90deg)' : 'rotate(0deg)';
-                    chevron.style.transform = nextRotation;
-                    chevron.style.transition = 'transform 0.3s ease';
-                }
-            });
-        });
-    }
 
-    // select -> input 이벤트
-    bindSelectToInput(root = document) {
-        if (!root) {
-            return;
+        this.displayElement = this.rootElement.querySelector('[data-session-remaining]');
+        if (!this.displayElement && this.displaySelector) {
+            this.displayElement = document.querySelector(this.displaySelector);
         }
-        root.querySelectorAll('.select-to-input').forEach(function(select) {
-            if (select.dataset.boundSelectToInput === 'true') {
-                return;
-            }
-            select.dataset.boundSelectToInput = 'true';
-            select.addEventListener('change', function() {
-                const targetId = this.getAttribute('data-target');
-                const targetInput = document.getElementById(targetId);
-                if (targetInput) {
-                    targetInput.value = this.value;
-                }
-            });
-        });
-    }
 
-    /**
-     * email css
-     */
-    bindEmailFocus(root = document) {
-        if (!root) {
-            return;
-        }
-        root.querySelectorAll('.email').forEach(function(container) {
-            if (container.dataset.boundEmail === 'true') {
-                return;
-            }
-            container.dataset.boundEmail = 'true';
-            const textInputs = container.querySelectorAll('input');
-            textInputs.forEach(function(input) {
-                input.addEventListener('focus', function() {
-                    container.classList.add('on');
-                });
-                input.addEventListener('blur', function() {
-                    container.classList.remove('on');
-                });
-            });
-        });
-    }
-
-    bindCardEdit(root = document) {
-        if (!root) {
-            return;
-        }
-        root.querySelectorAll('.flex-edit').forEach((button) => {
-            if (button.dataset.boundFlexEdit === 'true') {
-                return;
-            }
-            button.dataset.boundFlexEdit = 'true';
-            button.addEventListener('click', () => {
-                this.toggleCardEdit(button);
-            });
-        });
-    }
-
-    toggleCardEdit(button) {
-        const wrapper = button.closest('.card-wrapper');
-        if (!wrapper) {
-            return;
-        }
-        if (wrapper.classList.contains('edit')) {
-            wrapper.classList.remove('edit');
-        } else {
-            wrapper.classList.add('edit');
-        }
-    }
-
-    /**
-     * 모달 관련 JS
-     */
-    bindModalLoader(root = document) {
-        if (!root) {
+        if (!this.infoUrl || !this.displayElement) {
             return;
         }
 
-        const layout = this;
-        const modals = root.querySelectorAll('.modal');
-
-        modals.forEach(function(modal) {
-            if (modal.dataset.boundModalAjax === 'true') {
-                return;
-            }
-            modal.dataset.boundModalAjax = 'true';
-
-            modal.addEventListener('show.bs.modal', function(event) {
-                const trigger = event.relatedTarget;
-                if (!trigger) {
-                    return;
-                }
-                const requestUrl = trigger.getAttribute('data-modal-url');
-                if (!requestUrl) {
-                    return;
-                }
-
-                const modalContent = modal.querySelector('.modal-content');
-                if (!modalContent) {
-                    return;
-                }
-
-                modalContent.innerHTML = layout.buildModalLoading();
-                layout.loadModalContent(requestUrl).then(function(html) {
-                    modalContent.innerHTML = html;
-                    layout.rebindDynamic(modal);
-                    layout.syncModalLabel(modal);
-                }).catch(function(error) {
-                    modalContent.innerHTML = layout.buildModalError(error);
-                });
-            });
-
-            modal.addEventListener('hidden.bs.modal', function() {
-                const modalContent = modal.querySelector('.modal-content');
-                if (!modalContent) {
-                    return;
-                }
-                if (modal.dataset.keepContent === 'true') {
-                    return;
-                }
-                modalContent.innerHTML = '';
-            });
-        });
+        this.fetchSessionInfo();
     }
 
-    /**
-     * 전역 로딩 표시
-     */
-    ensureLoadingOverlay() {
-        if (this.loadingOverlay && document.body.contains(this.loadingOverlay)) {
-            return this.loadingOverlay;
+    async fetchSessionInfo() {
+        if (this.isFetching) {
+            return;
         }
+        this.isFetching = true;
+        try {
+            const response = await this.request('get', this.infoUrl);
+            const data = response?.data ?? response;
+            const seconds = this.extractRemainingSeconds(data);
 
-        const mainContent = document.querySelector('.main .main-content') || document.querySelector('.main');
-        if (!mainContent) {
+            if (seconds !== null && seconds !== undefined) {
+                this.setRemainingSeconds(seconds);
+            }
+        } catch (error) {
+            console.error('[SessionManager] 세션 정보를 가져오지 못했습니다.', error);
+        } finally {
+            this.isFetching = false;
+        }
+    }
+
+    extractRemainingSeconds(data) {
+        if (!data) {
             return null;
         }
 
-        const overlay = document.createElement('div');
-        overlay.className = 'layout-loading-overlay';
-        overlay.innerHTML = '<div class="layout-loading-content" role="status" aria-live="polite">' +
-            '<div class="layout-loading-spinner" aria-hidden="true"></div>' +
-            '<p class="layout-loading-text">로딩 중...</p>' +
-            '</div>';
-
-        mainContent.appendChild(overlay);
-
-        this.loadingOverlay = overlay;
-        this.loadingMessageElem = overlay.querySelector('.layout-loading-text');
-        return overlay;
-    }
-
-    showLoading(message = '로딩 중입니다...') {
-        const overlay = this.ensureLoadingOverlay();
-        if (!overlay) {
-            return;
-        }
-        if (this.loadingMessageElem) {
-            this.loadingMessageElem.textContent = message;
-        }
-        overlay.classList.add('is-active');
-    }
-
-    hideLoading() {
-        if (!this.loadingOverlay) {
-            return;
-        }
-        this.loadingOverlay.classList.remove('is-active');
-    }
-
-    setButtonLoading(button, isLoading) {
-        if (!(button instanceof HTMLElement)) {
-            return;
+        if (typeof data.remainingSeconds === 'number') {
+            return Math.max(0, Math.floor(data.remainingSeconds));
         }
 
-        if (isLoading) {
-            if (!button.dataset.prevDisabled) {
-                button.dataset.prevDisabled = button.disabled ? 'true' : 'false';
+        if (typeof data.expiresAt === 'string') {
+            const expires = new Date(data.expiresAt).getTime();
+            if (!Number.isNaN(expires)) {
+                const now = Date.now();
+                return Math.max(0, Math.floor((expires - now) / 1000));
             }
-            button.classList.add('is-loading');
-            button.disabled = true;
+        }
+
+        return null;
+    }
+
+    setRemainingSeconds(seconds) {
+        if (!Number.isFinite(seconds)) {
+            return;
+        }
+        this.remainingSeconds = Math.max(0, Math.floor(seconds));
+        this.updateDisplay();
+        this.ensureCountdown();
+    }
+
+    ensureCountdown() {
+        if (this.countdownTimerId) {
+            return;
+        }
+
+        this.countdownTimerId = window.setInterval(() => {
+            if (typeof this.remainingSeconds !== 'number') {
+                return;
+            }
+
+            this.remainingSeconds = Math.max(0, this.remainingSeconds - 1);
+            this.updateDisplay();
+
+            if (this.remainingSeconds <= 0) {
+                this.handleSessionExpired();
+            } else if (this.remainingSeconds <= this.warningThresholdSeconds) {
+                this.promptExtension();
+            }
+        }, 1000);
+    }
+
+    updateDisplay() {
+        if (!this.displayElement) {
+            return;
+        }
+        const formatted = this.formatSeconds(this.remainingSeconds);
+        this.displayElement.textContent = formatted;
+
+        if (this.overlayShown) {
+            const overlayLayer = this.getOverlayLayer();
+            if (overlayLayer) {
+                const overlayCountdown = overlayLayer.querySelector(this.overlayCountdownSelector);
+                if (overlayCountdown) {
+                    overlayCountdown.textContent = formatted;
+                }
+            }
+        }
+    }
+
+    formatSeconds(totalSeconds) {
+        if (!Number.isFinite(totalSeconds)) {
+            return '--:--';
+        }
+        const seconds = Math.max(0, totalSeconds);
+        const hours = Math.floor(seconds / 3600);
+        const minutes = Math.floor((seconds % 3600) / 60);
+        const secs = seconds % 60;
+
+        if (hours > 0) {
+            return [hours, minutes, secs].map(v => String(v).padStart(2, '0')).join(':');
+        }
+        return [minutes, secs].map(v => String(v).padStart(2, '0')).join(':');
+    }
+
+    promptExtension() {
+        if (this.overlayShown) {
+            return;
+        }
+        this.overlayShown = true;
+        this.renderExtensionOverlay();
+    }
+
+    renderExtensionOverlay() {
+        const overlayLayer = this.getOverlayLayer();
+        const overlayMarkup = this.buildOverlayMarkup();
+
+        if (overlayLayer && this.layout && this.layout.Overlay && typeof this.layout.Overlay.renderContent === 'function') {
+            this.layout.Overlay.open();
+            this.layout.Overlay.renderContent(overlayMarkup);
+            this.bindOverlayEvents(overlayLayer);
         } else {
-            button.classList.remove('is-loading');
-            const prev = button.dataset.prevDisabled;
-            if (typeof prev !== 'undefined') {
-                button.disabled = prev === 'true';
-                delete button.dataset.prevDisabled;
-            } else {
-                button.disabled = false;
-            }
+            const fallback = this.ensureFallbackOverlay();
+            fallback.innerHTML = overlayMarkup;
+            fallback.classList.add('session-overlay-active');
+            this.bindOverlayEvents(fallback);
         }
+
+        this.updateDisplay();
     }
 
-    loadModalContent(url) {
-        if (!url) {
-            return Promise.reject(new Error('유효한 요청 경로가 없습니다.'));
-        }
-        return fetch(url, {
-            credentials: 'same-origin',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then(function(response) {
-            if (!response.ok) {
-                const message = '모달 데이터를 불러오지 못했습니다. (' + response.status + ')';
-                throw new Error(message);
-            }
-            return response.text();
-        });
+    buildOverlayMarkup() {
+        const remaining = this.formatSeconds(this.remainingSeconds);
+        return `
+            <div class="session-extension" data-session-overlay>
+                <button type="button" class="session-extension__close" aria-label="닫기">
+                    <span aria-hidden="true">×</span>
+                </button>
+                <h2 class="session-extension__title">화면 보호</h2>
+                <p class="session-extension__message">세션 만료까지 <strong data-session-overlay-remaining>${remaining}</strong> 남았습니다.</p>
+                <form class="session-extension__form" novalidate>
+                    <label for="sessionExtendPassword" class="session-extension__label">비밀번호</label>
+                    <input type="password" id="sessionExtendPassword" class="session-extension__input" placeholder="비밀번호를 입력하세요" autocomplete="current-password" required />
+                    <p class="session-extension__error" role="alert" hidden></p>
+                    <button type="submit" class="session-extension__submit">세션 연장</button>
+                </form>
+            </div>
+        `;
     }
 
-    buildModalLoading() {
-        return '<div class="modal-body py-5 text-center">' +
-            '<div class="spinner-border text-primary" role="status" aria-hidden="true"></div>' +
-            '<p class="mt-3 mb-0 text-muted">콘텐츠를 불러오는 중입니다...</p>' +
-            '</div>';
-    }
-
-    buildModalError(error) {
-        const message = error && error.message ? error.message : '잠시 후 다시 시도해 주세요.';
-        return '<div class="modal-body py-4 text-center">' +
-            '<i class="fa-solid fa-triangle-exclamation fa-2x text-danger mb-3" aria-hidden="true"></i>' +
-            '<p class="mb-1">모달 콘텐츠를 가져오는 데 실패했습니다.</p>' +
-            '<p class="text-muted small mb-0">' + message + '</p>' +
-            '</div>';
-    }
-
-    buildModalUrl(baseUrl, trigger) {
-        const url = new URL(baseUrl, window.location.origin);
-        const params = this.collectModalParams(trigger);
-        params.forEach(function(value, key) {
-            url.searchParams.append(key, value);
-        });
-        return url.toString();
-    }
-
-    syncModalLabel(modal) {
-        if (!modal) {
+    bindOverlayEvents(layer) {
+        if (!layer) {
             return;
         }
-        const labelId = modal.getAttribute('aria-labelledby');
-        if (!labelId) {
+        const container = layer.querySelector(this.overlayContentSelector);
+        if (!container) {
             return;
         }
-        const modalContent = modal.querySelector('.modal-content');
-        if (!modalContent) {
-            return;
-        }
-        const title = modalContent.querySelector('.modal-title');
-        if (!title) {
-            return;
-        }
-        title.id = labelId;
-    }
+        const form = container.querySelector('form');
+        const passwordInput = container.querySelector('#sessionExtendPassword');
+        const errorElem = container.querySelector('.session-extension__error');
+        const closeButton = container.querySelector('.session-extension__close');
 
-    mobileSize() {
-        const mainElement = document.querySelector('.main');
-        if (!mainElement) {
-            return;
-        }
-        if (window.innerWidth <= 767) {
-            mainElement.classList.add('sidebarHide');
-        } else {
-            mainElement.classList.remove('sidebarHide');
-        }
-    }
-
-    /**
-     * content 로드 후 이벤트 동작
-     */
-    rebindDynamic(root) {
-        if (!root) {
-            return;
-        }
-        this.bindCollapseIconToggle(root);
-        this.bindSelectToInput(root);
-        this.bindEmailFocus(root);
-        this.bindCardEdit(root);
-        this.bindModalLoader(root);
-        this.showTab(root);
-    }
-
-    /**
-     * 페이지 탭 생성 컴포넌트
-     */
-    createTabManager() {
-        const layout = this;
-        const state = {
-            tabs: new Map(),
-            order: [],
-            activeId: null,
-            cache: new Map(),
-            initialContent: ''
-        };
-
-        let tabPanel = null;
-        let tabBar = null;
-        let contentArea = null;
-        const hasAxios = typeof axios !== 'undefined';
-        const tabRules = {
-            breakpoint: 767,
-            contexts: {
-                desktop: {
-                    maxTabs: 10,  // PC 최대 탭
-                    overflowStrategy: 'removeOldest'
-                },
-                mobile: {
-                    maxTabs: 3, // 모바일 최대 탭
-                    overflowStrategy: 'removeOldest'
-                }
-            }
-        };
-
-        // 탭 정렬 구조 ( 오래된거 제거 , 최근꺼 제거 )
-        const overflowStrategies = {
-            removeOldest: function() {
-                return state.order[0];
-            },
-            removeNewest: function() {
-                return state.order[state.order.length - 1];
-            }
-        };
-
-        function getViewportContext() {
-            const breakpoint = tabRules.breakpoint;
-            if (typeof window === 'undefined') {
-                return 'desktop';
-            }
-            if (typeof window.matchMedia === 'function') {
-                return window.matchMedia('(max-width: ' + breakpoint + 'px)').matches ? 'mobile' : 'desktop';
-            }
-            return window.innerWidth <= breakpoint ? 'mobile' : 'desktop';
-        }
-
-        function getActivePolicy() {
-            const contextKey = getViewportContext();
-            return tabRules.contexts[contextKey] || tabRules.contexts.desktop;
-        }
-
-        function enforceTabLimit() {
-            const policy = getActivePolicy();
-            if (!policy) {
-                return;
-            }
-            const maxTabs = typeof policy.maxTabs === 'number' ? policy.maxTabs : parseInt(policy.maxTabs, 10);
-            if (!maxTabs || maxTabs <= 0) {
-                return;
-            }
-            if (state.order.length < maxTabs) {
-                return;
-            }
-            const strategyKey = policy.overflowStrategy || 'removeOldest';
-            const selector = overflowStrategies[strategyKey] || overflowStrategies.removeOldest;
-            while (state.order.length >= maxTabs) {
-                const targetId = selector();
-                if (!targetId) {
-                    break;
-                }
-                close(targetId);
-            }
-        }
-
-        function init() {
-            tabPanel = document.getElementById('bottom-tab-panel');
-            tabBar = document.getElementById('bottom-tab-bar');
-            contentArea = document.getElementById('main-content-area');
-
-            if (!tabPanel || !tabBar || !contentArea) {
-                return;
-            }
-
-            state.initialContent = contentArea.innerHTML;
-
-            tabBar.addEventListener('click', onTabBarClick);
-            contentArea.addEventListener('click', onContentAreaClick);
-            document.addEventListener('click', onTriggerClick);
-        }
-
-        function open(descriptor) {
-            if (!descriptor || !descriptor.id || !descriptor.url) {
-                return;
-            }
-
-            if (state.tabs.has(descriptor.id)) {
-                activate(descriptor.id);
-                return;
-            }
-
-            enforceTabLimit();
-
-            const tab = {
-                id: descriptor.id,
-                title: (descriptor.title || '').trim() || '새 탭',
-                url: descriptor.url
-            };
-
-            state.tabs.set(descriptor.id, tab);
-            state.order.push(descriptor.id);
-            state.activeId = descriptor.id;
-            state.cache.delete(descriptor.id);
-
-            renderTabs();
-            if (hasAxios) {
-                loadContent(descriptor.id);
-            } else {
-                renderError(descriptor.id, '데이터 연결이 활성화되어 있지 않습니다.');
-            }
-        }
-
-        function activate(id) {
-            if (!state.tabs.has(id)) {
-                return;
-            }
-            state.activeId = id;
-            renderTabs();
-            const cached = state.cache.get(id);
-            if (cached) {
-                renderContent(cached);
-                return;
-            }
-            if (hasAxios) {
-                loadContent(id);
-                return;
-            }
-
-            renderError(id, '데이터 연결이 활성화되어 있지 않습니다.');
-        }
-
-        function close(id) {
-            if (!state.tabs.has(id)) {
-                return;
-            }
-
-            state.tabs.delete(id);
-            state.cache.delete(id);
-            state.order = state.order.filter(function(tabId) {
-                return tabId !== id;
-            });
-
-            const wasActive = state.activeId === id;
-            if (wasActive) {
-                state.activeId = state.order[state.order.length - 1] || null;
-            }
-
-            renderTabs();
-
-            if (state.activeId) {
-                activate(state.activeId);
-            } else if (wasActive) {
-                renderContent(state.initialContent);
-            }
-        }
-
-        function refresh(id) {
-            if (!state.tabs.has(id) || !hasAxios) {
-                return;
-            }
-            state.cache.delete(id);
-            if (state.activeId === id) {
-                loadContent(id);
-            }
-        }
-
-        function loadContent(id) {
-            const tab = state.tabs.get(id);
-            if (!tab) {
-                return;
-            }
-
-            renderLoading();
-
-            axios.get(tab.url, {
-            }).then(function(response) {
-                state.cache.set(id, response.data);
-                if (state.activeId === id) {
-                    renderContent(response.data);
-                }
-            }).catch(function() {
-                if (state.activeId === id) {
-                    renderError(id);
-                }
-            });
-        }
-
-        function renderTabs() {
-            if (!tabBar) {
-                return;
-            }
-
-            tabBar.innerHTML = '';
-
-            state.order.forEach(function(id) {
-                const tab = state.tabs.get(id);
-                if (!tab) {
+        if (form) {
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+                if (!passwordInput) {
                     return;
                 }
-
-                const tabElement = document.createElement('div');
-                tabElement.className = 'tab-item' + (state.activeId === id ? ' active' : '');
-                tabElement.setAttribute('data-tab-id', id);
-                tabElement.setAttribute('role', 'tab');
-                tabElement.setAttribute('tabindex', '0');
-
-                const title = document.createElement('span');
-                title.className = 'tab-title';
-                title.textContent = tab.title || '새 탭';
-
-                const closeButton = document.createElement('button');
-                closeButton.type = 'button';
-                closeButton.className = 'tab-close';
-                closeButton.setAttribute('data-tab-close', id);
-                closeButton.setAttribute('aria-label', '탭 닫기');
-                closeButton.innerHTML = '&times;';
-
-                tabElement.appendChild(title);
-                tabElement.appendChild(closeButton);
-
-                tabElement.addEventListener('keydown', function(event) {
-                    if (event.key === 'Enter' || event.key === ' ') {
-                        event.preventDefault();
-                        activate(id);
-                    }
-                });
-
-                tabBar.appendChild(tabElement);
-            });
-
-            if (tabPanel) {
-                if (state.order.length === 0) {
-                    tabPanel.classList.add('is-empty');
-                } else {
-                    tabPanel.classList.remove('is-empty');
+                const password = passwordInput.value.trim();
+                if (!password) {
+                    this.showOverlayError(errorElem, '비밀번호를 입력해주세요.');
+                    passwordInput.focus();
+                    return;
                 }
-            }
+                this.extendSession(password, { passwordInput, errorElem, submitButton: form.querySelector('.session-extension__submit') });
+            }, { once: false });
         }
 
-        function renderContent(html) {
-            if (!contentArea) {
-                return;
-            }
-
-            const template = document.createElement('template');
-            template.innerHTML = html;
-
-            // JS 동적 로딩
-            const fragment = template.content.cloneNode(true);
-            const scripts = Array.from(fragment.querySelectorAll('script'));
-            scripts.forEach(function(script) {
-                script.parentNode.removeChild(script);
-            });
-
-            contentArea.innerHTML = '';
-            contentArea.appendChild(fragment);
-            layout.rebindDynamic(contentArea);
-
-            scripts.forEach(function(script) {
-                const cloned = document.createElement('script');
-                Array.from(script.attributes).forEach(function(attr) {
-                    cloned.setAttribute(attr.name, attr.value);
-                });
-                if (script.textContent) {
-                    cloned.textContent = script.textContent;
-                }
-                contentArea.appendChild(cloned);
-            });
-
-            // datepicker
-            layout.datepickerRender();
+        if (closeButton) {
+            closeButton.addEventListener('click', () => this.hideOverlay());
         }
 
-        function renderLoading() {
-            if (!contentArea) {
-                return;
-            }
-            contentArea.innerHTML = '<div class="tab-feedback loading">로딩 중...</div>';
+        if (passwordInput) {
+            passwordInput.focus();
+        }
+    }
+
+    async extendSession(password, controls = {}) {
+        if (!this.extendUrl) {
+            return;
         }
 
-        function renderError(id, message) {
-            if (!contentArea) {
-                return;
+        const submitButton = controls.submitButton;
+        const passwordInput = controls.passwordInput;
+        const errorElem = controls.errorElem;
+
+        this.setSubmittingState(true, { submitButton, passwordInput });
+        this.showOverlayError(errorElem, '', true);
+
+        try {
+            const response = await this.request('post', this.extendUrl, { password });
+            const data = response?.data ?? response;
+            let seconds = this.extractRemainingSeconds(data);
+
+            if (seconds === null || seconds === undefined) {
+                await this.fetchSessionInfo();
+                seconds = this.remainingSeconds;
+            } else {
+                this.setRemainingSeconds(seconds);
             }
-            const errorText = message || '컨텐츠를 불러오는 데 실패했습니다.';
-            contentArea.innerHTML = '' +
-                '<div class="tab-feedback error">' +
-                '<p>' + errorText + '</p>' +
-                '<button type="button" class="btn btn-blue tab-retry-btn" data-tab-retry="' + id + '">다시 시도</button>' +
-                '</div>';
+
+            this.hideOverlay();
+            this.overlayShown = false;
+            if (passwordInput) {
+                passwordInput.value = '';
+            }
+        } catch (error) {
+            const message = this.resolveErrorMessage(error) || '세션 연장에 실패했습니다. 다시 시도해주세요.';
+            this.showOverlayError(errorElem, message);
+        } finally {
+            this.setSubmittingState(false, { submitButton, passwordInput });
+        }
+    }
+
+    handleSessionExpired() {
+        this.clearCountdown();
+        this.updateDisplay();
+        this.showSessionExpiredMessage();
+    }
+
+    showSessionExpiredMessage() {
+        const overlayLayer = this.getOverlayLayer();
+        const markup = `
+            <div class="session-extension session-extension--expired" data-session-overlay>
+                <h2 class="session-extension__title">세션이 만료되었습니다</h2>
+                <p class="session-extension__message">다시 로그인 후 이용해주세요.</p>
+                <button type="button" class="session-extension__submit" data-session-expired-reload>로그인 페이지로 이동</button>
+            </div>
+        `;
+
+        if (overlayLayer && this.layout && this.layout.Overlay && typeof this.layout.Overlay.renderContent === 'function') {
+            this.layout.Overlay.open();
+            this.layout.Overlay.renderContent(markup);
+            const reloadBtn = overlayLayer.querySelector('[data-session-expired-reload]');
+            if (reloadBtn) {
+                reloadBtn.addEventListener('click', () => window.location.reload());
+            }
+        } else {
+            const fallback = this.ensureFallbackOverlay();
+            fallback.innerHTML = markup;
+            fallback.classList.add('session-overlay-active');
+            const reloadBtn = fallback.querySelector('[data-session-expired-reload]');
+            if (reloadBtn) {
+                reloadBtn.addEventListener('click', () => window.location.reload());
+            }
+        }
+    }
+
+    hideOverlay() {
+        const overlayLayer = this.getOverlayLayer();
+        if (overlayLayer && this.layout && this.layout.Overlay) {
+            this.layout.Overlay.close();
+        } else {
+            const fallback = document.getElementById('sessionExtensionFallback');
+            if (fallback) {
+                fallback.classList.remove('session-overlay-active');
+                fallback.innerHTML = '';
+            }
+        }
+        this.overlayShown = false;
+    }
+
+    setSubmittingState(isSubmitting, controls = {}) {
+        const { submitButton, passwordInput } = controls;
+        if (submitButton) {
+            submitButton.disabled = isSubmitting;
+            submitButton.textContent = isSubmitting ? '처리 중...' : '세션 연장';
+        }
+        if (passwordInput) {
+            passwordInput.disabled = isSubmitting;
+        }
+    }
+
+    showOverlayError(elem, message, hide = false) {
+        if (!elem) {
+            return;
+        }
+        if (hide || !message) {
+            elem.hidden = true;
+            elem.textContent = '';
+        } else {
+            elem.hidden = false;
+            elem.textContent = message;
+        }
+    }
+
+    ensureFallbackOverlay() {
+        let fallback = document.getElementById('sessionExtensionFallback');
+        if (!fallback) {
+            fallback = document.createElement('div');
+            fallback.id = 'sessionExtensionFallback';
+            fallback.className = 'session-extension-fallback';
+            document.body.appendChild(fallback);
+        }
+        return fallback;
+    }
+
+    getOverlayLayer() {
+        return document.getElementById('launcherModal');
+    }
+
+    clearCountdown() {
+        if (this.countdownTimerId) {
+            window.clearInterval(this.countdownTimerId);
+            this.countdownTimerId = null;
+        }
+    }
+
+    async request(method, url, data) {
+        if (window.axios) {
+            return window.axios({ method, url, data, withCredentials: true });
         }
 
-        function onTabBarClick(event) {
-            const closeTarget = event.target.closest('[data-tab-close]');
-            if (closeTarget) {
-                event.stopPropagation();
-                const tabId = closeTarget.getAttribute('data-tab-close');
-                close(tabId);
-                return;
-            }
-
-            const tabTarget = event.target.closest('[data-tab-id]');
-            if (tabTarget) {
-                const tabId = tabTarget.getAttribute('data-tab-id');
-                activate(tabId);
-            }
-        }
-
-        function onContentAreaClick(event) {
-            const retryButton = event.target.closest('[data-tab-retry]');
-            if (retryButton) {
-                const tabId = retryButton.getAttribute('data-tab-retry');
-                refresh(tabId);
-            }
-        }
-
-        function onTriggerClick(event) {
-            const trigger = event.target.closest('[data-tab-id]');
-            if (!trigger) {
-                return;
-            }
-
-            const url = trigger.getAttribute('data-tab-url') || trigger.getAttribute('href');
-            if (!url) {
-                return;
-            }
-
-            event.preventDefault();
-
-            const tabIdAttr = trigger.getAttribute('data-tab-id');
-            const tabTitle = trigger.getAttribute('data-tab-title') || trigger.textContent.trim();
-            const tabId = tabIdAttr || sanitizeId(url);
-
-            open({
-                id: tabId,
-                title: tabTitle || '새 탭',
-                url: url
-            });
-            document.querySelectorAll('.nav-link').forEach(function(link) {
-                link.classList.remove('active');
-            });
-            trigger.classList.add('active');
-        }
-
-        function sanitizeId(value) {
-            return value.replace(/[^\w-]/g, '_');
-        }
-
-        return {
-            init: init,
-            open: open,
-            activate: activate,
-            close: close,
-            refresh: refresh
+        const options = {
+            method: method.toUpperCase(),
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            credentials: 'include'
         };
-    }
 
-
-    blockBrowserEvt() {
-        document.addEventListener('keydown', function (e) {
-            if (
-                e.key === 'F5' ||
-                (e.ctrlKey && e.key === 'r') ||
-                (e.metaKey && e.key === 'r')
-            ) {
-                e.preventDefault();
-                alert('새로고침이 차단되어 있습니다.');
-            }
-        });
-
-        // 마우스 오른쪽 버튼 새로고침 메뉴 방지 (일부 환경)
-        // window.addEventListener('beforeunload', function (e) {
-        //     // 페이지 이탈 경고
-        //     e.preventDefault();
-        //     e.returnValue = '';
-        // });
-        //
-        // history.pushState(null, '', location.href);
-        // window.onpopstate = function () {
-        //     history.pushState(null, '', location.href);
-        //     alert('뒤로가기가 차단되어 있습니다.');
-        // };
-    }
-
-    datepickerRender() {
-        document.querySelectorAll('.fc-datepicker').forEach((elem) => {
-            const picker = layout.setOption(elem, "picker");
-            let val;
-            let pickerOption = {};
-
-            const unit = picker.format === 'yyyy-mm' ? 'month' : 'days';
-            if (unit === 'days') {
-                pickerOption = {
-                    dateFormat: picker.format,
-                    multipleDatesSeparator: picker.separator,
-                    range: picker.range,
-                    onSelect: function (formattedDate, date, inst) {
-
-                        /* search box Input처리 */
-                        if(elem) {
-                            console.log('elem', elem)
-                            if(picker.range){
-                                console.log('date', date)
-                                console.log(elem.value)
-                                console.log(util.dateUtil.toString(date[0]))
-                                if(date.length < 2) {
-                                    elem.value = util.dateUtil.toString(date[0]) + ' - ' + util.dateUtil.toString(date[0]);
-                                } else {
-                                    elem.value = util.dateUtil.toString(date[0]) + ' - ' + util.dateUtil.toString(date[1]);
-                                }
-                            }else{
-                                if(formattedDate){
-                                    elem.value = formattedDate +" - " + formattedDate;
-                                }
-                            }
-
-                            search.addTag(elem);
-                            if(date.length > 1) {inst.hide();}
-                        }
-                    }
-                };
-            }
-
-            $(elem).datepicker(pickerOption);
-
-
-            // 기본값
-            switch (picker.default) {
-                case "today" : val = util.dateUtil.getNowDate(picker.separator); break;
-
-            }
-
-            if (val) {
-                elem.value = val;
-                search.addTag(elem);
-            }
-
-
-        });
-    }
-
-    setOption(elem, type) {
-        let option = {};
-        if (elem) {
-            if(type === "picker"){
-                option['format'] = elem.dataset.format;
-                option['separator'] = elem.dataset.separator;
-                option['range'] = elem.dataset.range === 'Y';
-                option['default'] = elem.dataset.default;
-                // option['option'] = JSON.parse(elem.dataset.option);
-            }
+        if (data && options.method !== 'GET') {
+            options.body = JSON.stringify(data);
         }
 
-        console.log(option)
+        const response = await fetch(url, options);
+        if (!response.ok) {
+            const text = await response.text();
+            throw new Error(text || `Request failed with status ${response.status}`);
+        }
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            const json = await response.json();
+            return { data: json };
+        }
+        return { data: null };
+    }
 
-        return option;
+    resolveErrorMessage(error) {
+        if (!error) {
+            return '';
+        }
+        if (error.response && error.response.data) {
+            const respData = error.response.data;
+            if (typeof respData === 'string') {
+                return respData;
+            }
+            if (respData && typeof respData.message === 'string') {
+                return respData.message;
+            }
+        }
+        if (error.message) {
+            return error.message;
+        }
+        return '';
     }
 }

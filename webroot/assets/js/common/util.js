@@ -39,7 +39,7 @@ const util = {
         var activeToast = null;
 
         var baseOptions = {
-            duration: 3000,
+            duration: 1000,
             gravity: 'top',
             position: 'right',
             close: true,
@@ -58,16 +58,16 @@ const util = {
 
         var typeStyles = {
             info: {
-                background: '#3498db'
+                background: 'linear-gradient(to right, rgb(59, 130, 246), rgb(96, 165, 250))'
             },
             success: {
-                background: '#2ecc71'
+                background: 'linear-gradient(to right, rgb(16, 185, 129), rgb(52, 211, 153))'
             },
             warning: {
-                background: '#f39c12'
+                background: 'linear-gradient(to right, rgb(245, 158, 11), rgb(251, 191, 36))'
             },
             error: {
-                background: '#e74c3c'
+                background: 'linear-gradient(to right, rgb(239, 68, 68), rgb(248, 113, 113))'
             }
         };
 

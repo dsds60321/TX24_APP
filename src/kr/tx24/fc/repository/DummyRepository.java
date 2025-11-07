@@ -7,7 +7,9 @@ import kr.tx24.fc.enums.MockNames;
 import kr.tx24.fc.enums.TxResultCode;
 import kr.tx24.fc.exception.TxException;
 import kr.tx24.lib.lang.CommonUtils;
+import kr.tx24.lib.map.MapFactory;
 import kr.tx24.lib.map.SharedMap;
+import kr.tx24.lib.map.TypeRegistry;
 import kr.tx24.lib.mapper.JacksonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +42,10 @@ public class DummyRepository {
 
 	public static SharedMap<String, Object> of(MockNames mockName) {
 		return loadMockOne(mockName.getKey());
+	}
+
+	public static <T> T of(MockNames mockName, TypeRegistry type) {
+		return loadMockOne(mockName.getKey(), type);
 	}
 
 	public static List<SharedMap<String, Object>> list(MockNames mockName) {
@@ -110,6 +116,12 @@ public class DummyRepository {
 	 * 더미 데이터 단건 조회
 	 */
 	private static SharedMap<String, Object> loadMockOne(String key) {
+		SharedMap<String, Object> map = loadMockOne(key, TypeRegistry.MAP_SHAREDMAP_OBJECT);
+		return new SharedMap<>(map);
+	}
+
+
+	private static <T> T loadMockOne(String key, TypeRegistry typeRegistry) {
 		if (!Files.exists(MOCK_DATA_PATH)) {
 			looger.warn("Mock data file not found: {}", MOCK_DATA_PATH.toAbsolutePath());
 			throw new TxException(TxResultCode.NO_CONTENTS, "Mock 데이터 파일을 찾을 수 없습니다.");
@@ -122,12 +134,16 @@ public class DummyRepository {
 				throw new TxException(TxResultCode.NO_CONTENTS, "요청한 Mock 데이터를 찾을 수 없습니다.");
 			}
 
-			SharedMap map = jacksonUtils.fromJson(targetNode.toString(), SharedMap.class);
-			if (map == null || map.isEmpty()) {
+			T result = jacksonUtils.fromJson(targetNode.toString(), typeRegistry);
+			if (result == null) {
 				throw new TxException(TxResultCode.NO_CONTENTS, "Mock 데이터가 비어 있습니다.");
 			}
 
-			return new SharedMap<String, Object>(map);
+			if (result instanceof SharedMap<?, ?> sharedMap && sharedMap.isEmpty()) {
+				throw new TxException(TxResultCode.NO_CONTENTS, "Mock 데이터가 비어 있습니다.");
+			}
+
+			return result;
 		} catch (TxException ex) {
 			throw ex;
 		} catch (Exception e) {
@@ -246,5 +262,4 @@ public class DummyRepository {
 			}
 		}
 	}
-
 }

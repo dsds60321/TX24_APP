@@ -30,6 +30,14 @@ public class TxResponse<T> implements Serializable {
 		return ok(data, TxResultCode.SUCCESS);
 	}
 
+	public static <T> TxResponse<T> okWithMsg(String message) {
+		return new TxResponse<>(true, TxResultCode.SUCCESS.getCode(), message, null, null);
+	}
+
+	public static <T> TxResponse<T> ok(T data, String message) {
+		return new TxResponse<>(true, TxResultCode.SUCCESS.getCode(), message, null, data);
+	}
+
 	public static <T> TxResponse<T> ok(T data, TxResultCode code) {
 		return new TxResponse<>(true, code.getCode(), code.getDefaultMessage(), null, data);
 	}

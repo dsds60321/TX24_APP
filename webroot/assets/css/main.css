@@ -307,7 +307,6 @@ body {
     transform: rotate(40deg);
 }
 
-
 /* ============================================
    5. CARD COMPONENTS
    ============================================ */
@@ -1215,6 +1214,10 @@ body {
     }
 }
 
+/* ============================================
+   9. TOAST
+   ============================================ */
+
 @keyframes toastify-slide-in-right {
 	from {
 		transform: translateX(120%);
@@ -1234,4 +1237,124 @@ body {
 .toastify.toastify-top.toastify-right {
 	top: 24px !important;
 	right: 24px;
+}
+
+
+/* ============================================
+   10. SESSION-LOCK
+   ============================================ */
+
+#sessionLockOverlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 9999;
+    backdrop-filter: blur(3px);
+    display: none;
+}
+
+/* 가운데 텍스트 */
+.lock-center-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    i {
+        font-size: 5em;
+    }
+}
+
+/* 입력 + 버튼을 화면 아래로 */
+.lock-bottom-control {
+    position: absolute;
+    bottom: 40px; /* 필요하면 10~80px로 조절 */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.lock-bottom-control input,
+.lock-bottom-control button {
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+
+/*SELECT CSS*/
+.simple-select {
+    position: relative;
+    width: 150px;
+    min-width: 0;
+    font-size: 14px;
+    flex: 1 1 150px;
+}
+
+.simple-select-trigger {
+    border: 1px solid #ced4da;
+    background: #fff;
+    padding: 6px 8px;
+    border-radius: 2px; /* radius 최소 */
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.simple-select-options {
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: #fff;
+    border: 1px solid #ced4da;
+    border-radius: 2px;
+    margin-top: 2px;
+    display: none;
+    z-index: 1000;
+    padding: 0;
+}
+.simple-select-options.show {
+    display: block;
+}
+
+.simple-select-options li {
+    list-style: none;
+    padding: 6px 8px;
+    cursor: pointer;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
+    border-radius: 2px; /* hover 시 자연스러움 확보 */
+}
+
+.simple-select-options li:hover {
+    background: #f5f6f7;
+    border: 1px solid #d3d6da;
+    margin: -1px;
+}
+
+.simple-select-options li.active {
+    background: #e4e7eb;
+    border: 1px solid #c9ccd1;
+    margin: -1px;
+}
+
+@media (max-width: 768px) {
+    .simple-select {
+        max-width: none;
+        flex-basis: 100%;
+    }
+
+    .simple-select-options {
+        max-height: 240px;
+        overflow-y: auto;
+    }
 }
