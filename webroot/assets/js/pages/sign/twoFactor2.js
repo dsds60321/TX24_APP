@@ -82,26 +82,35 @@
 				csrf: formData.get('_csrf')
 			}
 
-			const {data} = await axios.post('/sign/two-factor/code/send', payload);
-			if (!data.result) {
-				util.toastify.warning(data.msg || '서버로부터 오류가 발생했습니다.');
-				return;
+			try {
+				evt.target.classList.add('loading');
+				const {data} = await axios.post('/sign/two-factor/code/send', payload);
+				if (!data.result) {
+					util.toastify.warning(data.msg || '서버로부터 오류가 발생했습니다.');
+					return;
+				}
+
+				document.getElementById('verificationCode').value = '';
+				this.options.forEach((opt) => opt.classList.add('disabled'));
+
+				// 기존 전송 버튼 hidden 다시 보내기 유지
+				if (evt.target.id !== 'resend') {
+					evt.target.classList.add('hidden');
+					this.codeInfo.innerText = `${payload.type.toUpperCase()}로 인증코드가 전송되었습니다.`;
+				} else {
+					this.codeInfo.innerText = `${payload.type.toUpperCase()}로 인증코드가 재전송되었습니다.`;
+				}
+
+				util.toastify.success(data.msg);
+				this.codeInput.classList.remove('hidden');
+				this.retrySendBtn.classList.remove('hidden');
+			} catch (e) {
+				console.log(e);
+				util.toastify.error('서버로부터 오류가 발생했습니다. 관리자에게 문의해주시기 바랍니다.');
+				evt.target.classList.remove('loading');
 			}
 
-			document.getElementById('verificationCode').value = '';
-			this.options.forEach((opt) => opt.classList.add('disabled'));
 
-			// 기존 전송 버튼 hidden 다시 보내기 유지
-			if (evt.target.id !== 'resend') {
-				evt.target.classList.add('hidden');
-				this.codeInfo.innerText = `${payload.type.toUpperCase()}로 인증코드가 전송되었습니다.`;
-			} else {
-				this.codeInfo.innerText = `${payload.type.toUpperCase()}로 인증코드가 재전송되었습니다.`;
-			}
-
-			util.toastify.success(data.msg);
-			this.codeInput.classList.remove('hidden');
-			this.retrySendBtn.classList.remove('hidden');
 
 		},
 
@@ -126,6 +135,7 @@
 			};
 
 			try {
+				evt.target.classList.add('loading');
 				const {data} = await axios.post('/sign/two-factor/code/verify', payload);
 				if (!data.result) {
 					util.toastify.warning(data.msg || '2차 인증에 실패했습니다.');
@@ -137,6 +147,8 @@
 			} catch (error) {
 				const errorMsg = error?.response?.data?.msg || '서버로부터 오류가 발생했습니다.';
 				util.toastify.error(errorMsg);
+			} finally {
+				evt.target.classList.remove('loading');
 			}
 		}
 

@@ -4,6 +4,7 @@ import com.google.common.net.HttpHeaders;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.tx24.fc.bean.TxResponse;
+import kr.tx24.fc.consts.Consts;
 import kr.tx24.fc.enums.MockNames;
 import kr.tx24.fc.enums.TxResultCode;
 import kr.tx24.fc.exception.TxException;
@@ -22,12 +23,13 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.List;
 
+import static kr.tx24.fc.consts.Consts.Login.CSRF_FORMAT;
+
 @Service
 public class SignService {
 
     private static final Logger logger = LoggerFactory.getLogger(SignService.class);
 
-    public static final String CSRF_FORMAT = "TX_CSRF_KEY:{}";
     private final NotificationService notificationService;
 
     public SignService(NotificationService notificationService) {
@@ -162,7 +164,6 @@ public class SignService {
 
         // 세션 생성
         // TODO: 로그인 기록, 세션 데이터 생성...
-
         String sessionId = SessionUtils.create(userMap.getString("id"), userMap);
         userMap.put("sessionId", sessionId);
 
@@ -173,6 +174,11 @@ public class SignService {
         UserAgent ua = UADetect.set(headerMap.getString(HttpHeaders.USER_AGENT.toLowerCase()));
         // TODO: DB 저장 로직
 
+
+        // 1일 짜리 세션 레디스 생성
+        // 1일 유저 SessionData
+        String oneDaySessionKey = MsgUtils.format(MsgUtils.format(Consts.Session.DAY_SESSION_STORE, sessionId));
+        RedisUtils.set(oneDaySessionKey, userMap, Duration.ofDays(1).getSeconds());
     }
 
 }

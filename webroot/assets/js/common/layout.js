@@ -732,7 +732,6 @@ export default class Layout {
         }
 
         function open() {
-            console.log(layout.TabManager.getState())
             if (!overlayLayer) return;
             overlayLayer.classList.add('active');
         }
@@ -816,9 +815,13 @@ export default class Layout {
             }).join('');
         }
 
+        function isOpen() {
+            return overlayLayer?.classList.contains('active') ?? false;
+        }
+
 
         return {
-            init, open, close, tabOpen, renderContent
+            init, open, close, tabOpen, renderContent, isOpen
         }
     }
 }

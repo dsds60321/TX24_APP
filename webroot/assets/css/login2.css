@@ -431,6 +431,44 @@ body {
     background: #f5f7fa;
 }
 
+.btn-primary.loading,
+.btn-outline-primary.loading {
+	position: relative;
+	color: transparent;
+	pointer-events: none;
+}
+
+.btn-primary.loading::after,
+.btn-outline-primary.loading::after {
+	content: "";
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 18px;
+	height: 18px;
+	margin: -9px 0 0 -9px;
+	border-radius: 50%;
+	border: 2px solid currentColor;
+	border-top-color: transparent;
+	animation: btn-spinner 0.8s linear infinite;
+}
+
+.btn-primary.loading::after {
+	border-color: rgba(255, 255, 255, 0.6);
+	border-top-color: transparent;
+}
+
+.btn-outline-primary.loading::after {
+	border-color: rgba(28, 88, 217, 0.5);
+	border-top-color: transparent;
+}
+
+@keyframes btn-spinner {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
 .hidden {
     display: none !important;
 }

@@ -72,5 +72,4 @@ public class SignCtl {
         signService.verifyTwoFactorAuth(request, response, headerMap, param);
         return TxResponse.okWithMsg("2차 인증이 완료되었습니다.").link("/");
     }
-
 }
