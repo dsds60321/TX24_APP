@@ -105,12 +105,17 @@
 
 		},
 
-		verifyEvt(evt) {
+		async verifyEvt(evt) {
 			evt.preventDefault();
 			let formData = new FormData(this.form);
 
 			if (!formData.get('type')) {
 				util.toastify.error('인증방법을 선택 후 진행해주세요.');
+				return;
+			}
+
+			if (!formData.get('code')) {
+				util.toastify.error('인증 코드를 입력해주세요.');
 				return;
 			}
 
@@ -120,7 +125,19 @@
 				code: formData.get('code')
 			};
 
-			axios.post('/sign/two-factor/code/verify', payload);
+			try {
+				const {data} = await axios.post('/sign/two-factor/code/verify', payload);
+				if (!data.result) {
+					util.toastify.warning(data.msg || '2차 인증에 실패했습니다.');
+					return;
+				}
+
+				util.toastify.success(data.msg || '2차 인증이 완료되었습니다.');
+				window.location.href = data.link || '/';
+			} catch (error) {
+				const errorMsg = error?.response?.data?.msg || '서버로부터 오류가 발생했습니다.';
+				util.toastify.error(errorMsg);
+			}
 		}
 
 

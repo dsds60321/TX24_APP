@@ -68,8 +68,9 @@ public class SignCtl {
 
     @SessionIgnore
     @PostMapping("/two-factor/code/verify")
-    public String verifyTwoFactorAuthCode(HttpServletRequest request, HttpServletResponse response, @Header SharedMap<String,Object> headerMap, @RequestBody SharedMap<String, Object> param) {
-        return signService.verifyTwoFactorAuth(request, response, headerMap, param);
+    public @ResponseBody TxResponse<?> verifyTwoFactorAuthCode(HttpServletRequest request, HttpServletResponse response, @Header SharedMap<String,Object> headerMap, @RequestBody SharedMap<String, Object> param) {
+        signService.verifyTwoFactorAuth(request, response, headerMap, param);
+        return TxResponse.okWithMsg("2차 인증이 완료되었습니다.").link("/");
     }
 
 }

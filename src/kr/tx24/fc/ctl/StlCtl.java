@@ -19,33 +19,28 @@ public class StlCtl {
         this.stlService = stlService;
     }
 
-    @SessionIgnore
     @GetMapping("/crawling")
     public String collectionForm() {
         return "pages/stl/crawling/form";
     }
 
-    @SessionIgnore
     @PostMapping("/crawling/list")
     public String collectionSubmit(@RequestBody SearchRequest searchRequest, Model model){
         stlService.crawlPaging(model, searchRequest.datas, searchRequest.page);
         return "pages/stl/crawling/list";
     }
 
-    @SessionIgnore
     @GetMapping("/trx")
     public String trxForm() {
         return "pages/stl/trx/form";
     }
 
-    @SessionIgnore
     @PostMapping("/trx/list")
     public String trxList(@RequestBody SearchRequest searchRequest, Model model){
         stlService.trxPaging(model, searchRequest.datas, searchRequest.page);
         return "pages/stl/trx/list";
     }
 
-    @SessionIgnore
     @GetMapping("/trx/{trxId}")
     public String collectionDetail(@PathVariable("trxId") String trxId, Model model){
         stlService.detailModal(trxId, model);

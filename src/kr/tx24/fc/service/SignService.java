@@ -128,7 +128,7 @@ public class SignService {
     /**
      * 2차 인증 검증
      */
-    public String verifyTwoFactorAuth(HttpServletRequest request, HttpServletResponse response, SharedMap<String, Object> headerMap, SharedMap<String, Object> param) {
+    public void verifyTwoFactorAuth(HttpServletRequest request, HttpServletResponse response, SharedMap<String, Object> headerMap, SharedMap<String, Object> param) {
         if (CommonUtils.hasEmptyValue(param, List.of("type", "csrf", "code"))) {
             throw new TxException(TxResultCode.INVALID_REQUEST, "요청 파라미터가 유효하지 않습니다. 관리자에게 문의해주시기 바랍니다.");
         }
@@ -173,7 +173,6 @@ public class SignService {
         UserAgent ua = UADetect.set(headerMap.getString(HttpHeaders.USER_AGENT.toLowerCase()));
         // TODO: DB 저장 로직
 
-        return "redirect:/";
     }
 
 }
