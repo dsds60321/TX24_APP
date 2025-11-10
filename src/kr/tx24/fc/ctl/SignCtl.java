@@ -63,7 +63,7 @@ public class SignCtl {
     @PostMapping("/two-factor/code/send")
     public @ResponseBody TxResponse<?> sendTwoFactorAuthCode(@RequestBody SharedMap<String, Object> param) {
         signService.sendTwoFactorAuth(param);
-        return TxResponse.ok("2차 인증번호를 발송했습니다.");
+        return TxResponse.okWithMsg("2차 인증번호를 발송했습니다.");
     }
 
     @SessionIgnore
@@ -71,4 +71,5 @@ public class SignCtl {
     public String verifyTwoFactorAuthCode(HttpServletRequest request, HttpServletResponse response, @Header SharedMap<String,Object> headerMap, @RequestBody SharedMap<String, Object> param) {
         return signService.verifyTwoFactorAuth(request, response, headerMap, param);
     }
+
 }

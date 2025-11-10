@@ -186,7 +186,7 @@ body {
 #twoFASelection .form-content {
     overflow-y: auto;
     /*max-height: calc(100% - 80px);*/
-    min-height: 400px;
+    min-height: 370px;
 }
 
 #twoFASelection .form-content::-webkit-scrollbar {

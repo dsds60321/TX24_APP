@@ -27,7 +27,7 @@
 
 			// 인증 버튼
 			if (this.submitButton) {
-				this.submitButton.addEventListener('click', () => this.handleSubmit());
+				this.submitButton.addEventListener('click', () => this.sendCode());
 			}
 		},
 
@@ -76,6 +76,11 @@
 			if (this.authBox) {
 				this.authBox.style.display = 'block';
 			}
+		},
+
+
+		sendCode() {
+			this.form
 		},
 
 

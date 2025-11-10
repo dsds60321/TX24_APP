@@ -106,8 +106,6 @@ public class SignService {
             throw new TxException(TxResultCode.INVALID_REQUEST, "요청 파라미터가 유효하지 않습니다. 관리자에게 문의해주시기 바랍니다.");
         }
 
-        SharedMap<String, Object> response = new SharedMap<>();
-
         String csrf = param.getString("csrf");
         String type = param.getString("type");
         String csrfRedisKey = MsgUtils.format(CSRF_FORMAT, csrf);
@@ -135,7 +133,7 @@ public class SignService {
             throw new TxException(TxResultCode.INVALID_REQUEST, "요청 파라미터가 유효하지 않습니다. 관리자에게 문의해주시기 바랍니다.");
         }
 
-        String type = param.getString("type");
+        String type = param.getString("type").toUpperCase();
         String csrf = param.getString("csrf");
         String code = param.getString("code");
         // 인증 코드 확인

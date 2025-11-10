@@ -4611,5 +4611,15 @@
       "msgType": "SMS",
       "tmpl": "[TEST] 본인확인 인증번호 [{}] 입니다."
     }
+  ],
+  "mchtList" : [
+    {"mchtId": "test", "name" :  "테스트"},
+    {"mchtId": "test1", "name" :  "테스트1"},
+    {"mchtId": "test2", "name" :  "테스트2"}
+  ],
+  "appList" : [
+    {"appId": "appId", "name" :  "테스트"},
+    {"appId": "appId", "name" :  "테스트1"},
+    {"appId": "appId", "name" :  "테스트2"}
   ]
 }

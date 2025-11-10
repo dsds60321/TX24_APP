@@ -34,11 +34,11 @@ public class NotificationService {
         type = type.toUpperCase();
 
         try {
-            // 재발송 방지
+            // 재발송 방지 TODO : 확인 필요 화면상으로는 재발송 계속 가능한걸로 보임
             String twoFactorRedisKey = MsgUtils.format(TWO_FACTOR_FORMAT, type, csrf);
-            if (RedisUtils.exists(twoFactorRedisKey)) {
-                throw new TxException(TxResultCode.INVALID_REQUEST, "이미 발송된 요청입니다. 요청받으신 인증번호를 확인하여 다시 시도해주세요.");
-            }
+//            if (RedisUtils.exists(twoFactorRedisKey)) {
+//                throw new TxException(TxResultCode.INVALID_REQUEST, "이미 발송된 요청입니다. 요청받으신 인증번호를 확인하여 다시 시도해주세요.");
+//            }
 
             List<SharedMap<String, Object>> rows = DummyRepository.of(MockNames.TMPL, TypeRegistry.LIST_SHAREDMAP_OBJECT);
             if (rows.isEmpty()) {
@@ -56,8 +56,8 @@ public class NotificationService {
                     .orElseThrow(() -> new TxException(TxResultCode.INTERNAL_ERROR, "2차인증 요청 가능한 템플릿 타입이 없습니다."));
 
             String content = tmplMap.getString("tmpl");
-            String randomKey = IDUtils.genKey(6);
-            content = MsgUtils.format(content, IDUtils.genKey(6));
+            String randomKey = IDUtils.genDigit(6);
+            content = MsgUtils.format(content, randomKey);
 
 
             // 2차인증 전송
@@ -76,7 +76,6 @@ public class NotificationService {
             logger.info("TWO_FACTOR SEND | TO : {} : value : {} ", to, randomKey);
 
             // 2차 인증 유효기간 5분
-            RedisClient client = Redis.getClient();
             RedisUtils.set(twoFactorRedisKey, randomKey, Duration.ofMinutes(5).getSeconds());
         } catch (Exception e) {
             logger.info("sendTwoFactorAuth error : {} ", e.getMessage());

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tx24</title>
   <link th:href="@{/assets/css/login2.css}" rel="stylesheet" />
+  <link th:href="@{/assets/css/toastify.min.css}" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link href="https://fonts.cdnfonts.com/css/metropolis-2" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -46,9 +47,8 @@
     <!-- Right Section - Form -->
     <div class="form-container">
       <div class="form fixed-height">
-        <form action="" id="twoFactorForm" name="twoFactorForm">
+        <form action="" id="twoFactorForm" name="twoFactorForm" onsubmit="return false">
           <input type="hidden" name="_csrf" th:value="${_csrf}">
-          <input type="hidden" name="type">
         <!-- 2FA Method Selection -->
           <div id="twoFASelection" class="">
             <h2 class="form-title">Two-Factor Authentication</h2>
@@ -58,7 +58,7 @@
 
               <div class="two-fa-options">
                 <div class="two-fa-option" data-type="sms">
-                  <input type="radio" name="sms" id="sms" value="sms">
+                  <input type="radio" name="type" id="sms" value="sms">
                   <label for="sms">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 4px;">
                       <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" stroke="currentColor" stroke-width="2" fill="none"></path>
@@ -68,7 +68,7 @@
                   </label>
                 </div>
                 <div class="two-fa-option" data-type="email">
-                  <input type="radio" name="email" id="email" value="email">
+                  <input type="radio" name="type" id="email" value="email">
                   <label for="email">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 4px;">
                       <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" fill="none"></path>
@@ -78,7 +78,7 @@
                   </label>
                 </div>
                 <div class="two-fa-option" data-type="otp">
-                  <input type="radio" name="otp" id="otp" value="otp">
+                  <input type="radio" name="type" id="otp" value="otp">
                   <label for="otp">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 4px;">
                       <rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" stroke-width="2" fill="none"></rect>
@@ -93,21 +93,21 @@
               <div id="codeInputSection" class="hidden">
                 <p class="info-text" id="codeInfo"></p>
                 <div class="input-wrapper">
-                  <input type="text" class="code-input" id="verificationCode" placeholder=" " maxlength="6">
+                  <input type="text" name="code" class="code-input" id="verificationCode" placeholder=" " maxlength="6">
                   <label for="verificationCode">인증 코드</label>
                 </div>
               </div>
             </div>
 
             <!-- Primary Action Buttons (Same Position) -->
-            <button class="btn btn-primary" onclick="sendCode()" id="sendCodeBtn">Send</button>
+            <button class="btn btn-primary" id="sendCodeBtn">Send</button>
 
             <!-- Verify Button and Secondary Actions (Initially Hidden) -->
             <div id="codeButtonSection" class="hidden">
-              <button class="btn btn-primary" onclick="verifyCode()">확인</button>
+              <button class="btn btn-primary" id="verify">확인</button>
               <div class="button-group">
-                <button class="btn btn-primary btn-outline-primary" onclick="resendCode()">다시 보내기</button>
-                <button class="btn btn-primary btn-outline-primary" onclick="backToLogin()">뒤로 가기</button>
+                <button class="btn btn-primary btn-outline-primary" id="resend">다시 보내기</button>
+                <button class="btn btn-primary btn-outline-primary" id="back">뒤로 가기</button>
               </div>
             </div>
 
@@ -121,6 +121,8 @@
 </div>
 <script th:src="@{/assets/js/jquery.min.js}"></script>
 <script th:src="@{/assets/js/axios.min.js}"></script>
+<script th:src="@{/assets/js/common/toastify.js}"></script>
+<script th:src="@{/assets/js/common/util.js}"></script>
 <script th:src="@{/assets/js/just-validate.production.min.js}"></script>
 <script th:src="@{/assets/js/pages/sign/twoFactor2.js}"></script>
 </body>
