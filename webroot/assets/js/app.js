@@ -4,7 +4,7 @@ import SessionManager from './common/session.js';
 
 const layout = new Layout();
 const search = new Search();
-const sessionManager = new SessionManager({ layout });
+const sessionManager = new SessionManager();
 
 if (!window.layout) {
     window.layout = layout;

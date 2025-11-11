@@ -4,11 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.tx24.fc.bean.TxResponse;
 import kr.tx24.fc.consts.Consts;
-import kr.tx24.fc.service.SessionService;
+import kr.tx24.fc.service.SessionSvc;
 import kr.tx24.lib.lang.MsgUtils;
 import kr.tx24.lib.map.SharedMap;
 import kr.tx24.lib.redis.RedisUtils;
-import kr.tx24.was.annotation.Header;
 import kr.tx24.was.annotation.Session;
 import kr.tx24.was.annotation.SessionIgnore;
 import kr.tx24.was.util.SessionUtils;
@@ -21,10 +20,10 @@ import java.time.Duration;
 @RequestMapping("/user")
 public class UserCtl {
 
-    private final SessionService sessionService;
+    private final SessionSvc sessionSvc;
 
-    public UserCtl(SessionService sessionService) {
-        this.sessionService = sessionService;
+    public UserCtl(SessionSvc sessionSvc) {
+        this.sessionSvc = sessionSvc;
     }
 
     // 유저 세션 데이터 요청
@@ -43,7 +42,7 @@ public class UserCtl {
      */
     @SessionIgnore
     @PostMapping("/session/extend")
-    public @ResponseBody TxResponse<?> extendSession(HttpServletRequest request, HttpServletResponse response, @Header SharedMap<String,Object> headerMap, @RequestBody SharedMap<String, Object> param) {
-        return TxResponse.ok(sessionService.extendSession(request, response, headerMap, param), "세션을 연장했습니다.");
+    public @ResponseBody TxResponse<?> extendSession(HttpServletRequest request, HttpServletResponse response, @RequestBody SharedMap<String, Object> param) {
+        return TxResponse.ok(sessionSvc.extendSession(request, response, param), "세션을 연장했습니다.");
     }
 }

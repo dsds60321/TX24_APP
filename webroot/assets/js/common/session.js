@@ -5,19 +5,18 @@ export default class SessionManager {
         this.timer = null;
         this.timeElement = document.getElementById('session-time') || null;
         this.remainingSeconds = null; // 잔여 시간
-        this.screenLockAt = 1790; // 3분 남았을시 패스워드 알림
+        this.screenLockAt = 180; // 3분 남았을시 패스워드 알림
     }
 
     init() {
         this.getSession();
-        // layout.Overlay.open();
-        // layout.Overlay.renderContent(this.screenLockContent());
     }
 
     async getSession() {
         try {
             const { data } = await axios.get('/user/session');
             const ttl = this.normalizeTtl(data?.data.ttl);
+            this.remainingSeconds = ttl;
 
             if (ttl !== null) {
                 this.userId = data?.data.id;
@@ -88,6 +87,8 @@ export default class SessionManager {
 
         // 스크린락 시간
         if (this.screenLockAt >= this.remainingSeconds) {
+            console.log('screenLockAt' , this.screenLockAt)
+            console.log('remainingSeconds' , this.remainingSeconds)
 
             if (layout.Overlay.isOpen() === false) {
                 layout.Overlay.open();
@@ -113,13 +114,20 @@ export default class SessionManager {
         }
 
         const {data} = await axios.post('/user/session/extend', { userId : this.userId,sessionId : this.sessionId, password: pw});
+
         if (data.result) {
             layout.Overlay.close();
             const ttl = this.normalizeTtl(data?.data.ttl);
             this.startCountdown(ttl);
         }
 
-        util.toastify.info(data.msg);
+
+        util.toastify.warning(data.msg);
+
+        // 세션 연장 실패 로그인 페이지 이동
+        if (data.code === 'TX401') {
+            window.location.href = '/sign/in';
+        }
     }
 
 

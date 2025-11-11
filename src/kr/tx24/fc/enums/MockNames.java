@@ -5,7 +5,10 @@ public enum MockNames {
     USER("user"),
     CRAWL("crawl"),
     TMPL("tmpl"),
-    DFA("dfa"), TRX("trx");
+    DFA("dfa"),
+    TRX("trx"),
+    MCHT("mcht"),
+    APP("app");
 
     private final String key;
 

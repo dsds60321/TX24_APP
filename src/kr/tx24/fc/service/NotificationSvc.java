@@ -1,6 +1,5 @@
 package kr.tx24.fc.service;
 
-import io.lettuce.core.RedisClient;
 import kr.tx24.fc.enums.MockNames;
 import kr.tx24.fc.enums.TxResultCode;
 import kr.tx24.fc.exception.TxException;
@@ -11,7 +10,6 @@ import kr.tx24.lib.lang.IDUtils;
 import kr.tx24.lib.lang.MsgUtils;
 import kr.tx24.lib.map.SharedMap;
 import kr.tx24.lib.map.TypeRegistry;
-import kr.tx24.lib.redis.Redis;
 import kr.tx24.lib.redis.RedisUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +19,10 @@ import java.time.Duration;
 import java.util.List;
 
 @Service
-public class NotificationService {
+public class NotificationSvc {
 
 
-    private final Logger logger = LoggerFactory.getLogger(NotificationService.class);
+    private final Logger logger = LoggerFactory.getLogger(NotificationSvc.class);
     public static final String TWO_FACTOR_FORMAT = "TX_TWO_FACTOR|{}|{}";
 
     /**

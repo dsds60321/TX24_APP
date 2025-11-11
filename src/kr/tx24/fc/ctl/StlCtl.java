@@ -1,8 +1,7 @@
 package kr.tx24.fc.ctl;
 
 import kr.tx24.fc.bean.SearchRequest;
-import kr.tx24.fc.service.StlService;
-import kr.tx24.was.annotation.SessionIgnore;
+import kr.tx24.fc.service.StlSvc;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/stl")
 public class StlCtl {
 
-    private final StlService stlService;
-    public StlCtl(StlService stlService) {
-        this.stlService = stlService;
+    private final StlSvc stlSvc;
+    public StlCtl(StlSvc stlSvc) {
+        this.stlSvc = stlSvc;
     }
 
     @GetMapping("/crawling")
@@ -26,7 +25,7 @@ public class StlCtl {
 
     @PostMapping("/crawling/list")
     public String collectionSubmit(@RequestBody SearchRequest searchRequest, Model model){
-        stlService.crawlPaging(model, searchRequest.datas, searchRequest.page);
+        stlSvc.crawlPaging(model, searchRequest.datas, searchRequest.page);
         return "pages/stl/crawling/list";
     }
 
@@ -37,13 +36,13 @@ public class StlCtl {
 
     @PostMapping("/trx/list")
     public String trxList(@RequestBody SearchRequest searchRequest, Model model){
-        stlService.trxPaging(model, searchRequest.datas, searchRequest.page);
+        stlSvc.trxPaging(model, searchRequest.datas, searchRequest.page);
         return "pages/stl/trx/list";
     }
 
     @GetMapping("/trx/{trxId}")
     public String collectionDetail(@PathVariable("trxId") String trxId, Model model){
-        stlService.detailModal(trxId, model);
+        stlSvc.detailModal(trxId, model);
         return "pages/stl/trx/modal/view";
     }
 }

@@ -1,3 +1,5 @@
+import Suggest from "./suggest.js";
+
 /**
  * 공통 레이아웃 JS
  * 모달 + 오버레이 + 탭
@@ -10,6 +12,7 @@ export default class Layout {
         this.loadingOverlay = null;
         this.loadingMessageElem = null;
         this.init();
+        this.SuggestManager = new Suggest();
     }
 
     init() {
@@ -419,6 +422,26 @@ export default class Layout {
         this.bindModalLoader(root);
         this.showTab(root);
         this.simpleSelectEvt();
+        this.renderSuggest();
+    }
+
+    // suggest 렌더링
+    renderSuggest() {
+        const suggestElems = document.querySelectorAll('.client-suggest-panel');
+        if (!suggestElems || suggestElems.length === 0) {
+            return;
+        }
+
+        suggestElems.forEach(elem => {
+            const originInput = elem.closest('.search-group').querySelector('input')
+            originInput.addEventListener('input', (elem) => this.SuggestManager.render(elem))
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.client-suggest-panel')) {
+                suggestElems.forEach((elem) => elem.classList.remove('active'));
+            }
+        })
     }
 
     blockBrowserEvt() {

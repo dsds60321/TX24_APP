@@ -7,7 +7,6 @@ import kr.tx24.fc.enums.TxResultCode;
 import kr.tx24.fc.exception.TxException;
 import kr.tx24.fc.repository.DummyRepository;
 import kr.tx24.fc.enums.MockNames;
-import kr.tx24.lib.db.Retrieve;
 import kr.tx24.lib.map.SharedMap;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -15,7 +14,7 @@ import org.springframework.ui.Model;
 import java.util.List;
 
 @Service
-public class StlService {
+public class StlSvc {
 
     /**
      * 데이터 수집

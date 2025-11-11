@@ -21,9 +21,12 @@ import java.time.Duration;
 import java.util.List;
 
 @Service
-public class SessionService {
+public class SessionSvc {
 
-    public SharedMap<String,Object> extendSession(HttpServletRequest request, HttpServletResponse response, SharedMap<String, Object> headerMap,SharedMap<String, Object> param) {
+    public SharedMap<String,Object> extendSession(HttpServletRequest request, HttpServletResponse response, SharedMap<String, Object> param) {
+        if (true) {
+            throw new TxException(TxResultCode.UNAUTHORIZED, "세션 재생성 실패, 로그인 페이지로 이동합니다.");
+        }
         // 유저 정보 조회 + 패스워드 확인 -> 세션 연장
         if (CommonUtils.hasEmptyValue(param, List.of("userId", "password", "sessionId"))) {
             throw new TxException(TxResultCode.INVALID_REQUEST, "유저 정보를 찾을 수 없습니다. 다시 로그인 하여 진행해주세요.");
@@ -33,26 +36,26 @@ public class SessionService {
         String pw = param.getString("password");
         String sessionId = param.getString("sessionId");
 
+        // TODO : DB 조회시 아이디 등 검증
+        SharedMap<String, Object> userMap = DummyRepository.of(MockNames.USER);
+        String hashedPw = userMap.getString("password"); // 기존 패스워드
+
         // 기존 세션 있을 경우
         if (SessionUtils.exists(sessionId)) {
 
-            // ID로 해당 계정 조회 세션과 동일 여부 확인
-            SharedMap<String, Object> userMap = DummyRepository.of(MockNames.USER);
-
-
-            if (!Argon2.fastVerify(pw, userMap.getString("password"))) {
+            if (!Argon2.fastVerify(pw, hashedPw)) {
                 throw new TxException(TxResultCode.INVALID_REQUEST, "패스워드를 다시 확인 후 시도해주세요.");
             }
 
-            return SessionUtils.getBySessionId(sessionId);
+            SharedMap<String, Object> sessionMap = SessionUtils.getBySessionId(sessionId);
+            sessionMap.put("ttl", SessionUtils.getExpire(sessionId));
+            return sessionMap;
         }
 
         // 기존 세션도 없는 경우 하루 짜리에서 가져온다
         if (RedisUtils.exists(MsgUtils.format(Consts.Session.DAY_SESSION_STORE, sessionId))) {
-            // ID로 해당 계정 조회 세션과 동일 여부 확인
-            SharedMap<String, Object> userMap = DummyRepository.of(MockNames.USER);
 
-            if (!Argon2.fastVerify(pw, userMap.getString("password"))) {
+            if (!Argon2.fastVerify(pw, hashedPw)) {
                 throw new TxException(TxResultCode.INVALID_REQUEST, "패스워드를 다시 확인 후 시도해주세요.");
             }
 
@@ -62,9 +65,13 @@ public class SessionService {
             // 기존 세션 레디스 + 하루 짜리 임시 데이터 재 생성
             RedisUtils.set("WSDATA|" + sessionId, userMap, Was.SESSION_EXPIRE); // 기존 세션
             RedisUtils.set(MsgUtils.format(Consts.Session.DAY_SESSION_STORE, sessionId), userMap, Duration.ofDays(1).getSeconds()); // 하루짜리
-            return SessionUtils.getBySessionId(sessionId);
+
+            SharedMap<String, Object> sessionMap = SessionUtils.getBySessionId(sessionId);
+            sessionMap.put("ttl", SessionUtils.getExpire(sessionId));
+            return sessionMap;
         }
 
-        return null;
+        // 세션 연장 실패
+        throw new TxException(TxResultCode.UNAUTHORIZED, "세션 재생성 실패, 로그인 페이지로 이동합니다.");
     }
 }

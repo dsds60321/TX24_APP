@@ -18,9 +18,9 @@ import java.util.List;
  * 엑셀 서비스
  */
 @Service
-public class ExcelService {
+public class ExcelSvc {
 
-	private static final Logger logger = LoggerFactory.getLogger(ExcelService.class);
+	private static final Logger logger = LoggerFactory.getLogger(ExcelSvc.class);
 
 	public String excelDownloadLink(List<SearchBean> datas, MockNames mockNames) {
 		if (mockNames == null) {

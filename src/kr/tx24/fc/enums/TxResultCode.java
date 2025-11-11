@@ -11,6 +11,7 @@ public enum TxResultCode {
 	INVALID_REQUEST("TX001", "잘못된 요청입니다."),
 	NO_CONTENTS("TX204", "요청한 데이터를 찾을 수 없습니다."),
 	SECURITY_VIOLATION("TX403", "보안 규정에 위배되는 접근입니다."),
+	UNAUTHORIZED("TX401", "권한이 없는 접근입니다."),
 	INTERNAL_ERROR("TX500", "시스템 오류가 발생했습니다.");
 
 	private static final Logger logger = LoggerFactory.getLogger(TxResultCode.class);

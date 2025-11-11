@@ -26,14 +26,14 @@ import java.util.List;
 import static kr.tx24.fc.consts.Consts.Login.CSRF_FORMAT;
 
 @Service
-public class SignService {
+public class SignSvc {
 
-    private static final Logger logger = LoggerFactory.getLogger(SignService.class);
+    private static final Logger logger = LoggerFactory.getLogger(SignSvc.class);
 
-    private final NotificationService notificationService;
+    private final NotificationSvc notificationSvc;
 
-    public SignService(NotificationService notificationService) {
-        this.notificationService = notificationService;
+    public SignSvc(NotificationSvc notificationSvc) {
+        this.notificationSvc = notificationSvc;
     }
 
     /**
@@ -120,7 +120,7 @@ public class SignService {
 
         // 2차인증 노티 전송 OTP 미 전송
         if (!type.equalsIgnoreCase("otp")) {
-            notificationService.sendTwoFactorAuth(csrf, type, userMap.getString(type.toLowerCase(), ""));
+            notificationSvc.sendTwoFactorAuth(csrf, type, userMap.getString(type.toLowerCase(), ""));
         }
 
         // SESSION에 들어갈 userData tll 연장
@@ -139,7 +139,7 @@ public class SignService {
         String csrf = param.getString("csrf");
         String code = param.getString("code");
         // 인증 코드 확인
-        String twoFactorRedisKey = MsgUtils.format(NotificationService.TWO_FACTOR_FORMAT, type, csrf);
+        String twoFactorRedisKey = MsgUtils.format(NotificationSvc.TWO_FACTOR_FORMAT, type, csrf);
         // 유저 정보 확인
         String userRedisKey = MsgUtils.format(CSRF_FORMAT, csrf);
 

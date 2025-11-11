@@ -6,6 +6,7 @@ import kr.tx24.fc.exception.TxException;
 import kr.tx24.lib.lang.CommonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -53,13 +54,14 @@ public class AppExceptionHandler {
         int numericCode = resultCode.getNumericCode();
 
         String exceptionMessage = CommonUtils.getExceptionMessage(ex, 1000);
-        if (numericCode >= 400) {
-            logger.warn("handleTxException | CODE [{}] | : {}",numericCode, exceptionMessage);
-        } else {
-            logger.info("handleTxException | CODE [{}] : {}", numericCode, exceptionMessage);
-        }
 
-        // 항상 200 처리
-        return ResponseEntity.ok(TxResponse.fail(resultCode, ex.getErrorMessage()));
-    }
+		if (numericCode >= 400) {
+			logger.warn("handleTxException | CODE [{}] | : {}",numericCode, exceptionMessage);
+		} else {
+			logger.info("handleTxException | CODE [{}] : {}", numericCode, exceptionMessage);
+		}
+
+		// 항상 200 처리
+		return ResponseEntity.ok(TxResponse.fail(resultCode, ex.getErrorMessage()));
+	}
 }
