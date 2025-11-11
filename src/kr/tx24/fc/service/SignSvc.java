@@ -9,6 +9,7 @@ import kr.tx24.fc.enums.MockNames;
 import kr.tx24.fc.enums.TxResultCode;
 import kr.tx24.fc.exception.TxException;
 import kr.tx24.fc.repository.DummyRepository;
+import kr.tx24.fc.util.OtpUtil;
 import kr.tx24.lib.crypt.Argon2;
 import kr.tx24.lib.lang.CommonUtils;
 import kr.tx24.lib.lang.MsgUtils;
@@ -39,7 +40,7 @@ public class SignSvc {
     /**
      * 로그인
      */
-    public TxResponse<?> in(SharedMap<String, Object> param, TxResponse<?> response) {
+    public TxResponse<?> in(HttpServletRequest request, HttpServletResponse response, SharedMap<String, Object> param, TxResponse<?> txResponse) {
 		if (CommonUtils.hasEmptyValue(param, List.of("id", "password", "_csrf"))) {
 			throw new TxException(TxResultCode.INVALID_REQUEST, "필수 값이 누락되었습니다.");
 		}
@@ -54,10 +55,8 @@ public class SignSvc {
         }
 
 
-        SharedMap<String, Object> userData = DummyRepository.of(MockNames.USER);
-        if (userData == null) {
-            throw new TxException(TxResultCode.NO_CONTENTS, "가입 정보를 찾을 수 없습니다.");
-        }
+        List<SharedMap<String, Object>> rows = DummyRepository.of(MockNames.USER, TypeRegistry.LIST_SHAREDMAP_OBJECT);
+        SharedMap<String, Object> userData = rows.stream().filter(row -> row.isEquals("id", id)).findFirst().orElseThrow(() -> new TxException(TxResultCode.INVALID_REQUEST, "가입 정보를 찾을 수 없습니다."));
 
         if (!userData.isEquals("id", id)) {
 			throw new TxException(TxResultCode.NO_CONTENTS, "가입 정보를 찾을 수 없습니다.");
@@ -74,13 +73,25 @@ public class SignSvc {
             throw new TxException(TxResultCode.INVALID_REQUEST, "패스워드가 일치하지 않습니다.");
         }
 
+        // 인증을 위한 OTP 시크릿키 준비
+        String otpSecret = OtpUtil.getUserSecret(id);
+        if (!CommonUtils.isEmpty(otpSecret)) {
+            userData.put("otpSecret", otpSecret);
+        }
+
         // 2차인증 준비
         String csrfRedisKey = MsgUtils.format(CSRF_FORMAT, csrf);
         RedisUtils.set(csrfRedisKey, userData, Duration.ofMinutes(5).getSeconds());
 
+        // 2차 인증 확인
+        if (!userData.isEquals("2fa", "active")) {
+            createSession(request, response, userData);
+            return new TxResponse<>(true, TxResultCode.SUCCESS.getCode(), param.getString("_csrf"), "/", userData);
+        }
+
 
         // 2차 인증 레디스 생성
-        return response.link("/sign/two-factor").result(true).msg(param.getString("_csrf"));
+        return new TxResponse<>(true, TxResultCode.SUCCESS.getCode(), param.getString("_csrf"), "/sign/two-factor", userData);
     }
 
     /**
@@ -92,7 +103,7 @@ public class SignSvc {
 
         // 해당 레디스 키 존재하지 않음
         if (!RedisUtils.exists(csrfRedisKey)) {
-            throw new TxException(TxResultCode.SECURITY_VIOLATION);
+            throw new TxException(TxResultCode.UNAUTHORIZED);
         }
 
         // 5분 재설정
@@ -101,7 +112,7 @@ public class SignSvc {
 
     /**
      * 2차인증 발송
-     *
+     * csrf -> 0ee5a5e909e026da80a392c61dfc314d
      */
     public void sendTwoFactorAuth(SharedMap<String,Object> param) {
         if (CommonUtils.hasEmptyValue(param, List.of("csrf", "type"))) {
@@ -115,11 +126,17 @@ public class SignSvc {
         SharedMap<String,Object> userMap = RedisUtils.get(csrfRedisKey, TypeRegistry.MAP_SHAREDMAP_OBJECT);
         if (CommonUtils.isEmpty(userMap)) {
             logger.info("2차 인증 유효기간 초과");
-            throw new TxException(TxResultCode.SECURITY_VIOLATION, "인증 유효시간을 초과했습니다.");
+            throw new TxException(TxResultCode.UNAUTHORIZED, "인증 유효시간을 초과했습니다.");
         }
 
-        // 2차인증 노티 전송 OTP 미 전송
-        if (!type.equalsIgnoreCase("otp")) {
+        boolean isOtpType = type.equalsIgnoreCase("otp");
+
+        if (isOtpType) {
+            String otpSecret = userMap.getString("otpSecret", "");
+            if (CommonUtils.isEmpty(otpSecret)) {
+                throw new TxException(TxResultCode.INVALID_REQUEST, "OTP 2차 인증이 등록되어 있지 않습니다.");
+            }
+        } else {
             notificationSvc.sendTwoFactorAuth(csrf, type, userMap.getString(type.toLowerCase(), ""));
         }
 
@@ -136,6 +153,7 @@ public class SignSvc {
         }
 
         String type = param.getString("type").toUpperCase();
+        boolean isOtpType = "OTP".equalsIgnoreCase(type);
         String csrf = param.getString("csrf");
         String code = param.getString("code");
         // 인증 코드 확인
@@ -143,40 +161,50 @@ public class SignSvc {
         // 유저 정보 확인
         String userRedisKey = MsgUtils.format(CSRF_FORMAT, csrf);
 
-        // 토큰 만료
-        if (!RedisUtils.exists(twoFactorRedisKey) || !RedisUtils.exists(userRedisKey)) {
-            throw new TxException(TxResultCode.SECURITY_VIOLATION, "이미 만료된 토큰입니다. 다시 로그인을 시도해주세요.");
+        if (!RedisUtils.exists(userRedisKey)) {
+            throw new TxException(TxResultCode.UNAUTHORIZED, "이미 만료된 토큰입니다. 다시 로그인을 시도해주세요.");
         }
 
-        // 인증 코드 확인
-        String twoFactorCode = RedisUtils.get(twoFactorRedisKey, TypeRegistry.STRING);
-        if (!twoFactorCode.equals(code)) {
-            throw new TxException(TxResultCode.SECURITY_VIOLATION, "인증 코드가 일치하지 않습니다.");
+        if (!isOtpType && !RedisUtils.exists(twoFactorRedisKey)) {
+            throw new TxException(TxResultCode.UNAUTHORIZED, "이미 만료된 토큰입니다. 다시 로그인을 시도해주세요.");
         }
 
         // 임시 세션내 유저 정보 조회
         SharedMap<String, Object> userMap = RedisUtils.get(userRedisKey, TypeRegistry.MAP_SHAREDMAP_OBJECT);
         if (CommonUtils.isEmpty(userMap)) {
             logger.info("인증 코드 일치 | 토큰 만료로인해 유저 정보 조회 실패");
-            throw new TxException(TxResultCode.SECURITY_VIOLATION, "이미 만료된 토큰입니다. 다시 로그인을 시도해주세요.");
+            throw new TxException(TxResultCode.UNAUTHORIZED, "이미 만료된 토큰입니다. 다시 로그인을 시도해주세요.");
         }
 
-
-        // 세션 생성
-        // TODO: 로그인 기록, 세션 데이터 생성...
-        String sessionId = SessionUtils.create(userMap.getString("id"), userMap);
-        userMap.put("sessionId", sessionId);
-
-        // 쿠키에 세션 데이터 저장
-        CookieUtils.create(response, request.getHeader("host"), "/", Was.SESSION_ID, sessionId, Was.SESSION_EXPIRE, false, true);
+        if (isOtpType) {
+            String otpSecret = userMap.getString("otpSecret", "");
+            if (CommonUtils.isEmpty(otpSecret) || !OtpUtil.validateOtp(otpSecret, code)) {
+                throw new TxException(TxResultCode.INVALID_REQUEST, "OTP 코드가 일치하지 않습니다.");
+            }
+        } else {
+            String twoFactorCode = RedisUtils.get(twoFactorRedisKey, TypeRegistry.STRING);
+            if (!code.equals(twoFactorCode)) {
+                throw new TxException(TxResultCode.INVALID_REQUEST, "인증 코드가 일치하지 않습니다.");
+            }
+        }
 
         // SESSION DATABASE 저장
         UserAgent ua = UADetect.set(headerMap.getString(HttpHeaders.USER_AGENT.toLowerCase()));
         // TODO: DB 저장 로직
 
 
+        // 세션 생성
+        createSession(request, response, userMap);
+    }
+
+    private static void createSession(HttpServletRequest request, HttpServletResponse response, SharedMap<String, Object> userMap) {
+        String sessionId = SessionUtils.create(userMap.getString("id"), userMap);
+        userMap.put("sessionId", sessionId);
+
+        // 쿠키에 세션 데이터 저장
+        CookieUtils.create(response, request.getHeader("host"), "/", Was.SESSION_ID, sessionId, Was.SESSION_EXPIRE, false, true);
+
         // 1일 짜리 세션 레디스 생성
-        // 1일 유저 SessionData
         String oneDaySessionKey = MsgUtils.format(MsgUtils.format(Consts.Session.DAY_SESSION_STORE, sessionId));
         RedisUtils.set(oneDaySessionKey, userMap, Duration.ofDays(1).getSeconds());
     }

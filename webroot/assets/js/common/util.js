@@ -39,7 +39,7 @@ const util = {
         var activeToast = null;
 
         var baseOptions = {
-            duration: 1000,
+            duration: 2000,
             gravity: 'top',
             position: 'right',
             close: true,
@@ -166,26 +166,7 @@ const util = {
             info: createTyped('info'),
             success: createTyped('success'),
             warning: createTyped('warning'),
-            error: createTyped('error'),
-            demo: function () {
-                if (!hasToastify) {
-                    console.warn('[util.toastify] demo를 실행하려면 Toastify가 필요합니다.');
-                    return;
-                }
-                var queue = [
-                    function () { call.show('기본 토스트 예제입니다.'); },
-                    function () { call.success('성공 토스트 예제입니다.'); },
-                    function () { call.info('정보 토스트 예제입니다.'); },
-                    function () { call.warning('경고 토스트 예제입니다.'); },
-                    function () { call.error('에러 토스트 예제입니다.'); }
-                ];
-                var delay = 0;
-                var step = 600;
-                queue.forEach(function (fn) {
-                    window.setTimeout(fn, delay);
-                    delay += step;
-                });
-            }
+            error: createTyped('error')
         };
 
         return call;

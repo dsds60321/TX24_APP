@@ -10,114 +10,151 @@
 		},
 
 		cacheElements() {
-			this.form = document.twoFactor,
-			this.authBox = document.querySelector('.auth-box');
-			this.optionButtons = document.querySelectorAll('.option-Btn');
-			this.submitButton = document.querySelector('#submitBtn');
-			this.codeInput = document.querySelector('#code');
-			this.errorField = this.authBox ? this.authBox.querySelector('.text-danger') : null;
+			this.form = document.twoFactorForm,
+			this.options = document.querySelectorAll('.two-fa-option'),
+			this.codeInfo = document.getElementById('codeInfo'),
+			this.sendBtn = document.getElementById('sendCodeBtn'),
+			this.codeInput = document.getElementById('codeInputSection'),
+			this.retrySendBtn = document.getElementById('codeButtonSection'),
+			this.resendBtn = document.getElementById('resend'),
+			this.backBtn = document.getElementById('back'),
+			this.verifyBtn = document.getElementById('verify');
 		},
 
 		bindEvents() {
-			if (this.optionButtons.length > 0) {
-				this.optionButtons.forEach((button) => {
-					button.addEventListener('click', () => this.showAuthBox(button));
-				});
-			}
 
-			// 인증 버튼
-			if (this.submitButton) {
-				this.submitButton.addEventListener('click', () => this.sendCode());
-			}
+			// 선택 이벤트
+			this.options.forEach((opt) => this.optionClickEvt(opt));
+
+			// 인증 코드 요청 이벤트
+			this.sendBtn.addEventListener('click', (evt) => this.sendCode(evt));
+
+			// 뒤로가기
+			this.backBtn.addEventListener('click', () => {
+				this.options.forEach(elem => elem.classList.remove('disabled'));
+
+				this.sendBtn.classList.remove('hidden');
+				this.codeInput.classList.add('hidden');
+				this.retrySendBtn.classList.add('hidden');
+
+			});
+
+			// 다시 보내기
+			this.resendBtn.addEventListener('click', (evt) => this.sendCode(evt));
+
+			this.verifyBtn.addEventListener('click', (evt) => this.verifyEvt(evt));
 		},
 
-		async showAuthBox(button) {
 
-			if (!confirm(button.innerText + ' 요청을 진행하시겠습니까?')) {
+
+		optionClickEvt(elem) {
+			elem.addEventListener('click', () => {
+				const type = elem.dataset.type;
+				if (!type) {
+					util.toastify.error('타입을 확인 할 수 없습니다.');
+					return;
+				}
+
+				if (elem.classList.contains('disabled')) {
+					util.toastify.warning('인증코드가 이미 발송되었습니다. 뒤로가기 후 재선택 혹은 다시보내기를 시도해주세요.');
+					return;
+				}
+
+				document.getElementById(type).checked = true;
+				this.options.forEach((opt) => opt.classList.remove('selected'));
+
+				elem.classList.add('selected');
+			});
+		},
+
+
+		async sendCode(evt) {
+			evt.preventDefault();
+			let formData = new FormData(this.form);
+
+			if (!formData.get('type')) {
+				util.toastify.error('인증방법을 선택 후 진행해주세요.');
 				return;
 			}
 
-
-			const type = button.dataset.type;
-			if (!type) {
-				util.toastify.warning('타입 지정에 오류가 발생했습니다. 관리자에게 문의해주시기 바랍니다.');
-				return;
+			const payload = {
+				type: formData.get('type'),
+				csrf: formData.get('_csrf')
 			}
-
-			this.form.type.value = type;
-
-
-			if (type === 'otp') {
-				this.openCodeInput();
-				return;
-			}
-
-			const formData = new FormData(this.form);
 
 			try {
-				const {data} = await axios.post('/sign/two-factor/code/send', {
-					type,
-					csrf: formData.get('_csrf') || ''
-				});
-				console.log(data);
+				evt.target.classList.add('loading');
+				const {data} = await axios.post('/sign/two-factor/code/send', payload);
 
-				alert(data.msg);
-				this.openCodeInput();
-			} catch (error) {
-				console.log(error);
-				alert('서버로부터 오류가 발생했습니다.');
-				return;
-			}
+				if (!data.result) {
+					util.toastify.warning(data.msg || '서버로부터 오류가 발생했습니다.');
+					return;
+				}
 
+				document.getElementById('verificationCode').value = '';
+				this.options.forEach((opt) => opt.classList.add('disabled'));
 
-		},
+				// 기존 전송 버튼 hidden 다시 보내기 유지
+				if (evt.target.id !== 'resend') {
+					evt.target.classList.add('hidden');
+					this.codeInfo.innerText = `${payload.type.toUpperCase()}로 인증코드가 전송되었습니다.`;
+				} else {
+					this.codeInfo.innerText = `${payload.type.toUpperCase()}로 인증코드가 재전송되었습니다.`;
+				}
 
-		openCodeInput() {
-			if (this.authBox) {
-				this.authBox.style.display = 'block';
-			}
-		},
-
-
-		sendCode() {
-			this.form
-		},
-
-
-		handleSubmit() {
-			if (!this.codeInput) {
-				return;
-			}
-
-			const code = this.codeInput.value.trim();
-			if (!code) {
-				this.showError('인증번호를 입력해주세요.');
-				return;
-			}
-
-			const frm = new FormData(this.form);
-			try {
-				const { data } = axios.post('/sign/two-factor/code/verify', {
-					code,
-					csrf: frm.get('_csrf') || '',
-					type: frm.get('type') || ''
-				});
-
-				alert(data.msg);
+				util.toastify.success(data.msg);
+				this.codeInput.classList.remove('hidden');
+				this.retrySendBtn.classList.remove('hidden');
 			} catch (e) {
-				alert('서버로부터 오류가 발생했습니다.');
-				return;
+				console.log(e);
+				util.toastify.error('서버로부터 오류가 발생했습니다. 관리자에게 문의해주시기 바랍니다.');
+			} finally {
+				evt.target.classList.remove('loading');
 			}
+
+
 
 		},
 
-		showError(message) {
-			if (!this.errorField) {
+		async verifyEvt(evt) {
+			evt.preventDefault();
+			let formData = new FormData(this.form);
+
+			if (!formData.get('type')) {
+				util.toastify.error('인증방법을 선택 후 진행해주세요.');
 				return;
 			}
 
-			this.errorField.innerHTML = ERROR_ICON_HTML + message;
+			if (!formData.get('code')) {
+				util.toastify.error('인증 코드를 입력해주세요.');
+				return;
+			}
+
+			const payload = {
+				type: formData.get('type'),
+				csrf: formData.get('_csrf'),
+				code: formData.get('code')
+			};
+
+			try {
+				evt.target.classList.add('loading');
+				const {data} = await axios.post('/sign/two-factor/code/verify', payload);
+				if (!data.result) {
+					util.toastify.warning(data.msg || '2차 인증에 실패했습니다.');
+					return;
+				}
+
+				util.toastify.success(data.msg || '2차 인증이 완료되었습니다.');
+				window.location.href = data.link || '/';
+			} catch (error) {
+				const errorMsg = error?.response?.data?.msg || '서버로부터 오류가 발생했습니다.';
+				util.toastify.error(errorMsg);
+			} finally {
+				evt.target.classList.remove('loading');
+			}
 		}
+
+
 	};
 
 	document.addEventListener('DOMContentLoaded', () => {

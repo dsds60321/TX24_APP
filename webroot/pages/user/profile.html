@@ -1,0 +1,161 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8"/>
+    <title>계정 프로필</title>
+</head>
+<body>
+<div class="row profile-page">
+    <div class="col-12">
+        <div class="pt-2">
+
+            <div th:replace="~{pages/layout/fragments :: maps('계정 프로필')}"></div>
+            <form action="/user/profile" method="POST" id="profileForm" name="profileForm" onsubmit="return false">
+                <div class="card-wrapper">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <p class="fs-6 fw-bold mb-0">프로필 정보</p>
+                        <div>
+                            <button id="submitBtn" type="submit" class="btn none btn-outline-primary fs-9 pt-0 pb-0 btn-radius-2 flex-submit">submit</button>
+                            <button type="button" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 flex-edit">edit</button>
+                        </div>
+                    </div>
+                        <div class="card-contents">
+                        <div class="card-row profile-summary-row">
+                            <div class="col d-flex profile-summary">
+                                <div class="profile-avatar" aria-hidden="true">TX</div>
+                                <div class="profile-summary__body">
+                                    <p class="fs-8 text-grey mb-1">아이디</p>
+                                    <p class="profile-summary__id" th:text="${USER.id}"></p>
+                                    <p class="profile-summary__name" th:text="${USER.name}">홍길동</p>
+                                    <p class="profile-summary__meta" th:text="${USER.dept}"></p>
+                                    <ul class="profile-summary__tags">
+                                        <li th:text="${USER['2fa'] == 'active'} ? '2차 인증 사용' : '2차 인증 해제'"></li>
+                                        <div th:switch="${USER.role}">
+                                            <li th:case="0">임원</li>
+                                            <li th:case="1">팀장</li>
+                                            <li th:case="2">팀원</li>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="col profile-otp-inline">
+                                <div class="profile-otp-inline__header">
+                                    <p class="fs-8 fw-bold mb-1">OTP / 2차 인증</p>
+                                </div>
+                                <div class="profile-otp-inline__body">
+                                    <div class="profile-otp-inline__qr">
+                                        <img th:if="${otpQrBase64}" th:src="${'data:image/png;base64,' + otpQrBase64}" alt="OTP QR 코드">
+                                    </div>
+                                    <div class="profile-otp-inline__meta">
+                                        <p class="mb-2 text-grey fs-8">인증 앱으로 QR을 스캔하거나 키를 직접 입력하세요.</p>
+                                        <pre class="profile-otp-inline__codes" th:text="${USER.otpSecret}"></pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-row profile-detail-row">
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">이름</p></div>
+                                <div class="card-txt">
+                                    <p class="fs-8 value" th:text="${USER.name}"></p>
+                                    <div class="edit-group">
+                                        <input type="text" id="name" name="name" class="form-control fs-8" th:value="${USER.name}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">부서</p></div>
+                                <div class="card-txt">
+                                    <p class="fs-8 value" th:text="${USER.dept}"></p>
+                                    <div class="edit-group">
+                                        <select name="status" class="form-control fs-8">
+                                            <option value="영업" th:selected="${USER.dept == '영업'}">영업</option>
+                                            <option value="개발" th:selected="${USER.dept == '개발'}">개발</option>
+                                            <option value="관리" th:selected="${USER.dept == '관리'}">관리</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">직책</p></div>
+                                <div class="card-txt">
+                                    <div th:switch="${USER.role}">
+                                        <p th:case="0" class="fs-8 value">임원</p>
+                                        <p th:case="1" class="fs-8 value">팀장</p>
+                                        <p th:case="2" class="fs-8 value">팀원</p>
+                                    </div>
+                                    <div class="edit-group">
+                                        <select name="status" class="form-control fs-8">
+                                            <option value="0" th:selected="${USER.dept == '0'}">임원</option>
+                                            <option value="1" th:selected="${USER.dept == '1'}">팀장</option>
+                                            <option value="2" th:selected="${USER.dept == '2'}">팀원</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">상태</p></div>
+                                <div class="card-txt">
+                                    <p class="fs-8 value" th:text="${USER.status == 'active'} ? '사용' : '해제'">상태</p>
+                                    <div class="edit-group">
+                                        <select name="status" class="form-control fs-8">
+                                            <option value="active" th:selected="${USER.status == 'active'}">사용</option>
+                                            <option value="inactive" th:selected="${USER.status == 'inactive'}">중지</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card-row profile-detail-row">
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">이메일</p></div>
+                                <div class="card-txt">
+                                    <p class="fs-8 value" th:text="${USER.email}">kang.ts@tx24.co.kr</p>
+                                    <div class="edit-group">
+                                        <input name="email" type="email" class="form-control fs-8" th:value="${USER.email}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">휴대폰</p></div>
+                                <div class="card-txt">
+                                    <p class="fs-8 value" th:text="${USER.phone}"></p>
+                                    <div class="edit-group">
+                                        <input name="phone" type="text" class="form-control fs-8" th:value="${USER.phone}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">2차 인증</p></div>
+                                <div class="card-txt">
+                                    <p class="fs-8 value" th:text="${USER['2fa'] == 'active'} ? '사용' : '해제'">상태</p>
+                                    <div class="edit-group">
+                                        <select name="status" class="form-control fs-8">
+                                            <option value="active" th:selected="${USER['2fa'] == 'active'}">사용</option>
+                                            <option value="inactive" th:selected="${USER['2fa']== 'inactive'}">중지</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex">
+                                <div class="card-title"><p class="fs-8 fw-bold">최근 로그인</p></div>
+                                <div class="card-txt">
+                                    <p class="fs-8 value">2024-03-25 14:22:10</p>
+                                    <div class="edit-group">
+                                        <input type="text" class="form-control fs-8" value="2024-03-25 14:22:10" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script th:src="@{/assets/js/pages/user/profile.js}"></script>
+</body>
+</html>

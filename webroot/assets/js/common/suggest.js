@@ -38,6 +38,8 @@ export default class Suggest {
 
 
         suggestElem.innerHTML = '';
+        suggestElem.classList.add('active');
+
         if (!data.result || data.data.length === 0) {
             suggestElem.innerHTML = this.renderEmpty();
             return;
@@ -52,12 +54,10 @@ export default class Suggest {
         console.log(container)
         container.innerHTML = items.join('');
         suggestElem.append(container);
-
-        suggestElem.classList.add('active');
     }
 
     renderEmpty() {
-        return `<div class="client-suggest-empty" data-state="empty">일치하는 데이터를 찾을 수 없습니다.</div>`
+        return `<div class="client-suggest-empty active" data-state="empty">일치하는 데이터를 찾을 수 없습니다.</div>`
     }
 
     renderContainer() {

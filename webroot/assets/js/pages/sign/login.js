@@ -63,12 +63,16 @@
                     }
                 });
 
-				console.log('----', data)
-
                 if (!data.result) {
 					this.showError(data.msg)
 					return false;
                 }
+
+				// 2차 인증 해제
+				if (data.data['2fa'] !== 'active') {
+					location.href = data.link;
+					return;
+				}
 
                 const frm = document.createElement('form');
                 frm.action = data.link;

@@ -4,11 +4,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.tx24.fc.bean.TxResponse;
 import kr.tx24.fc.enums.TxResultCode;
+import kr.tx24.fc.service.SessionSvc;
 import kr.tx24.fc.service.SignSvc;
 import kr.tx24.lib.lang.IDUtils;
 import kr.tx24.lib.map.SharedMap;
 import kr.tx24.lib.redis.RedisUtils;
 import kr.tx24.was.annotation.Header;
+import kr.tx24.was.annotation.Session;
 import kr.tx24.was.annotation.SessionIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +27,11 @@ public class SignCtl {
     private static final Logger logger = LoggerFactory.getLogger(SignCtl.class);
 
     private final SignSvc signSvc;
+    private final SessionSvc sessionSvc;
 
-    public SignCtl(SignSvc signSvc) {
+    public SignCtl(SignSvc signSvc, SessionSvc sessionSvc) {
         this.signSvc = signSvc;
+        this.sessionSvc = sessionSvc;
     }
 
     @SessionIgnore
@@ -37,7 +41,14 @@ public class SignCtl {
         RedisUtils.set(csrf, "", Duration.ofMinutes(5).getSeconds());
         logger.info("set csrf : {} ", csrf);
         model.addAttribute("_csrf", csrf);
-        return "pages/sign/login2";
+        return "pages/sign/login";
+    }
+
+    @SessionIgnore
+    @GetMapping("/out")
+    public String logout(@Session SharedMap<String, Object> session) {
+        sessionSvc.logout(session);
+        return "redirect:/sign/in";
     }
 
     /**
@@ -45,10 +56,10 @@ public class SignCtl {
      */
     @SessionIgnore
     @PostMapping("/in")
-    public @ResponseBody TxResponse<?> login(@RequestBody SharedMap<String, Object> param) {
-        TxResponse<?> response = new TxResponse<>().link("/init").msg("아이디 또는 패스워드가 일치하지 않습니다.");
-        response.code = TxResultCode.INVALID_REQUEST.getCode();
-        return signSvc.in(param, response);
+    public @ResponseBody TxResponse<?> login(HttpServletRequest request, HttpServletResponse response,@RequestBody SharedMap<String, Object> param) {
+        TxResponse<?> txResponse = new TxResponse<>().link("/init").msg("아이디 또는 패스워드가 일치하지 않습니다.");
+        txResponse.code = TxResultCode.INVALID_REQUEST.getCode();
+        return signSvc.in(request, response, param, txResponse);
     }
 
     @SessionIgnore
@@ -56,7 +67,7 @@ public class SignCtl {
     public String twoFactorAuthForm(@RequestParam("_csrf") String _csrf, Model model) {
         model.addAttribute("_csrf", _csrf);
         signSvc.twoFactorAuth(_csrf);
-        return "pages/sign/twoFactor2";
+        return "pages/sign/twoFactor";
     }
 
     @SessionIgnore

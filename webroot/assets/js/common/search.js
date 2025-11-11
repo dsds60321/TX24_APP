@@ -50,7 +50,7 @@ export default class Search {
 
 			// excel ... 등 요청시
 			if (contentType) {
-				const response = await axios.post(url, this.bean.datas, {
+				const response = await httpClient.post(url, this.bean.datas, {
 					headers: {
 						'Content-Type': 'application/json',
 						'X-Request-Content': contentType,
@@ -67,7 +67,7 @@ export default class Search {
 			}
 
 
-			const { data } = await axios.post(url, this.bean);
+			const { data } = await httpClient.post(url, this.bean);
 			if (pageContainer) {
 				pageContainer.innerHTML = data;
 			}

@@ -1,5 +1,4 @@
 import Suggest from "./suggest.js";
-
 /**
  * 공통 레이아웃 JS
  * 모달 + 오버레이 + 탭
@@ -23,15 +22,14 @@ export default class Layout {
     }
 
     bindEvents() {
-        // menuToggle
-        this.menuToggle();
-        this.sideNaviToggle();
-        this.bindSelectToInput();
-        this.bindEmailFocus();
-        this.bindCardEdit();
-        this.bindModalLoader();
-        this.blockBrowserEvt();
-        this.simpleSelectEvt();
+        this.menuToggle(); // 메뉴 사이드바 이벤트
+        this.sideNaviToggle(); // 네비게이션 이벤트
+        this.bindSelectToInput();  // select
+        this.bindEmailFocus(); // 이메일 focus
+        this.bindCardEdit(); // edit 수정버튼 클릭 이벤트
+        this.bindModalLoader(); // 모달 이벤트
+        this.blockBrowserEvt(); // 브라우저 동작 제어 이벤트
+        this.simpleSelectEvt(); // select 이벤트
     }
 
     // 탭 함수
@@ -156,6 +154,7 @@ export default class Layout {
         if (!root) {
             return;
         }
+
         root.querySelectorAll('.flex-edit').forEach((button) => {
             if (button.dataset.boundFlexEdit === 'true') {
                 return;
@@ -169,14 +168,44 @@ export default class Layout {
 
     toggleCardEdit(button) {
         const wrapper = button.closest('.card-wrapper');
+        const submitBtn = button.closest('div').querySelector('.flex-submit');
+
         if (!wrapper) {
             return;
         }
+        // TODO edit 접으면 기본값으로 돌아가는게 필요할듯
+
         if (wrapper.classList.contains('edit')) {
             wrapper.classList.remove('edit');
+            submitBtn ? submitBtn.classList.add('none') : '';
+            this.resetData(wrapper);
         } else {
             wrapper.classList.add('edit');
+            submitBtn ? submitBtn.classList.remove('none') : '';
         }
+
+    }
+
+    resetData(wrapper) {
+        wrapper.querySelectorAll('input, select').forEach(elem => {
+            const originElem = elem.closest('.card-txt')?.querySelector('.value');
+            if (!originElem) return;
+
+            const originValue = originElem.textContent?.trim() ?? '';
+
+            switch (elem.tagName) {
+                case 'INPUT':
+                    elem.value = originValue;
+                    break;
+
+                case 'SELECT':
+                    const matched = Array.from(elem.options)
+                        .find(opt => opt.textContent.trim() === originValue);
+
+                    if (matched) elem.value = matched.value;
+                    break;
+            }
+        });
     }
 
     /**
@@ -605,9 +634,12 @@ export default class Layout {
             loadContent(tabUrl);
         }
 
-
         function onTriggerClick(event) {
-            event.preventDefault();
+
+            // submit , href 등 이벤트 발생 안됨
+            if (event.target.closest('.nav-link')) {
+                event.preventDefault();
+            }
 
             // tab생성에 필요한 데이터
             const linkElem = event.target.closest('.nav-link');
@@ -631,6 +663,7 @@ export default class Layout {
 
             linkElem.classList.add('active');
         }
+
 
         function renderContent(html) {
             if (!contentArea) {
@@ -670,8 +703,7 @@ export default class Layout {
 
         function loadContent(url) {
             const tab = state.tabs.get(url);
-            console.log('loadContent ' ,tab)
-            axios.get(tab.url)
+            httpClient.get(tab.url)
                 .then(({data}) => {
                     state.cache.set(url, data);
                     renderContent(data);

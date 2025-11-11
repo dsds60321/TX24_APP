@@ -1,9 +1,12 @@
 package kr.tx24.fc.ctl.advice;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import kr.tx24.fc.bean.TxResponse;
 import kr.tx24.fc.enums.TxResultCode;
 import kr.tx24.fc.exception.TxException;
 import kr.tx24.lib.lang.CommonUtils;
+import kr.tx24.was.util.Was;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
@@ -49,11 +52,28 @@ public class AppExceptionHandler {
      *   - resultCode < 400 : info
      */
     @ExceptionHandler(TxException.class)
-    public ResponseEntity<TxResponse<?>> handleTxException(TxException ex) {
+    public ResponseEntity<TxResponse<?>> handleTxException(HttpServletRequest request, HttpServletResponse response, TxException ex) {
+        boolean isAxios = Was.getHeader(request, "X-Requested-With").equalsIgnoreCase("xmlhttprequest")
+                || Was.getHeader(request,"X-FromAjax").equals("true");
+
         TxResultCode resultCode = ex.getResultCode();
         int numericCode = resultCode.getNumericCode();
 
         String exceptionMessage = CommonUtils.getExceptionMessage(ex, 1000);
+
+        // 401 오류에 대한
+        try {
+            // SUBMIT에만 redirect 진행됨
+            if (!isAxios && numericCode == 401) {
+                logger.info("Session Expired OR CSRF Token Invalid : {} ", exceptionMessage );
+                response.sendRedirect("/sign/in");
+                return null;
+            }
+        } catch (Exception e) {
+            logger.warn("handleTxException | sendRedirect error : {} ", CommonUtils.getExceptionMessage(e, 1000));
+            return ResponseEntity.ok(TxResponse.fail(resultCode, ex.getErrorMessage()));
+        }
+
 
 		if (numericCode >= 400) {
 			logger.warn("handleTxException | CODE [{}] | : {}",numericCode, exceptionMessage);

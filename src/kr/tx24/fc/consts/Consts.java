@@ -8,6 +8,7 @@ public final class Consts {
     }
 
     public static final class Session {
+        public static final String SESSION_STORE = "WSDATA|{}";
         public static final String DAY_SESSION_STORE = "ONE_DAY_SESSION_STORE|{}";
     }
 }

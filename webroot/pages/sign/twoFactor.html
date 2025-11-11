@@ -1,92 +1,129 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>login2fa</title>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tx24</title>
+  <link th:href="@{/assets/css/login2.css}" rel="stylesheet" />
+  <link th:href="@{/assets/css/toastify.min.css}" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.cdnfonts.com/css/metropolis-2" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+<!-- Fixed Logo at Top Left -->
+<div class="logo">
+  <div class="logo-content">
+    <div class="logo-image">
+      <!--            <img src="data:image/png;base64,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" alt="tx24 Logo">-->
+    </div>
+    <div>
+      <div style="display: flex; align-items: center;">
+        <span class="logo-text"></span>
+        <span class="edition-badge">Professional</span>
+      </div>
+    </div>
+  </div>
+  <div class="logo-subtitle">Transaction Management</div>
+</div>
 
-    <!-- CSS -->
-    <link href="/assets/css/components.css" rel="stylesheet" />
-    <link href="/assets/css/login.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
+<!-- Top Right Link -->
+<a href="#" class="top-right-link">계정이 없으신가요?</a>
 
-    <!-- Icon -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  </head>
+<div class="container">
+  <div class="content">
+    <!-- Left Section -->
+    <div class="header">
+      <h1 class="header-heading">
+        All your transactions,<br>
+        securely managed in one place.
+      </h1>
+      <p class="header-subtitle">
+        Collaborate with your team in real-time.<br>
+        Stay connected, organized, and productive.
+      </p>
+    </div>
 
-  <body>
-    <div class="login-wrapper">
-      <div class="login d-flex col-12 m-0">
-        
-        <!-- Left: Login Box -->
-        <div class="col-6 login-box-wrapper d-flex align-items-center justify-content-center flex-column">
-          
-          <div class="row logo-box">
-            <img src="/assets/img/syslink.png" alt="" class="p-0">
-            <p class="fs-8 p-0 pt-2 mb-0">Sign in to continue to syslink.</p>
+    <!-- Right Section - Form -->
+    <div class="form-container">
+      <div class="form fixed-height">
+        <form action="" id="twoFactorForm" name="twoFactorForm" onsubmit="return false">
+          <input type="hidden" name="_csrf" th:value="${_csrf}">
+        <!-- 2FA Method Selection -->
+          <div id="twoFASelection" class="">
+            <h2 class="form-title">Two-Factor Authentication</h2>
+
+            <div class="form-content">
+              <p class="info-text">인증 방법을 선택하세요</p>
+
+              <div class="two-fa-options">
+                <div class="two-fa-option" data-type="sms">
+                  <input type="radio" name="type" id="sms" value="sms">
+                  <label for="sms">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 4px;">
+                      <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" stroke="currentColor" stroke-width="2" fill="none"></path>
+                      <path d="M7 9H17M7 13H13" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+                    <div>SMS</div>
+                  </label>
+                </div>
+                <div class="two-fa-option" data-type="email">
+                  <input type="radio" name="type" id="email" value="email">
+                  <label for="email">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 4px;">
+                      <path d="M4 4H20C21.1 4 22 4.9 22 6V18C22 19.1 21.1 20 20 20H4C2.9 20 2 19.1 2 18V6C2 4.9 2.9 4 4 4Z" stroke="currentColor" stroke-width="2" fill="none"></path>
+                      <path d="M22 6L12 13L2 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                    </svg>
+                    <div>EMAIL</div>
+                  </label>
+                </div>
+                <div class="two-fa-option" data-type="otp">
+                  <input type="radio" name="type" id="otp" value="otp">
+                  <label for="otp">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom: 4px;">
+                      <rect x="5" y="2" width="14" height="20" rx="2" stroke="currentColor" stroke-width="2" fill="none"></rect>
+                      <path d="M9 6H15M9 10H15M9 14H15" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
+                      <circle cx="12" cy="18" r="1.5" fill="currentColor"></circle>
+                    </svg>
+                    <div>OTP</div>
+                  </label>
+                </div>
+              </div>
+
+              <div id="codeInputSection" class="hidden">
+                <p class="info-text" id="codeInfo"></p>
+                <div class="input-wrapper">
+                  <input type="text" name="code" class="code-input" id="verificationCode" placeholder=" " maxlength="6">
+                  <label for="verificationCode">인증 코드</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Primary Action Buttons (Same Position) -->
+            <button class="btn btn-primary" id="sendCodeBtn">Send</button>
+
+            <!-- Verify Button and Secondary Actions (Initially Hidden) -->
+            <div id="codeButtonSection" class="hidden">
+              <button class="btn btn-primary" id="verify">확인</button>
+              <div class="button-group">
+                <button class="btn btn-primary btn-outline-primary" id="resend">다시 보내기</button>
+                <button class="btn btn-primary btn-outline-primary" id="back">뒤로 가기</button>
+              </div>
+            </div>
+
           </div>
+        </form>
 
-          <form name="twoFactor" action="" class="login-form pt-3">
-            <input type="hidden" name="_csrf" th:value="${_csrf}">
-            <input type="hidden" name="type">
-
-            <!-- 인증 선택 영역 -->
-            <div class="option-box mb-4 mt-4">
-              <div class="mb-4">
-                <button type="button" data-type="sms" id="smsBtn" class="btn btn-grey-outline btn-xl fs-8 w-100 option-Btn">
-                  <i class="fa-solid fa-comment-dots me-2"></i>SMS 인증
-                </button>
-              </div>
-              <div class="mb-4">
-                <button type="button" data-type="email" id="emailBtn" class="btn btn-grey-outline btn-xl fs-8 w-100 option-Btn">
-                  <i class="fa-solid fa-envelope me-2"></i>이메일 인증
-                </button>
-              </div>
-              <div>
-                <button type="button" data-type="otp" id="OtpBtn" class="btn btn-grey-outline btn-xl fs-8 w-100 option-Btn">
-                  <i class="fa-brands fa-google me-2"></i>Google OTP 인증
-                </button>
-              </div>
-            </div>
-
-            <!-- 인증번호 입력 영역 -->
-            <div class="auth-box pt-5 pb-3" style="display: none;">
-              <div class="d-flex justify-content-between">
-                <label for="code" class="form-label fs-7 fw-bold">인증번호 입력</label>
-                <p class="fs-7 text-primary mb-0" id="two-fa">-- : --</p>
-              </div>
-
-              <div class="position-relative">
-                <span class="position-absolute top-50 start-0 translate-middle-y ms-2">
-                  <i class="text-grey fs-9 fa-solid fa-lock"></i>
-                </span>
-                <input type="password" id="code" placeholder="" class="form-control ps-5">
-              </div>
-
-              <p class="fs-7 text-danger pt-3" style="height: 25px;">
-                <!-- <i class="fa-solid fa-circle-exclamation me-1"></i>에러 문구 입력. -->
-              </p>
-
-              <button type="button" id="submitBtn" class="btn btn-primary btn-xl fs-7 w-100 mt-3">Sign In</button>
-            </div>
-
-            <p class="fs-8 text-primary text-center pt-4 mb-0">©2025, tx24</p>
-          </form>
-
-        </div>
-
-        <!-- Right: Background -->
-        <div class="col-6 login-bg d-flex align-items-center justify-content-center">
-          <img src="/assets/img/login-bg.png" alt="">
-        </div>
       </div>
     </div>
 
-    <!-- JS -->
-    <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
-    <script th:src="@{/assets/js/just-validate.production.min.js}"></script>
-    <script th:src="@{/assets/js/axios.min.js}"></script>
-    <script th:src="@{/assets/js/pages/sign/twoFactor.js}"></script>
-
-  </body>
+  </div>
+</div>
+<script th:src="@{/assets/js/jquery.min.js}"></script>
+<script th:src="@{/assets/js/axios.min.js}"></script>
+<script th:src="@{/assets/js/common/toastify.js}"></script>
+<script th:src="@{/assets/js/common/util.js}"></script>
+<script th:src="@{/assets/js/just-validate.production.min.js}"></script>
+<script th:src="@{/assets/js/pages/sign/twoFactor.js}"></script>
+</body>
 </html>

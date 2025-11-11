@@ -5,7 +5,7 @@ export default class SessionManager {
         this.timer = null;
         this.timeElement = document.getElementById('session-time') || null;
         this.remainingSeconds = null; // 잔여 시간
-        this.screenLockAt = 180; // 3분 남았을시 패스워드 알림
+        this.screenLockAt = 180; // 3분 남았을시 패스워드 알림 -> 백엔드에서 받아서 사용하면 좋을꺼같음
     }
 
     init() {
@@ -14,6 +14,7 @@ export default class SessionManager {
 
     async getSession() {
         try {
+
             const { data } = await axios.get('/user/session');
             const ttl = this.normalizeTtl(data?.data.ttl);
             this.remainingSeconds = ttl;
@@ -145,5 +146,11 @@ export default class SessionManager {
             </form>`
     }
 
+    logout() {
+        if (!confirm('로그아웃을 진행하시겠습니까?')) {
+            return;
+        }
 
+        location.href = '/sign/out';
+    }
 }

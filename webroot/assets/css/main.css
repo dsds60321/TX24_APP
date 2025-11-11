@@ -200,6 +200,153 @@ body {
     padding-bottom: 4px;
 }
 
+/* ============================================
+   Profile Page (simple)
+   ============================================ */
+
+.profile-summary-row {
+    flex-wrap: wrap;
+}
+
+.profile-summary {
+    border: 1px solid #E0E4EA;
+    padding: 1.25rem;
+    gap: 1rem;
+    background-color: #fff;
+}
+
+.profile-avatar {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+    background-color: #F3F4F6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #1F2937;
+}
+
+.profile-summary__id {
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #4B5563;
+}
+
+.profile-summary__name {
+    margin: 0.15rem 0 0;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.profile-summary__meta {
+    margin: 0.15rem 0 0;
+    color: #6B7280;
+    font-size: 0.9rem;
+}
+
+.profile-summary__tags {
+    list-style: none;
+    display: flex;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 0.8rem 0 0;
+}
+
+.profile-summary__tags li {
+    border: 1px solid #E5E7EB;
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    font-size: 0.78rem;
+    color: #374151;
+}
+
+.profile-otp-inline {
+    border: 1px solid #E0E4EA;
+    border-radius: 6px;
+    padding: 1.25rem;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.profile-otp-inline__body {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    flex-wrap: wrap;
+}
+
+.profile-otp-inline__qr img {
+    width: 164px;
+    height: 164px;
+    border-radius: 8px;
+    border: 1px solid #E5E7EB;
+    background-color: #fff;
+    padding: 0.5rem;
+}
+
+.profile-otp-inline__key {
+    font-size: 0.85rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    background-color: #EEF2FF;
+    color: #3730A3;
+    display: inline-block;
+}
+
+.profile-otp-inline__codes {
+    margin: 0.6rem 0 0;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px dashed #CBD5F5;
+    background-color: #fff;
+    font-family: "Fira Code", "SFMono-Regular", monospace;
+    font-size: 0.85rem;
+    color: #1F2937;
+}
+
+.profile-detail-list {
+    margin: 0;
+    padding: 0;
+}
+
+.profile-detail-list > div {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid #F3F4F6;
+}
+
+.profile-detail-list > div:last-child {
+    border-bottom: 0;
+}
+
+.profile-detail-list dt {
+    margin: 0;
+    color: #6B7280;
+    font-size: 0.85rem;
+}
+
+.profile-detail-list dd {
+    margin: 0;
+    font-weight: 600;
+    color: #111827;
+}
+
+@media (max-width: 992px) {
+    .profile-summary-row {
+        flex-direction: column;
+    }
+
+    .profile-otp-inline__body {
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
 .main .sidebar .position-sticky .nav-wrapper .nav .nav-item .nav-link {
     color: #363A43;
     transition: all 0.3s;
@@ -1357,4 +1504,30 @@ body {
         max-height: 240px;
         overflow-y: auto;
     }
+}
+
+
+.deleted-text {
+    text-decoration: line-through;
+}
+
+.btn.none {
+    display: none;
+}
+
+.just-validate-error-label,.text-danger {
+    color: #D32F2F;
+    font-size: 13px;
+    font-weight: 600;
+    display: block;
+    transition: opacity .4s ease;
+}
+
+.text-danger::before {
+    margin-right: 4px;
+    content: "\f06a"; /* exclamation-circle 아이콘 */
+    font-family: "Font Awesome 6 Free";
+    font-weight: 900; /* solid 아이콘일 때 필요 */
+    margin-left: 4px;
+    color: #dc3545; /* Bootstrap text-danger 색 */
 }
