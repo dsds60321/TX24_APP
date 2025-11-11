@@ -1,28 +1,25 @@
+import Suggest from "./suggest.js";
+
 /**
  * 공통 레이아웃 JS
+ * 모달 + 오버레이 + 탭
  */
 export default class Layout {
     constructor() {
+        // 하위 페이지 탭 매니저
+        this.TabManager = this.createTabManager();
+        this.Overlay = this.overlay();
         this.loadingOverlay = null;
         this.loadingMessageElem = null;
-        this.appsState = this.createAppsState();
-        this.currentView = null;
-        this.currentDescriptor = null;
-        this.appsOverlay = null;
-        this.appsGrid = null;
-        this.appsClearButton = null;
-        this.appsCloseButton = null;
-        this.handleAppsOverlayKeyDown = this.handleAppsOverlayKeyDown.bind(this);
         this.init();
-        window.apps = () => this.openTab(true);
+        this.SuggestManager = new Suggest();
     }
 
     init() {
         this.bindEvents();
         this.mobileSize();
-        this.initAppsOverlay();
-        this.bindAppLaunchers();
-        this.restoreSavedApps();
+        this.TabManager.init();
+        this.Overlay.init();
     }
 
     bindEvents() {
@@ -33,7 +30,8 @@ export default class Layout {
         this.bindEmailFocus();
         this.bindCardEdit();
         this.bindModalLoader();
-        // this.blockBrowserEvt();
+        this.blockBrowserEvt();
+        this.simpleSelectEvt();
     }
 
     // 탭 함수
@@ -42,7 +40,7 @@ export default class Layout {
 
         tabAllButtons.forEach(elem => {
 
-            elem.addEventListener('click', function({target}) {
+            elem.addEventListener('click', function ({target}) {
                 var nav = target.closest('.nav-box');
                 const tabId = target.dataset.tabTarget;
                 if (!tabId) return;
@@ -67,7 +65,7 @@ export default class Layout {
             return;
         }
         sideMenuToggle.dataset.boundSidebarToggle = 'true';
-        sideMenuToggle.addEventListener('click', function() {
+        sideMenuToggle.addEventListener('click', function () {
             const mainElement = document.querySelector('.main');
             if (!mainElement) {
                 return;
@@ -79,7 +77,7 @@ export default class Layout {
             }
         });
 
-        document.querySelector('.close_sidebar').addEventListener('click', function() {
+        document.querySelector('.close_sidebar').addEventListener('click', function () {
             const mainElement = document.querySelector('.main');
             mainElement.classList.add('sidebarHide');
         })
@@ -94,12 +92,12 @@ export default class Layout {
         if (!root) {
             return;
         }
-        root.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function(toggle) {
+        root.querySelectorAll('[data-bs-toggle="collapse"]').forEach(function (toggle) {
             if (toggle.dataset.boundCollapseIcon === 'true') {
                 return;
             }
             toggle.dataset.boundCollapseIcon = 'true';
-            toggle.addEventListener('click', function() {
+            toggle.addEventListener('click', function () {
                 const chevron = this.querySelector('.fa-caret-down');
                 if (chevron) {
                     const nextRotation = chevron.style.transform === 'rotate(0deg)' ? 'rotate(-90deg)' : 'rotate(0deg)';
@@ -115,12 +113,12 @@ export default class Layout {
         if (!root) {
             return;
         }
-        root.querySelectorAll('.select-to-input').forEach(function(select) {
+        root.querySelectorAll('.select-to-input').forEach(function (select) {
             if (select.dataset.boundSelectToInput === 'true') {
                 return;
             }
             select.dataset.boundSelectToInput = 'true';
-            select.addEventListener('change', function() {
+            select.addEventListener('change', function () {
                 const targetId = this.getAttribute('data-target');
                 const targetInput = document.getElementById(targetId);
                 if (targetInput) {
@@ -137,17 +135,17 @@ export default class Layout {
         if (!root) {
             return;
         }
-        root.querySelectorAll('.email').forEach(function(container) {
+        root.querySelectorAll('.email').forEach(function (container) {
             if (container.dataset.boundEmail === 'true') {
                 return;
             }
             container.dataset.boundEmail = 'true';
             const textInputs = container.querySelectorAll('input');
-            textInputs.forEach(function(input) {
-                input.addEventListener('focus', function() {
+            textInputs.forEach(function (input) {
+                input.addEventListener('focus', function () {
                     container.classList.add('on');
                 });
-                input.addEventListener('blur', function() {
+                input.addEventListener('blur', function () {
                     container.classList.remove('on');
                 });
             });
@@ -192,13 +190,13 @@ export default class Layout {
         const layout = this;
         const modals = root.querySelectorAll('.modal');
 
-        modals.forEach(function(modal) {
+        modals.forEach(function (modal) {
             if (modal.dataset.boundModalAjax === 'true') {
                 return;
             }
             modal.dataset.boundModalAjax = 'true';
 
-            modal.addEventListener('show.bs.modal', function(event) {
+            modal.addEventListener('show.bs.modal', function (event) {
                 const trigger = event.relatedTarget;
                 if (!trigger) {
                     return;
@@ -214,16 +212,17 @@ export default class Layout {
                 }
 
                 modalContent.innerHTML = layout.buildModalLoading();
-                layout.loadModalContent(requestUrl).then(function(html) {
-                    modalContent.innerHTML = html;
+                layout.loadModalContent(requestUrl).then(function (html) {
+                    console.log('---- ' , html);
+                    modalContent.innerHTML = html || layout.buildModalError();
                     layout.rebindDynamic(modal);
                     layout.syncModalLabel(modal);
-                }).catch(function(error) {
+                }).catch(function (error) {
                     modalContent.innerHTML = layout.buildModalError(error);
                 });
             });
 
-            modal.addEventListener('hidden.bs.modal', function() {
+            modal.addEventListener('hidden.bs.modal', function () {
                 const modalContent = modal.querySelector('.modal-content');
                 if (!modalContent) {
                     return;
@@ -282,6 +281,10 @@ export default class Layout {
     }
 
     setButtonLoading(button, isLoading) {
+        if (!(button instanceof HTMLElement)) {
+            return;
+        }
+
         if (isLoading) {
             if (!button.dataset.prevDisabled) {
                 button.dataset.prevDisabled = button.disabled ? 'true' : 'false';
@@ -309,7 +312,7 @@ export default class Layout {
             headers: {
                 'X-Requested-With': 'XMLHttpRequest'
             }
-        }).then(function(response) {
+        }).then(function (response) {
             if (!response.ok) {
                 const message = '모달 데이터를 불러오지 못했습니다. (' + response.status + ')';
                 throw new Error(message);
@@ -337,7 +340,7 @@ export default class Layout {
     buildModalUrl(baseUrl, trigger) {
         const url = new URL(baseUrl, window.location.origin);
         const params = this.collectModalParams(trigger);
-        params.forEach(function(value, key) {
+        params.forEach(function (value, key) {
             url.searchParams.append(key, value);
         });
         return url.toString();
@@ -374,6 +377,37 @@ export default class Layout {
         }
     }
 
+    simpleSelectEvt() {
+        document.querySelectorAll('.simple-select').forEach(function (select) {
+            const trigger = select.querySelector('.simple-select-trigger');
+            const options = select.querySelector('.simple-select-options');
+            const label   = select.querySelector('.selected-label');
+            const hidden  = select.querySelector('input[type="hidden"]');
+
+            trigger.addEventListener('click', function () {
+                options.classList.toggle('show');
+            });
+
+            options.querySelectorAll('li').forEach(li => {
+                li.addEventListener('click', () => {
+                    select.querySelectorAll('li').forEach(l => l.classList.remove('active'));
+                    li.classList.add('active');
+
+                    label.textContent = li.textContent;
+                    if (hidden) {
+                        hidden.value = li.dataset.value;
+                    }
+
+                    options.classList.remove('show');
+                });
+            });
+
+            document.addEventListener('click', (e) => {
+                if (!select.contains(e.target)) options.classList.remove('show');
+            });
+        })
+    }
+
     /**
      * content 로드 후 이벤트 동작
      */
@@ -386,626 +420,52 @@ export default class Layout {
         this.bindEmailFocus(root);
         this.bindCardEdit(root);
         this.bindModalLoader(root);
-        this.bindAppLaunchers(root);
         this.showTab(root);
+        this.simpleSelectEvt();
+        this.renderSuggest();
     }
 
-    createAppsState() {
-        return {
-            storageKey: 'tx24:apps',
-            maxItems: 12,
-            items: []
-        };
-    }
-
-    bindAppLaunchers(root = document) {
-        if (!root) {
-            return;
-        }
-        root.querySelectorAll('[data-tab-url]').forEach((trigger) => {
-            if (trigger.dataset.boundAppLauncher === 'true') {
-                return;
-            }
-            trigger.dataset.boundAppLauncher = 'true';
-            trigger.addEventListener('click', (event) => {
-                event.preventDefault();
-                this.openAppFromTrigger(trigger);
-            });
-        });
-    }
-
-    openAppFromTrigger(trigger) {
-        if (!trigger) {
-            return;
-        }
-        const url = trigger.getAttribute('data-tab-url') || trigger.getAttribute('href');
-        if (!url) {
-            return;
-        }
-        const tabIdAttr = trigger.getAttribute('data-tab-id');
-        const tabTitle = trigger.getAttribute('data-tab-title') || trigger.textContent.trim();
-        const descriptor = {
-            id: tabIdAttr || this.sanitizeId(url),
-            title: tabTitle || '저장된 화면',
-            url: url
-        };
-
-        document.querySelectorAll('.nav-link').forEach((link) => {
-            if (link !== trigger) {
-                link.classList.remove('active');
-            }
-        });
-        trigger.classList.add('active');
-
-        this.syncCurrentViewSnapshot();
-        this.currentDescriptor = descriptor;
-        this.loadAppContent(descriptor);
-    }
-
-    loadAppContent(descriptor) {
-        if (!descriptor || !descriptor.url) {
+    // suggest 렌더링
+    renderSuggest() {
+        const suggestElems = document.querySelectorAll('.client-suggest-panel');
+        if (!suggestElems || suggestElems.length === 0) {
             return;
         }
 
-        if (typeof axios === 'undefined') {
-            window.location.href = descriptor.url;
-            return;
-        }
-
-        this.showLoading('화면을 불러오는 중입니다...');
-        axios.get(descriptor.url, {
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        }).then((response) => {
-            this.hideLoading();
-            const html = response.data;
-            const snapshot = {
-                id: descriptor.id,
-                title: descriptor.title,
-                url: descriptor.url,
-                html: ''
-            };
-            this.currentDescriptor = descriptor;
-            this.currentView = snapshot;
-            this.renderMainContent(html, { resetForms: true, source: 'server' });
-            const hydratedHtml = this.getCurrentContentHTML();
-            snapshot.html = hydratedHtml;
-            const record = this.saveApp(snapshot);
-            if (record) {
-                this.currentView = record;
-            }
-        }).catch((error) => {
-            this.hideLoading();
-            const message = error && error.message ? error.message : '콘텐츠를 불러오지 못했습니다.';
-            this.renderMainContent(this.buildAppError(message), { resetForms: false, source: 'error' });
-        });
-    }
-
-    renderMainContent(html, options = {}) {
-        const { resetForms = false } = options;
-        const contentArea = document.getElementById('main-content-area');
-        if (!contentArea) {
-            return;
-        }
-
-        const template = document.createElement('template');
-        template.innerHTML = html;
-
-        const fragment = template.content.cloneNode(true);
-        const scripts = Array.from(fragment.querySelectorAll('script'));
-        scripts.forEach((script) => {
-            script.parentNode.removeChild(script);
+        suggestElems.forEach(elem => {
+            const originInput = elem.closest('.search-group').querySelector('input')
+            originInput.addEventListener('input', (elem) => this.SuggestManager.render(elem))
         });
 
-        contentArea.innerHTML = '';
-        contentArea.appendChild(fragment);
-        if (resetForms) {
-            contentArea.querySelectorAll('form').forEach((form) => {
-                try {
-                    form.reset();
-                } catch (error) {
-                    console.warn('폼 리셋 중 오류가 발생했습니다.', error);
-                }
-            });
-        }
-        this.rebindDynamic(contentArea);
-        this.datepickerRender();
-
-        scripts.forEach((script) => {
-            const cloned = document.createElement('script');
-            Array.from(script.attributes).forEach((attr) => {
-                cloned.setAttribute(attr.name, attr.value);
-            });
-            if (script.textContent) {
-                cloned.textContent = script.textContent;
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.client-suggest-panel')) {
+                suggestElems.forEach((elem) => elem.classList.remove('active'));
             }
-            contentArea.appendChild(cloned);
-        });
+        })
     }
-
-    buildAppError(message) {
-        const safeMessage = message || '잠시 후 다시 시도해 주세요.';
-        return '<div class="app-error-state" role="alert">' +
-            '<div class="app-error-icon" aria-hidden="true"><i class="fa-solid fa-triangle-exclamation"></i></div>' +
-            '<div class="app-error-body">' +
-            '<p class="app-error-title">콘텐츠를 가져오지 못했습니다.</p>' +
-            '<p class="app-error-message">' + safeMessage + '</p>' +
-            '</div>' +
-            '</div>';
-    }
-
-    saveApp(app) {
-        if (!app || !app.id) {
-            return;
-        }
-        const items = this.appsState.items;
-        const existingIndex = items.findIndex((item) => item.id === app.id);
-        if (existingIndex !== -1) {
-            items.splice(existingIndex, 1);
-        }
-        const record = {
-            id: app.id,
-            title: (app.title || '').trim() || '저장된 화면',
-            url: app.url || '',
-            html: app.html || '',
-            savedAt: Date.now(),
-            snapshotAt: Date.now()
-        };
-        items.unshift(record);
-
-        if (items.length > this.appsState.maxItems) {
-            items.length = this.appsState.maxItems;
-        }
-
-        this.persistApps();
-        if (this.isAppsOverlayOpen()) {
-            this.renderAppsOverlay();
-        }
-        this.currentView = record;
-        return record;
-    }
-
-    removeSavedApp(appId) {
-        if (!appId) {
-            return;
-        }
-        this.appsState.items = this.appsState.items.filter((item) => item.id !== appId);
-        this.persistApps();
-        this.renderAppsOverlay();
-        if (this.currentView && this.currentView.id === appId) {
-            this.currentView = null;
-        }
-    }
-
-    clearSavedApps() {
-        this.appsState.items = [];
-        this.persistApps();
-        this.renderAppsOverlay();
-        this.currentView = null;
-    }
-
-    activateSavedApp(appId) {
-        if (!appId) {
-            return;
-        }
-        const items = this.appsState.items;
-        const index = items.findIndex((item) => item.id === appId);
-        if (index === -1) {
-            return null;
-        }
-        let app;
-        if (index === 0) {
-            app = items[0];
-        } else {
-            [app] = items.splice(index, 1);
-            items.unshift(app);
-        }
-        this.persistApps();
-        return app;
-    }
-
-    persistApps() {
-        if (typeof localStorage === 'undefined') {
-            return;
-        }
-        try {
-            localStorage.setItem(this.appsState.storageKey, JSON.stringify(this.appsState.items));
-        } catch (error) {
-            console.warn('앱 정보를 저장하지 못했습니다.', error);
-        }
-    }
-
-    restoreSavedApps() {
-        if (typeof localStorage !== 'undefined') {
-            try {
-                const raw = localStorage.getItem(this.appsState.storageKey);
-                if (raw) {
-                    const parsed = JSON.parse(raw);
-                    if (Array.isArray(parsed)) {
-                        this.appsState.items = parsed.slice(0, this.appsState.maxItems);
-                    }
-                }
-            } catch (error) {
-                console.warn('저장된 앱 정보를 불러오지 못했습니다.', error);
-            }
-        }
-        this.renderAppsOverlay();
-    }
-
-    initAppsOverlay() {
-        if (this.appsOverlay && document.body.contains(this.appsOverlay)) {
-            return;
-        }
-        this.appsOverlay = document.getElementById('apps-overlay');
-        if (!this.appsOverlay) {
-            return;
-        }
-        this.appsGrid = this.appsOverlay.querySelector('[data-apps-grid]');
-        this.appsClearButton = this.appsOverlay.querySelector('[data-apps-clear]');
-        this.appsCloseButton = this.appsOverlay.querySelector('[data-apps-close]');
-
-        if (!this.appsOverlay.dataset.boundAppsOverlay) {
-            this.appsOverlay.dataset.boundAppsOverlay = 'true';
-            this.appsOverlay.addEventListener('click', (event) => {
-                if (event.target === this.appsOverlay) {
-                    this.closeAppsOverlay();
-                }
-            });
-        }
-
-        if (this.appsClearButton && this.appsClearButton.dataset.boundAppsClear !== 'true') {
-            this.appsClearButton.dataset.boundAppsClear = 'true';
-            this.appsClearButton.addEventListener('click', () => {
-                this.clearSavedApps();
-            });
-        }
-
-        if (this.appsCloseButton && this.appsCloseButton.dataset.boundAppsClose !== 'true') {
-            this.appsCloseButton.dataset.boundAppsClose = 'true';
-            this.appsCloseButton.addEventListener('click', () => {
-                this.closeAppsOverlay();
-            });
-        }
-    }
-
-    renderAppsOverlay() {
-        if (!this.appsGrid) {
-            return;
-        }
-        this.appsGrid.innerHTML = '';
-        const { items, maxItems } = this.appsState;
-        for (let index = 0; index < maxItems; index += 1) {
-            const app = items[index];
-            const tile = this.createAppTile(app, index);
-            this.appsGrid.appendChild(tile);
-        }
-    }
-
-    getSavedApp(appId) {
-        if (!appId) {
-            return null;
-        }
-        return this.appsState.items.find((item) => item.id === appId) || null;
-    }
-
-    updateSavedApp(appId, updater, { rerender = false } = {}) {
-        if (!appId) {
-            return null;
-        }
-        const items = this.appsState.items;
-        const index = items.findIndex((item) => item.id === appId);
-        if (index === -1) {
-            return null;
-        }
-        const base = items[index];
-        const next = typeof updater === 'function' ? updater({ ...base }) : { ...base, ...updater };
-        items[index] = next;
-        this.persistApps();
-        if (rerender && this.isAppsOverlayOpen()) {
-            this.renderAppsOverlay();
-        }
-        return next;
-    }
-
-    getCurrentContentHTML() {
-        const contentArea = document.getElementById('main-content-area');
-        if (!contentArea) {
-            return '';
-        }
-        const clone = contentArea.cloneNode(true);
-        const originalControls = contentArea.querySelectorAll('input, textarea, select');
-        const cloneControls = clone.querySelectorAll('input, textarea, select');
-        originalControls.forEach((control, index) => {
-            const cloneControl = cloneControls[index];
-            if (!cloneControl) {
-                return;
-            }
-            if (control instanceof HTMLInputElement && cloneControl instanceof HTMLInputElement) {
-                switch (control.type) {
-                    case 'checkbox':
-                    case 'radio':
-                        cloneControl.checked = control.checked;
-                        if (control.checked) {
-                            cloneControl.setAttribute('checked', 'checked');
-                        } else {
-                            cloneControl.removeAttribute('checked');
-                        }
-                        break;
-                    case 'file':
-                        cloneControl.value = '';
-                        cloneControl.removeAttribute('value');
-                        break;
-                    default:
-                        cloneControl.value = control.value;
-                        cloneControl.setAttribute('value', control.value);
-                        break;
-                }
-            } else if (control instanceof HTMLTextAreaElement && cloneControl instanceof HTMLTextAreaElement) {
-                cloneControl.value = control.value;
-                cloneControl.textContent = control.value;
-            } else if (control instanceof HTMLSelectElement && cloneControl instanceof HTMLSelectElement) {
-                const options = cloneControl.options;
-                Array.from(options).forEach((option, idx) => {
-                    option.selected = control.options[idx] ? control.options[idx].selected : option.selected;
-                    if (option.selected) {
-                        option.setAttribute('selected', 'selected');
-                    } else {
-                        option.removeAttribute('selected');
-                    }
-                });
-            }
-        });
-
-        clone.querySelectorAll('[data-skip-app-snapshot]').forEach((node) => node.remove());
-        clone.querySelectorAll('script').forEach((node) => node.remove());
-        return clone.innerHTML.trim();
-    }
-
-    syncCurrentViewSnapshot() {
-        if (!this.currentView || !this.currentView.id) {
-            return;
-        }
-        const html = this.getCurrentContentHTML();
-        if (!html) {
-            return;
-        }
-        this.currentView.html = html;
-        const updated = this.updateSavedApp(this.currentView.id, { html, snapshotAt: Date.now() });
-        if (updated) {
-            this.currentView = updated;
-        }
-    }
-
-    buildPreviewHTML(html) {
-        if (!html) {
-            return '<div class="apps-preview-empty">미리보기 없음</div>';
-        }
-        const template = document.createElement('template');
-        template.innerHTML = html;
-        template.content.querySelectorAll('script').forEach((node) => node.remove());
-        const container = document.createElement('div');
-        container.appendChild(template.content.cloneNode(true));
-        const sanitized = container.innerHTML.trim();
-        if (!sanitized) {
-            return '<div class="apps-preview-empty">미리보기 없음</div>';
-        }
-        return '<div class="apps-preview-frame"><div class="apps-preview-content">' + sanitized + '</div></div>';
-    }
-
-    createAppTile(app, index) {
-        const tile = document.createElement('div');
-        tile.className = 'apps-tile' + (app ? ' is-filled' : ' is-empty');
-        tile.setAttribute('data-app-slot', String(index + 1));
-
-        const body = document.createElement('div');
-        body.className = 'apps-tile-body';
-
-        if (app) {
-            tile.setAttribute('data-app-id', app.id);
-            const preview = document.createElement('div');
-            preview.className = 'apps-tile-preview';
-            preview.innerHTML = this.buildPreviewHTML(app.html);
-            this.schedulePreviewFit(preview);
-            body.appendChild(preview);
-
-            const footer = document.createElement('div');
-            footer.className = 'apps-tile-footer';
-
-            const title = document.createElement('span');
-            title.className = 'apps-tile-title';
-            title.textContent = app.title || '저장된 화면';
-
-            const deleteButton = document.createElement('button');
-            deleteButton.type = 'button';
-            deleteButton.className = 'apps-tile-delete btn btn-sm btn-light';
-            deleteButton.setAttribute('data-app-delete', app.id);
-            deleteButton.setAttribute('aria-label', '저장된 화면 삭제');
-            deleteButton.innerHTML = '<i class="fa-solid fa-trash"></i>';
-
-            footer.appendChild(title);
-            footer.appendChild(deleteButton);
-            tile.appendChild(body);
-            tile.appendChild(footer);
-
-            deleteButton.addEventListener('click', (event) => {
-                event.stopPropagation();
-                this.removeSavedApp(app.id);
-            });
-
-            tile.addEventListener('click', () => {
-                const activeApp = this.activateSavedApp(app.id) || app;
-                if (activeApp) {
-                    this.currentDescriptor = {
-                        id: activeApp.id,
-                        title: activeApp.title,
-                        url: activeApp.url
-                    };
-                    this.currentView = { ...activeApp };
-                    this.renderMainContent(activeApp.html || '', { resetForms: false, source: 'snapshot' });
-                    const hydratedHtml = this.getCurrentContentHTML();
-                    this.currentView.html = hydratedHtml;
-                    this.updateSavedApp(activeApp.id, { html: hydratedHtml, snapshotAt: Date.now() });
-                }
-                this.closeAppsOverlay();
-            });
-        } else {
-            const placeholder = document.createElement('div');
-            placeholder.className = 'apps-tile-placeholder';
-            placeholder.innerHTML = '<span class="apps-slot-index">' + (index + 1) + '</span>' +
-                '<span class="apps-slot-empty">저장된 화면이 없습니다.</span>';
-            body.appendChild(placeholder);
-            tile.appendChild(body);
-
-            const footer = document.createElement('div');
-            footer.className = 'apps-tile-footer';
-            const title = document.createElement('span');
-            title.className = 'apps-slot-empty-label';
-            title.textContent = '빈 슬롯';
-            footer.appendChild(title);
-            tile.appendChild(footer);
-        }
-
-        return tile;
-    }
-
-    schedulePreviewFit(preview) {
-        if (!preview) {
-            return;
-        }
-        requestAnimationFrame(() => {
-            this.fitPreview(preview);
-        });
-    }
-
-    fitPreview(preview) {
-        if (!preview) {
-            return;
-        }
-        const frame = preview.querySelector('.apps-preview-frame');
-        const content = frame ? frame.querySelector('.apps-preview-content') : null;
-        if (!frame || !content) {
-            return;
-        }
-        content.style.transform = 'scale(1)';
-        content.style.margin = '0';
-        const frameStyles = window.getComputedStyle(frame);
-        const frameWidth = Math.max(
-            0,
-            frame.clientWidth - parseFloat(frameStyles.paddingLeft || '0') - parseFloat(frameStyles.paddingRight || '0')
-        );
-        const frameHeight = Math.max(
-            0,
-            frame.clientHeight - parseFloat(frameStyles.paddingTop || '0') - parseFloat(frameStyles.paddingBottom || '0')
-        );
-        const contentRect = content.getBoundingClientRect();
-        const contentWidth = content.scrollWidth || contentRect.width;
-        const contentHeight = content.scrollHeight || contentRect.height;
-        if (!contentWidth || !contentHeight || !frameWidth || !frameHeight) {
-            return;
-        }
-        const scale = Math.min(frameWidth / contentWidth, frameHeight / contentHeight, 1);
-        const scaledWidth = contentWidth * scale;
-        const scaledHeight = contentHeight * scale;
-        const offsetX = Math.max(0, (frameWidth - scaledWidth) / 2);
-        const offsetY = Math.max(0, (frameHeight - scaledHeight) / 2);
-        const translateX = offsetX / scale;
-        const translateY = offsetY / scale;
-        content.style.transformOrigin = 'top left';
-        content.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`;
-    }
-
-    handleAppsResize() {
-        if (!this.isAppsOverlayOpen() || !this.appsGrid) {
-            return;
-        }
-        this.appsGrid.querySelectorAll('.apps-tile-preview').forEach((preview) => this.fitPreview(preview));
-    }
-
-    openTab(force) {
-        if (!this.appsOverlay) {
-            return;
-        }
-        const shouldOpen = typeof force === 'boolean' ? force : !this.isAppsOverlayOpen();
-        if (shouldOpen) {
-            this.openAppsOverlay();
-        } else {
-            this.closeAppsOverlay();
-        }
-    }
-
-    openAppsOverlay() {
-        if (!this.appsOverlay) {
-            return;
-        }
-        this.syncCurrentViewSnapshot();
-        this.renderAppsOverlay();
-        this.appsOverlay.classList.add('is-open');
-        this.appsOverlay.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('apps-overlay-open');
-        document.addEventListener('keydown', this.handleAppsOverlayKeyDown);
-        window.addEventListener('resize', this.handleAppsResize);
-        requestAnimationFrame(() => {
-            if (!this.appsGrid) {
-                return;
-            }
-            this.appsGrid.querySelectorAll('.apps-tile-preview').forEach((preview) => this.fitPreview(preview));
-        });
-    }
-
-    closeAppsOverlay() {
-        if (!this.appsOverlay) {
-            return;
-        }
-        this.appsOverlay.classList.remove('is-open');
-        this.appsOverlay.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('apps-overlay-open');
-        document.removeEventListener('keydown', this.handleAppsOverlayKeyDown);
-        window.removeEventListener('resize', this.handleAppsResize);
-    }
-
-    isAppsOverlayOpen() {
-        return this.appsOverlay ? this.appsOverlay.classList.contains('is-open') : false;
-    }
-
-    handleAppsOverlayKeyDown(event) {
-        if (event.key === 'Escape') {
-            this.closeAppsOverlay();
-        }
-    }
-
-    sanitizeId(value) {
-        return (value || '').replace(/[^\w-]/g, '_');
-    }
-
 
     blockBrowserEvt() {
-        document.addEventListener('keydown', function (e) {
-            if (
-                e.key === 'F5' ||
-                (e.ctrlKey && e.key === 'r') ||
-                (e.metaKey && e.key === 'r')
-            ) {
-                e.preventDefault();
-                alert('새로고침이 차단되어 있습니다.');
-            }
-        });
 
-        // 마우스 오른쪽 버튼 새로고침 메뉴 방지 (일부 환경)
-        window.addEventListener('beforeunload', function (e) {
-            // 페이지 이탈 경고
-            e.preventDefault();
-            e.returnValue = '';
-        });
+        // document.addEventListener('keydown', function (e) {
+        //     if (
+        //         e.key === 'F5' ||
+        //         (e.ctrlKey && e.key === 'r') ||
+        //         (e.metaKey && e.key === 'r')
+        //     ) {
+        //         e.preventDefault();
+        //         alert('새로고침이 차단되어 있습니다.');
+        //     }
+        // });
 
         history.pushState(null, '', location.href);
         window.onpopstate = function () {
             history.pushState(null, '', location.href);
-            alert('뒤로가기가 차단되어 있습니다.');
+            layout.Overlay.tabOpen();
         };
     }
 
     datepickerRender() {
+        console.log('datepickerRender datepickerRender')
         document.querySelectorAll('.tx-datepicker').forEach((elem) => {
             const picker = layout.setOption(elem, "picker");
             let val;
@@ -1020,25 +480,27 @@ export default class Layout {
                     onSelect: function (formattedDate, date, inst) {
 
                         /* search box Input처리 */
-                        if(elem) {
+                        if (elem) {
                             console.log('elem', elem)
-                            if(picker.range){
+                            if (picker.range) {
                                 console.log('date', date)
                                 console.log(elem.value)
                                 console.log(util.dateUtil.toString(date[0]))
-                                if(date.length < 2) {
+                                if (date.length < 2) {
                                     elem.value = util.dateUtil.toString(date[0]) + ' - ' + util.dateUtil.toString(date[0]);
                                 } else {
                                     elem.value = util.dateUtil.toString(date[0]) + ' - ' + util.dateUtil.toString(date[1]);
                                 }
-                            }else{
-                                if(formattedDate){
-                                    elem.value = formattedDate +" - " + formattedDate;
+                            } else {
+                                if (formattedDate) {
+                                    elem.value = formattedDate + " - " + formattedDate;
                                 }
                             }
 
                             search.addTag(elem);
-                            if(date.length > 1) {inst.hide();}
+                            if (date.length > 1) {
+                                inst.hide();
+                            }
                         }
                     }
                 };
@@ -1049,7 +511,9 @@ export default class Layout {
 
             // 기본값
             switch (picker.default) {
-                case "today" : val = util.dateUtil.getNowDate(picker.separator); break;
+                case "today" :
+                    val = util.dateUtil.getNowDate(picker.separator);
+                    break;
 
             }
 
@@ -1065,7 +529,7 @@ export default class Layout {
     setOption(elem, type) {
         let option = {};
         if (elem) {
-            if(type === "picker"){
+            if (type === "picker") {
                 option['format'] = elem.dataset.format;
                 option['separator'] = elem.dataset.separator;
                 option['range'] = elem.dataset.range === 'Y';
@@ -1079,4 +543,308 @@ export default class Layout {
         return option;
     }
 
+
+    /*
+     * 페이지 히스토리
+     */
+    createTabManager() {
+        let contentArea = null;
+        const state = {
+            tabs: new Map(),
+            activeUrl: null,
+            cache: new Map(),
+            images: new Map()
+        }
+
+        function getState() {
+            return state;
+        }
+
+        function init() {
+            contentArea = document.getElementById('main-content-area');
+
+            if (!contentArea) {
+                return;
+            }
+
+            document.addEventListener('click', onTriggerClick);
+        }
+
+        // NavLink 혹은 , 탭 선택시 open 함수
+        function open({title, url}) {
+            if (!title && !url) {
+                return;
+            }
+
+
+            const tab = {
+                title: title,
+                url: url,
+            };
+
+            state.tabs.set(url, tab);
+            state.activeUrl = url;
+            activate(url);
+        }
+
+        function activate(tabUrl) {
+            layout.Overlay.close();
+
+            if (!state.tabs.has(tabUrl)) {
+                return;
+            }
+
+            state.activeUrl = tabUrl;
+            const cached = state.cache.get(tabUrl); // 이미 가지고 있는 페이지인 경우
+
+            if (cached) {
+                renderContent(cached);
+                return;
+            }
+
+            loadContent(tabUrl);
+        }
+
+
+        function onTriggerClick(event) {
+            event.preventDefault();
+
+            // tab생성에 필요한 데이터
+            const linkElem = event.target.closest('.nav-link');
+            if (!linkElem) {
+                return;
+            }
+
+            const {tabUrl, tabTitle} = linkElem.dataset;
+            if (!tabUrl || !tabTitle) {
+                return;
+            }
+
+            open({
+                title: tabTitle,
+                url: tabUrl,
+            });
+
+            document.querySelectorAll('.nav-link').forEach(function (link) {
+                link.classList.remove('active');
+            });
+
+            linkElem.classList.add('active');
+        }
+
+        function renderContent(html) {
+            if (!contentArea) {
+                return;
+            }
+
+            const template = document.createElement('template');
+            template.innerHTML = html;
+
+            // JS 동적 로딩
+            const fragment = template.content.cloneNode(true);
+            const scripts = Array.from(fragment.querySelectorAll('script'));
+            scripts.forEach(function (script) {
+                script.parentNode.removeChild(script);
+            });
+
+            contentArea.innerHTML = '';
+            contentArea.appendChild(fragment);
+            layout.rebindDynamic(contentArea);
+
+            scripts.forEach(function (script) {
+                const cloned = document.createElement('script');
+                Array.from(script.attributes).forEach(function (attr) {
+                    cloned.setAttribute(attr.name, attr.value);
+                });
+                if (script.textContent) {
+                    cloned.textContent = script.textContent;
+                }
+                contentArea.appendChild(cloned);
+            });
+
+            // datepicker
+            layout.datepickerRender();
+            capturePage(state.activeUrl);
+        }
+
+
+        function loadContent(url) {
+            const tab = state.tabs.get(url);
+            console.log('loadContent ' ,tab)
+            axios.get(tab.url)
+                .then(({data}) => {
+                    state.cache.set(url, data);
+                    renderContent(data);
+                })
+                .catch(error => {
+                    console.error('loadContent ERROR ', error)
+                    util.toastify.warning('컨텐츠를 불러오는데 실패했습니다.');
+                    state.tabs.delete(url);
+                    renderError(tab.url);
+                });
+        }
+
+        function renderError(id, message) {
+            if (!contentArea) {
+                return;
+            }
+            const errorText = message || '컨텐츠를 불러오는 데 실패했습니다.';
+            contentArea.innerHTML = '' +
+                '<div class="tab-feedback error">' +
+                '<p>' + errorText + '</p>' +
+                '<button type="button" class="btn btn-blue tab-retry-btn" data-tab-retry="' + id + '">다시 시도</button>' +
+                '</div>';
+        }
+
+        function capturePage(url) {
+            html2canvas(contentArea, {
+                backgroundColor: '#F1F2F4',
+                scale: 1.5,
+                logging: false,
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                const imageData = canvas.toDataURL('image/png', 0.95);
+                state.images.set(url, imageData);
+            }).catch(err => {
+                console.error('캡처 실패:', err);
+            });
+        }
+
+        function deleteApp(elem) {
+            const card = elem.closest('.app-card');
+            const url = card.dataset.url;
+
+            if (!card && !url) {
+                return;
+            }
+
+            if (state.tabs.size === 1) {
+                util.toastify.info('최소 1개에 페이지는 남겨두어야 합니다.');
+                return;
+            }
+
+            if (state.tabs.has(url)) {
+                state.tabs.delete(url);
+                state.cache.delete(url);
+                state.images.delete(url);
+                card.remove();
+            }
+
+        }
+
+
+        return {
+            init,
+            open,
+            activate,
+            getState,
+            deleteApp
+        }
+    }
+
+
+    /**
+     * overlay 함수
+     */
+    overlay() {
+        let overlayLayer = null;
+
+        function init() {
+            overlayLayer = document.getElementById('launcherModal');
+        }
+
+        function open() {
+            if (!overlayLayer) return;
+            overlayLayer.classList.add('active');
+        }
+
+        function close() {
+            if (!overlayLayer) return;
+            overlayLayer.classList.remove('active');
+        }
+
+        function loading(isLoading, message = 'Loading...') {
+            if (!overlayLayer) return;
+            if (isLoading) {
+                open();
+                overlayLayer.classList.add('loading');
+                // TODO css 및 html 추가 필요
+            } else {
+                overlayLayer.classList.remove('loading');
+                close();
+            }
+        }
+
+
+        function renderContent(content) {
+            if (!overlayLayer) return;
+            overlayLayer.innerHTML = content;
+        }
+
+
+        function tabOpen() {
+            open();
+            renderTabHeader();
+            renderTabContent();
+        }
+
+
+        function renderTabHeader() {
+            overlayLayer.innerHTML = `<div class="launcher-content">
+               <button class="close-launcher" onClick="layout.Overlay.close()">×</button>
+               <div class="launcher-header-section">
+                   <h1 class="launcher-title">Apps History</h1>
+                   <p class="launcher-subtitle">방문한 페이지를 선택하여 빠르게 이동하세요</p>
+                   <button class="clear-all-btn" onClick="" id="clearAllBtn"
+                           style="display: none;">
+                       🗑️ 전체 기록 삭제
+                   </button>
+               </div>`;
+        }
+
+        function renderTabContent() {
+            const {tabs, images} = layout.TabManager.getState();
+            document.querySelector('.launcher-content')
+                .insertAdjacentHTML('beforeend', `
+                  <div class="apps-grid" id="appsGrid">
+                    ${renderTab()}
+                  </div>
+                `);
+        }
+
+        function renderTab() {
+            const {tabs, images} = layout.TabManager.getState();
+
+            if (tabs.size === 0) {
+                return `
+                      <div class="empty-state">
+                        <div class="empty-state-icon">📭</div>
+                        <div class="empty-state-title">아직 방문한 페이지가 없습니다</div>
+                        <div class="empty-state-text">사이드바 메뉴에서 페이지를 방문해보세요!</div>
+                      </div>
+                    `;
+            }
+
+            return [...tabs].map(([url, {title}]) => {
+                const image = images.get(url) || "";
+                return `
+                      <div class="app-card" data-url="${url}" onclick="layout.TabManager.activate('${url}')">
+                        <button class="delete-app-btn" onclick="event.stopPropagation(); layout.TabManager.deleteApp(this);">×</button>
+                        <div class="app-title">${title}</div>
+                        <div class="app-preview"><img src='${image}' alt='${title}'></div>
+                      </div>
+                    `;
+            }).join('');
+        }
+
+        function isOpen() {
+            return overlayLayer?.classList.contains('active') ?? false;
+        }
+
+
+        return {
+            init, open, close, tabOpen, renderContent, isOpen
+        }
+    }
 }

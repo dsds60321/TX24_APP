@@ -6,6 +6,7 @@
         <title th:text="${pageTitle} ?: 'TX24'">TX24</title>
 
         <!-- CSS -->
+        <link th:href="@{/assets/css/toastify.min.css}" rel="stylesheet" />
         <link th:href="@{/assets/css/components.css}" rel="stylesheet" />
         <link th:href="@{/assets/css/main.css}" rel="stylesheet" />
         <link th:href="@{/assets/css/datepicker.min.css}" rel="stylesheet" />
@@ -34,19 +35,8 @@
                         </div>
                     </div>
 
-                    <div class="apps-overlay" id="apps-overlay" aria-hidden="true">
-                        <div class="apps-overlay-inner" role="dialog" aria-modal="true" aria-label="저장된 화면">
-                            <div class="apps-overlay-header">
-                                <h2 class="apps-overlay-title mb-0">저장된 화면</h2>
-                                <div class="apps-overlay-actions">
-                                    <button type="button" class="btn btn-outline-light btn-sm" data-apps-clear>전체 삭제</button>
-                                    <button type="button" class="btn btn-light btn-sm apps-overlay-close" data-apps-close aria-label="닫기">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="apps-overlay-grid" data-apps-grid></div>
-                        </div>
+                    <!-- 레이아웃 HTML -->
+                    <div class="main-overlay" id="launcherModal">
                     </div>
                 </main>
             </div>
@@ -61,7 +51,9 @@
         <script th:src="@{/assets/js/bootstrap.bundle.min.js}"></script>
         <script th:src="@{/assets/js/axios.min.js}"></script>
         <script th:src="@{/assets/js/datepicker.js}"></script>
+        <script th:src="@{/assets/js/common/toastify.js}"></script>
         <script th:src="@{/assets/js/common/util.js}"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
         <script th:src="@{/assets/js/just-validate.production.min.js}"></script>
         <script type="module" th:src="@{/assets/js/common/layout.js}"></script>
         <script type="module" th:src="@{/assets/js/common/search.js}"></script>

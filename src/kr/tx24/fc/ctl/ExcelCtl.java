@@ -2,7 +2,7 @@ package kr.tx24.fc.ctl;
 
 import kr.tx24.fc.bean.SearchBean;
 import kr.tx24.fc.bean.TxResponse;
-import kr.tx24.fc.service.ExcelService;
+import kr.tx24.fc.service.ExcelSvc;
 import kr.tx24.fc.enums.MockNames;
 import kr.tx24.was.annotation.SessionIgnore;
 import org.slf4j.Logger;
@@ -20,9 +20,9 @@ import java.util.List;
 public class ExcelCtl {
 
 	private static final Logger logger = LoggerFactory.getLogger(ExcelCtl.class);
-	private final ExcelService excelSvc;
+	private final ExcelSvc excelSvc;
 
-	public ExcelCtl(ExcelService excelSvc) {
+	public ExcelCtl(ExcelSvc excelSvc) {
 		this.excelSvc = excelSvc;
 	}
 

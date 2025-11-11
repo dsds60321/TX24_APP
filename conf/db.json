@@ -1,7 +1,7 @@
 {
-  "jdbcurl"     : "jdbc:mariadb://TBDEVDB:3306/SYSLINK",
-  "username"    : "syslink",
-  "password"    : "syslink0907!",
+  "jdbcurl"     : "jdbc:mariadb://localhost:3306",
+  "username"    : "e2u",
+  "password"    : "12345",
   "driver"      : "org.mariadb.jdbc.Driver",
   "pool"        : "POOLNAME",
   "max"         : 10,

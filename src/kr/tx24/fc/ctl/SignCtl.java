@@ -1,11 +1,14 @@
 package kr.tx24.fc.ctl;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import kr.tx24.fc.bean.TxResponse;
 import kr.tx24.fc.enums.TxResultCode;
-import kr.tx24.fc.service.SignService;
+import kr.tx24.fc.service.SignSvc;
 import kr.tx24.lib.lang.IDUtils;
 import kr.tx24.lib.map.SharedMap;
 import kr.tx24.lib.redis.RedisUtils;
+import kr.tx24.was.annotation.Header;
 import kr.tx24.was.annotation.SessionIgnore;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,10 +24,10 @@ public class SignCtl {
 
     private static final Logger logger = LoggerFactory.getLogger(SignCtl.class);
 
-    private final SignService signService;
+    private final SignSvc signSvc;
 
-    public SignCtl(SignService signService) {
-        this.signService = signService;
+    public SignCtl(SignSvc signSvc) {
+        this.signSvc = signSvc;
     }
 
     @SessionIgnore
@@ -34,7 +37,7 @@ public class SignCtl {
         RedisUtils.set(csrf, "", Duration.ofMinutes(5).getSeconds());
         logger.info("set csrf : {} ", csrf);
         model.addAttribute("_csrf", csrf);
-        return "pages/sign/login";
+        return "pages/sign/login2";
     }
 
     /**
@@ -45,25 +48,28 @@ public class SignCtl {
     public @ResponseBody TxResponse<?> login(@RequestBody SharedMap<String, Object> param) {
         TxResponse<?> response = new TxResponse<>().link("/init").msg("아이디 또는 패스워드가 일치하지 않습니다.");
         response.code = TxResultCode.INVALID_REQUEST.getCode();
-        return signService.in(param, response);
+        return signSvc.in(param, response);
     }
 
     @SessionIgnore
     @PostMapping("/two-factor")
-    public String twoFactorAuthForm(@RequestParam("key") String key) {
-        signService.twoFactorAuth(key);
-        return "pages/sign/twoFactor";
+    public String twoFactorAuthForm(@RequestParam("_csrf") String _csrf, Model model) {
+        model.addAttribute("_csrf", _csrf);
+        signSvc.twoFactorAuth(_csrf);
+        return "pages/sign/twoFactor2";
     }
 
     @SessionIgnore
     @PostMapping("/two-factor/code/send")
-    public TxResponse<?> sendTwoFactorAuthCode(@RequestBody SharedMap<String, Object> param) {
-        return signService.isTwoFactorAuth(param) ? TxResponse.ok("2차 인증번호를 발송했습니다.") : TxResponse.fail("2차 인증번호 발송에 실패했습니다.");
+    public @ResponseBody TxResponse<?> sendTwoFactorAuthCode(@RequestBody SharedMap<String, Object> param) {
+        signSvc.sendTwoFactorAuth(param);
+        return TxResponse.okWithMsg("2차 인증번호를 발송했습니다.");
     }
 
     @SessionIgnore
-    @PostMapping("/two-factor/code/confirm")
-    public TxResponse<?> confirmTwoFactorAuthCode(@RequestBody SharedMap<String, Object> param) {
-        return signService.confirmTwoFactorAuth(param) ? TxResponse.ok("2차 인증번호 확인에 성공했습니다.") : TxResponse.fail("2차 인증번호 확인에 실패했습니다.");
+    @PostMapping("/two-factor/code/verify")
+    public @ResponseBody TxResponse<?> verifyTwoFactorAuthCode(HttpServletRequest request, HttpServletResponse response, @Header SharedMap<String,Object> headerMap, @RequestBody SharedMap<String, Object> param) {
+        signSvc.verifyTwoFactorAuth(request, response, headerMap, param);
+        return TxResponse.okWithMsg("2차 인증이 완료되었습니다.").link("/");
     }
 }

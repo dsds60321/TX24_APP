@@ -30,9 +30,10 @@ public class ExampleCtl {
 	@GetMapping("/login2fa")
     public String login2fa() {
         return "sample/login2fa"; 
-    }  
-	    
-	
+    }
+
+
+    @SessionIgnore
 	@GetMapping("/components")
     public String components() {
         return "sample/components"; 
@@ -67,21 +68,25 @@ public class ExampleCtl {
         return "sample/forms"; 
     }
 
+    @SessionIgnore
     @GetMapping("/modal/default")
     public String modalDefault(Model model) {
         return "sample/modal/default";
     }
 
+    @SessionIgnore
     @GetMapping("/modal/fail")
     public String modalFail(Model model) {
         return "sample/modal/fail";
     }
 
+    @SessionIgnore
     @GetMapping("/modal/tab")
     public String modalTab(Model model) {
         return "sample/modal/tabs";
     }
-	
+
+    @SessionIgnore
 	@GetMapping("/modal/form")
 	public String modalForm(Model model) {
         SharedMap<String, Object> map = new SharedMap<>();

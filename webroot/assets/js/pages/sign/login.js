@@ -10,7 +10,7 @@
 		},
 
 		cacheElements() {
-			this.form = document.querySelector('.login-form');
+			this.form = document.getElementById('loginForm');
 			if (this.form) {
 				this.form.setAttribute('novalidate', 'novalidate');
 			}
@@ -20,6 +20,7 @@
 			this.togglePasswordButton = document.querySelector('#togglePassword');
 			this.eyeIcon = document.querySelector('#eyeIcon');
 			this.errorField = document.querySelector('.text-danger');
+			this.errorWrapper = document.querySelector('#error-wrapper');
 			this.loginButton = document.querySelector('#loginBtn');
 		},
 
@@ -47,11 +48,10 @@
 		},
 
 		async request(formElement) {
-            const form = formElement instanceof HTMLFormElement ? formElement : this.form;
-            const formData = new FormData(form);
+            const formData = new FormData(formElement);
             const payload = {
                 id: (formData.get('id') || '').trim(),
-                password: formData.get('password') || '',
+                password: formData.get('pw') || '',
                 _csrf : formData.get('_csrf') || ''
             };
 
@@ -63,8 +63,10 @@
                     }
                 });
 
+				console.log('----', data)
+
                 if (!data.result) {
-                    this.errorField.innerHTML = ERROR_ICON_HTML + data.msg;
+					this.showError(data.msg)
 					return false;
                 }
 
@@ -75,8 +77,8 @@
 
                 // REDIS key
                 let input = document.createElement('input');
-				input.name = "key";
-				input.id = "key";
+				input.name = "_csrf";
+				input.id = "_csrf";
                 input.type = "hidden";
                 input.value = data.msg
 
@@ -113,12 +115,15 @@
 				return;
 			}
 
-			this.errorField.innerHTML = ERROR_ICON_HTML + message;
+			this.errorWrapper.style.display = 'block';
+			this.errorField.innerHTML = message;
 		},
 
 		clearError() {
 			if (this.errorField) {
 				this.errorField.textContent = '';
+
+				this.errorWrapper.style.display = 'none';
 			}
 		},
 

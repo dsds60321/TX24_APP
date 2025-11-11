@@ -7,7 +7,6 @@ export default class Search {
 				selectedPage: 0
 			}
 		};
-		this.layout = typeof window !== 'undefined' ? window.layout : null;
 	}
 
 	async submit(elem, event, option) {
@@ -43,7 +42,7 @@ export default class Search {
 		try {
 			layout.setButtonLoading(submitButton, true);
 			// 검색 버튼시 페이지 초기화
-			if (event.target.classList.contains('search-submit-btn') && submitButton.classList.contains('is-loading')) {
+			if ( event && event.target.classList.contains('search-submit-btn') && submitButton.classList.contains('is-loading')) {
 				this.bean.page.selectedPage = 0;
 			}
 
@@ -193,7 +192,7 @@ export default class Search {
 	}
 
 	setSizing (tableContent, rowsPerPage) {
-		const perPage = document.querySelector(".rows-per-page");
+		const perPage = document.getElementById("perPage");
 		perPage.value = rowsPerPage;
 		tableContent.setAttribute('data-size', rowsPerPage);
 		if (document.querySelector('body').classList.contains('mobile')) {
@@ -388,9 +387,11 @@ export default class Search {
 	}
 
 	sizingbtn (t) {
-		this.bean.page.rowsPerPage = t.value || '20';
+		const limit = t.dataset.value;
+		console.log(limit);
+		this.bean.page.rowsPerPage = limit || '20';
 		const tableContent = document.querySelector('.table-contents');
-		tableContent.setAttribute('data-size', t.value);
+		tableContent.setAttribute('data-size', limit);
 		tableContent.setAttribute('data-current', 0);
 		search.submit(t, null, 'tag');
 	}

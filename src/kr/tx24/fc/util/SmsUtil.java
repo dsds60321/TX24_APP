@@ -1,6 +1,5 @@
 package kr.tx24.fc.util;
 
-import kr.tx24.lib.map.SharedMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
