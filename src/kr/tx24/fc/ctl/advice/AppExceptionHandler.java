@@ -9,7 +9,6 @@ import kr.tx24.lib.lang.CommonUtils;
 import kr.tx24.was.util.Was;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -84,4 +83,5 @@ public class AppExceptionHandler {
 		// 항상 200 처리
 		return ResponseEntity.ok(TxResponse.fail(resultCode, ex.getErrorMessage()));
 	}
+
 }
