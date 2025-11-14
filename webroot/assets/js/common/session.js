@@ -15,7 +15,7 @@ export default class SessionManager {
     async getSession() {
         try {
 
-            const { data } = await axios.get('/user/session');
+            const { data } = await axios.get('/member/session');
             const ttl = this.normalizeTtl(data?.data.ttl);
             this.remainingSeconds = ttl;
 
@@ -114,7 +114,7 @@ export default class SessionManager {
             return;
         }
 
-        const {data} = await axios.post('/user/session/extend', { userId : this.userId,sessionId : this.sessionId, password: pw});
+        const {data} = await axios.post('/member/session/extend', { userId : this.userId,sessionId : this.sessionId, password: pw});
 
         if (data.result) {
             layout.Overlay.close();

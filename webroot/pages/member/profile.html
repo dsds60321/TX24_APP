@@ -9,7 +9,7 @@
         <div class="pt-2">
 
             <div th:replace="~{pages/layout/fragments :: maps('계정 프로필')}"></div>
-            <form action="/user/profile" method="POST" id="profileForm" name="profileForm" onsubmit="return false">
+            <form action="/member/profile" method="POST" id="profileForm" name="profileForm" onsubmit="return false">
                 <div class="card-wrapper">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <p class="fs-6 fw-bold mb-0">프로필 정보</p>
@@ -156,6 +156,6 @@
         </div>
     </div>
 </div>
-<script th:src="@{/assets/js/pages/user/profile.js}"></script>
+<script th:src="@{/assets/js/pages/member/profile.js}"></script>
 </body>
 </html>

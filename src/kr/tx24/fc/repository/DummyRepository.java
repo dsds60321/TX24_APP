@@ -48,15 +48,11 @@ public class DummyRepository {
 		return loadMockOne(mockName.getKey(), type);
 	}
 
-	public static List<SharedMap<String, Object>> list(MockNames mockName) {
-		return loadMock(mockName.getKey());
-	}
-
 	/**
 	 * 더미 데이터 조회
 	 */
 	public static List<SharedMap<String, Object>> of(MockNames mockName, List<SearchBean> datas) {
-		List<SharedMap<String, Object>> rows = loadMock(mockName.getKey());
+		List<SharedMap<String,Object>> rows = of(mockName, TypeRegistry.LIST_SHAREDMAP_OBJECT);
 
 		// 검색
 		rows = rows.stream()
@@ -75,8 +71,8 @@ public class DummyRepository {
 	 * 더미 데이터 페이징 조회
 	 */
 	public static List<SharedMap<String, Object>> of(MockNames mockName, List<SearchBean> datas, SearchPage page) {
-		List<SharedMap<String, Object>> rows = search(loadMock(mockName.getKey()), datas, page);
-
+		List<SharedMap<String,Object>> rows = of(mockName, TypeRegistry.LIST_SHAREDMAP_OBJECT);
+		rows = search(rows, datas, page);
 		for (int i = 0; i < rows.size(); i++) {
 			rows.get(i).put("idx", i + 1);
 		}

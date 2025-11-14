@@ -73,7 +73,7 @@
 			}
 
 			try {
-				const { data } = await httpClient.post('/user/profile/update', payload);
+				const { data } = await httpClient.post('/member/profile/update', payload);
 
 				if (!data.result) {
 					util.toastify.error(data?.data.msg || '서버로부터 오류가 발생했습니다.');

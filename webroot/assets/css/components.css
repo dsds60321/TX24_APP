@@ -29,6 +29,7 @@
 
 /* Required field marker */
 .required::after {
+    margin-left: 5px;
     content: '*';
     color: #dc3545;
     font-size: 0.9rem;

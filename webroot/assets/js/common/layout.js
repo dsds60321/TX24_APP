@@ -474,16 +474,16 @@ export default class Layout {
 
     blockBrowserEvt() {
 
-        document.addEventListener('keydown', function (e) {
-            if (
-                e.key === 'F5' ||
-                (e.ctrlKey && e.key === 'r') ||
-                (e.metaKey && e.key === 'r')
-            ) {
-                e.preventDefault();
-                alert('새로고침이 차단되어 있습니다.');
-            }
-        });
+        // document.addEventListener('keydown', function (e) {
+        //     if (
+        //         e.key === 'F5' ||
+        //         (e.ctrlKey && e.key === 'r') ||
+        //         (e.metaKey && e.key === 'r')
+        //     ) {
+        //         e.preventDefault();
+        //         alert('새로고침이 차단되어 있습니다.');
+        //     }
+        // });
 
         // 뒤로 가기 클릭시 탭 생성 -> # 버튼 클릭시 열리는 문제 있음
         history.pushState(null, '', location.href);
@@ -589,6 +589,7 @@ export default class Layout {
         const state = {
             tabs: new Map(),
             activeUrl: null,
+            refererUrl: null,
             cache: new Map(),
             images: new Map()
         }
@@ -607,29 +608,50 @@ export default class Layout {
             document.addEventListener('click', onTriggerClick);
         }
 
-        // NavLink 혹은 , 탭 선택시 open 함수
-        function open({title, url}) {
-            if (!title && !url) {
-                return;
+        /**
+         * NOTE : NavLink 혹은 , 탭 선택시 open 함수
+         * title : 탭 제목
+         * url : 탭 유니크 아이디
+         * referer : 네비게이션 탭 설정값
+         */
+		function open({title, url, referer}) {
+			if (!title && !url) {
+				return;
+			}
+
+            if (referer) {
+                state.refererUrl = referer;
             }
 
 
-            const tab = {
-                title: title,
-                url: url,
-            };
+			const tab = {
+				title: title,
+				url: url,
+			};
 
-            state.tabs.set(url, tab);
-            state.activeUrl = url;
-            activate(url);
-        }
+			state.tabs.set(url, tab);
+			state.activeUrl = url;
 
-        function activate(tabUrl) {
-            layout.Overlay.close();
+			try {
+				activate(url, {skipNavSync: true});
+			} finally {
+				// 콘텐츠 로딩 결과와 관계없이 UI 상태는 항상 동기화
+				toggleNav(url);
+			}
+		}
 
-            if (!state.tabs.has(tabUrl)) {
-                return;
-            }
+		function activate(tabUrl, options = {}) {
+			const {skipNavSync = false} = options;
+
+			layout.Overlay.close();
+
+			if (!skipNavSync) {
+				toggleNav(tabUrl);
+			}
+
+			if (!state.tabs.has(tabUrl)) {
+				return;
+			}
 
             state.activeUrl = tabUrl;
             const cached = state.cache.get(tabUrl); // 이미 가지고 있는 페이지인 경우
@@ -664,12 +686,6 @@ export default class Layout {
                 title: tabTitle,
                 url: tabUrl,
             });
-
-            document.querySelectorAll('.nav-link').forEach(function (link) {
-                link.classList.remove('active');
-            });
-
-            linkElem.classList.add('active');
         }
 
 
@@ -771,6 +787,31 @@ export default class Layout {
                 card.remove();
             }
 
+        }
+
+        function toggleNav(url) {
+            // 네비게이션 설정
+            document.querySelectorAll('.nav-wrapper .nav-link').forEach(function (link) {
+                link.classList.remove('active');
+            });
+
+            document.querySelectorAll('.nav-wrapper .collapse').forEach(function (collapse) {
+                collapse.classList.remove('show');
+            });
+
+
+            let selectTab = document.querySelector(`[data-tab-url="${url}"]`);
+            if (!selectTab && state.refererUrl) {
+                selectTab = document.querySelector(`[data-tab-url="${state.refererUrl}"]`);
+
+                // 이전 URL 초기화
+                state.refererUrl = null;
+            }
+
+            if (selectTab) {
+                selectTab.classList.add('active');
+                selectTab.closest('.collapse').classList.add('show');
+            }
         }
 
 

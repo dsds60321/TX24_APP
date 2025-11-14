@@ -34,7 +34,7 @@ const util = {
     },
 
     // toastify 노티 유틸
-    toastify: (function () {
+    toastify : (function () {
         var hasToastify = typeof Toastify === 'function';
         var activeToast = null;
 

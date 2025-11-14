@@ -24,7 +24,7 @@ public class StlCtl {
     }
 
     @PostMapping("/crawling/list")
-    public String collectionSubmit(@RequestBody SearchRequest searchRequest, Model model){
+    public String collectionPage(@RequestBody SearchRequest searchRequest, Model model){
         stlSvc.crawlPaging(model, searchRequest.datas, searchRequest.page);
         return "pages/stl/crawling/list";
     }

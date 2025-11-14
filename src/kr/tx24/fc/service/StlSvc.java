@@ -8,6 +8,7 @@ import kr.tx24.fc.exception.TxException;
 import kr.tx24.fc.repository.DummyRepository;
 import kr.tx24.fc.enums.MockNames;
 import kr.tx24.lib.map.SharedMap;
+import kr.tx24.lib.map.TypeRegistry;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -36,7 +37,7 @@ public class StlSvc {
      * 모달 데이터 조회
      */
     public void detailModal(String trxId, Model model) {
-        List<SharedMap<String, Object>> rows = DummyRepository.list(MockNames.TRX);
+        List<SharedMap<String, Object>> rows = DummyRepository.of(MockNames.TRX, TypeRegistry.LIST_SHAREDMAP_OBJECT);
         SharedMap<String, Object> data = rows.stream().filter(row -> row.isEquals("trxId", trxId))
                 .findFirst()
                 .orElseThrow(() -> new TxException(TxResultCode.NO_CONTENTS));

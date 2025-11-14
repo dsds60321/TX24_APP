@@ -24,7 +24,7 @@
                     <span th:text="${session.userName} ?: '관리자'">관리자</span>님
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                    <li><a class="dropdown-item" onclick="layout.TabManager.open({ title : '프로필', url : '/user/profile'})">프로필</a></li>
+                    <li><a class="dropdown-item" onclick="layout.TabManager.open({ title : '프로필', url : '/member/profile'})">프로필</a></li>
                     <li><a class="dropdown-item" onclick="sessionManager.logout()">로그아웃</a></li>
                 </ul>
             </div>
