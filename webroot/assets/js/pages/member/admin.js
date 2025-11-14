@@ -1,124 +1,172 @@
 (function () {
-    const AdminForm = {
-        form: null,
-        submitButton: null,
-        validator: null,
-        emailLocal: null,
-        emailDomain: null,
-        hiddenEmail: null,
-        domainSelect: null,
-        requiredSelectors: ['#loginId', '#userName', '#emailLocal', '#emailDomain', '#dept', '#mobile', '#role'],
-        requiredFields: [],
+    const AdminPage = {
+
+        form : null,
+        submitButton : null,
+        validator : null,
+        requiredSelectors : [],
+        idField: null,
+        idCheckTimer: null,
+        lastRequestedId: '',
+        isIdAvailable: null,
 
         init() {
-            this.form = document.getElementById('adminRegisterForm');
-            if (!this.form) {
-                return;
-            }
-
-            this.submitButton = this.form.querySelector('.flex-submit');
-            this.emailLocal = document.getElementById('emailLocal');
-            this.emailDomain = document.getElementById('emailDomain');
-            this.hiddenEmail = document.getElementById('email');
-            this.domainSelect = document.getElementById('emailDomainSelect');
-            this.requiredFields = this.requiredSelectors
-                .map(selector => document.querySelector(selector))
-                .filter(Boolean);
-
+            this.cacheElements();
             this.initValidator();
             this.bindEvents();
-            this.updateEmailValue();
             this.toggleSubmit(false);
         },
 
-        initValidator() {
-            if (typeof JustValidate === 'undefined') {
-                console.warn('JustValidate library is required for admin form validation.');
-                return;
-            }
+        cacheElements() {
+            this.form = document.adminRegisterForm;
+            this.submitButton = document.querySelector('.flex-submit');
+            this.idField = this.form?.querySelector('#id') ?? null;
 
-            this.validator = new JustValidate('#adminRegisterForm', {
+        },
+
+        initValidator() {
+            this.requiredSelectors = ValidationUtil.findRequiredFields(this.form, ['#emailLocal','#emailDomain','#emailDomainSelect']);
+            this.validator = ValidationUtil.create(this.form, {
                 validateOnInput: true,
                 focusInvalidField: true
             });
 
-            this.validator
-                .addField('#loginId', [
-                    { rule: 'required', errorMessage: '아이디를 입력해주세요.' },
-                    { rule: 'minLength', value: 4, errorMessage: '4자 이상 입력해주세요.' },
-                    { rule: 'maxLength', value: 20, errorMessage: '20자 이하로 입력해주세요.' }
-                ])
-                .addField('#userName', [
-                    { rule: 'required', errorMessage: '이름을 입력해주세요.' },
-                    { rule: 'minLength', value: 2 , errorMessage: '2글자 이상 입력해주세요.'}
-                ])
-                .addField('#emailLocal', [{ rule: 'required', errorMessage: '이메일 아이디를 입력해주세요.' }])
-                .addField('#emailDomain', [
-                    { rule: 'required', errorMessage: '도메인을 입력하거나 선택해주세요.' },
-                    { rule: 'customRegexp', value: /^[a-z0-9.-]+\.[a-z]{2,}$/i, errorMessage: '도메인을 확인해주세요.' }
-                ])
-                .addField('#dept', [{ rule: 'required', errorMessage: '부서를 선택해주세요.' }])
-                .addField('#mobile', [
-                    { rule: 'required', errorMessage: '휴대전화를 입력해주세요.' },
-                    { rule: 'customRegexp', value: /^[0-9\-]{10,13}$/, errorMessage: '휴대전화 형식을 확인해주세요.' }
-                ])
-                .addField('#role', [{ rule: 'required', errorMessage: '등급을 선택해주세요.' }])
-                .onSuccess((event) => {
-                    event?.preventDefault();
-                    this.toggleSubmit(true);
+
+            // 필수 필드들에 대한 룰 저장
+            const defaultRules = this.requiredSelectors.map(elem => {
+                const rule = ValidationUtil.getDefaultRule(elem);
+                if (!rule) {
+                    return null;
+                }
+                if (elem.id === 'id') {
+                    rule.rules.push({
+                        validator: () => this.isIdAvailable !== false,
+                        errorMessage: '이미 사용 중인 아이디입니다.'
+                    });
+                }
+                return rule;
+            });
+
+            ValidationUtil.addFields(this.validator, defaultRules)
+                .onSuccess(async (event) => {
+                    event.preventDefault();
+                    try {
+                        layout.Overlay.loading(true);
+                        const {data} = await httpClient.post('/member/admin/add');
+                        if (data.result) {
+                            util.toastify.success(data.msg);
+                        } else {
+                            util.toastify.warning(data.data.msg || '서버로부터 오류가 발생했습니다.');
+                        }
+
+                        // 경로 이동
+                        layout.TabManager.activate('/member/admin/form');
+                    } catch (error) {
+                        console.log('error', error);
+                        util.toastify.error('서버로부터 오류가 발생했습니다.')
+                    } finally {
+                        layout.Overlay.loading(false);
+                    }
+
                 })
                 .onFail(() => {
-                    this.toggleSubmit(false);
+                    util.toastify.warning('입력값을 다시 확인해주세요.');
                 });
+
         },
 
         bindEvents() {
-            this.requiredFields.forEach(field => {
-                const eventType = field.tagName === 'SELECT' ? 'change' : 'input';
-                field.addEventListener(eventType, () => {
-                    if (field === this.emailLocal || field === this.emailDomain) {
-                        this.updateEmailValue();
-                    }
-                    if (field.id && this.validator) {
-                        this.validator.revalidateField(`#${field.id}`);
-                    }
-                    this.checkCompletion();
-                });
-            });
 
-            this.domainSelect?.addEventListener('change', () => {
-                if (this.emailDomain) {
-                    this.emailDomain.value = this.domainSelect.value;
-                    this.updateEmailValue();
-                    this.validator?.revalidateField('#emailDomain');
-                    this.checkCompletion();
-                }
-            });
+            // 이메일 이벤트
+            this.emailEvt()
 
-            this.form.addEventListener('reset', () => {
-                window.setTimeout(() => {
-                    this.updateEmailValue();
-                    this.toggleSubmit(false);
-                    if (this.validator && typeof this.validator.refresh === 'function') {
-                        this.validator.refresh();
-                    }
-                }, 0);
-            });
+            // 검증 이벤트 동작
+            ValidationUtil.validExecute(
+                this.validator,
+                this.requiredSelectors,
+                this.checkCompletion,
+                this
+            );
+
+            this.setupIdDuplicateCheck();
+
         },
 
-        updateEmailValue() {
-            if (!this.hiddenEmail) {
+        // 성공시 동작
+        checkCompletion() {
+            if (!this.form) {
                 return;
             }
-            const local = this.emailLocal?.value.trim();
-            const domain = this.emailDomain?.value.trim();
-            this.hiddenEmail.value = (local && domain) ? `${local}@${domain}` : '';
+            const hasErrors = Boolean(this.form.querySelector('.just-validate-error-label'));
+            const allFilled = this.requiredSelectors.every(field => field && field.checkValidity());
+            const idValid = this.isIdAvailable !== false;
+            this.toggleSubmit(!hasErrors && allFilled && idValid);
         },
 
-        checkCompletion() {
-            const complete = this.requiredFields.every(field => field && field.checkValidity());
-            this.toggleSubmit(complete);
+        emailEvt() {
+            const local = document.getElementById('emailLocal');
+            const domain = document.getElementById('emailDomain');
+            const domainSelect = document.getElementById('emailDomainSelect');
+            const email = document.getElementById('email');
+            local.addEventListener('input', () => {
+                if (local.value) {
+                    email.value = `${local.value}@${domain.value}`;
+                }
+
+            });
+
+            domainSelect.addEventListener('change', () => {
+                if (domainSelect.value) {
+                    email.value = `${local.value}@${domain.value}`;
+                }
+            })
+
+            domain.addEventListener('input', () => {
+                if (domain.value) {
+                    email.value = `${local.value}@${domain.value}`;
+                }
+            })
         },
+
+        setupIdDuplicateCheck() {
+            if (!this.idField) {
+                return;
+            }
+
+            this.idField.addEventListener('input', () => {
+                this.isIdAvailable = null;
+                const value = this.idField.value.trim();
+
+                if (value.length < 4) {
+                    this.validator?.revalidateField('#id');
+                    this.checkCompletion();
+                    return;
+                }
+
+                window.clearTimeout(this.idCheckTimer);
+                this.idCheckTimer = window.setTimeout(() => {
+                    this.checkIdAvailability(value);
+                }, 300);
+            });
+        },
+
+        async checkIdAvailability(value) {
+            this.lastRequestedId = value;
+            try {
+                const { data } = await httpClient.get(`/member/check-id/${encodeURIComponent(value)}`);
+                if (this.lastRequestedId !== value) {
+                    return;
+                }
+                this.isIdAvailable = data?.result === true;
+            } catch (error) {
+                console.error('checkIdAvailability error', error);
+                this.isIdAvailable = false;
+            } finally {
+                this.validator?.revalidateField('#id');
+                this.checkCompletion();
+            }
+        },
+
 
         toggleSubmit(canSubmit) {
             if (!this.submitButton) {
@@ -126,24 +174,8 @@
             }
             this.submitButton.disabled = !canSubmit;
             this.submitButton.classList.toggle('disabled', !canSubmit);
-        },
-
-        async checkIdDuplicateId(value) {
-            console.log('checkIdDuplicateId value', value);
-            const trimmed = value?.trim() ?? '';
-            if (!trimmed || trimmed.length < 4) {
-                return true;
-            }
-
-            try {
-                const {data} = await httpClient.get(`/member/check-id/${encodeURIComponent(trimmed)}`);
-                return data?.result === true;
-            } catch (error) {
-                console.error('checkIdDuplicateId error', error);
-                return false;
-            }
         }
-    }
 
-    AdminForm.init()
+    }
+    AdminPage.init()
 })();
