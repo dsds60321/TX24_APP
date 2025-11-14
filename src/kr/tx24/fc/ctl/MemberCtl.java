@@ -57,6 +57,12 @@ public class MemberCtl {
         return "pages/member/admin/add";
     }
 
+    @PostMapping("/admin/add")
+    public @ResponseBody TxResponse<?> adminAdd(@RequestBody SharedMap<String, Object> param) {
+        memberSvc.adminAdd(param);
+        return TxResponse.okWithMsg("회원을 등록했습니다.");
+    }
+
     /**
      * NOTE
      * 상단 프로필

@@ -88,4 +88,25 @@ public class MemberSvc {
 		List<SharedMap<String, Object>> rows = DummyRepository.of(MockNames.USER, datas, page);
 		model.addAttribute("RLIST", new SearchResponse(rows, page));
 	}
+
+	public void adminAdd(SharedMap<String, Object> param) {
+		List<SharedMap<String,Object>> rows = DummyRepository.of(MockNames.USER, TypeRegistry.LIST_SHAREDMAP_OBJECT);
+
+		// TODO 필수값 정의
+		if (CommonUtils.hasEmptyValue(param, List.of("id", "email", "phone"))) {
+			throw new TxException(TxResultCode.INVALID_REQUEST, "id는 필수값입니다.");
+		}
+
+		// 유저 검증
+		rows.stream()
+				.filter(user -> user.isEquals("id", param.getString("id")))
+				.findAny()
+				.ifPresent(user -> {
+					throw new TxException(TxResultCode.INVALID_REQUEST, "이미 존재하는 아이디입니다.");
+				});
+
+
+		// 유저 저장 로직
+
+	}
 }

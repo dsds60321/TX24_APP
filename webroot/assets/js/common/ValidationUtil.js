@@ -44,6 +44,7 @@ const ValidationUtil = (function () {
     }
 
     /**
+     * 엘리먼트 주입시
      * 기본 룰 반환
      */
     function getDefaultRule(elem) {
@@ -72,42 +73,23 @@ const ValidationUtil = (function () {
             ]
         }
 
+        if (selector.includes('id')) {
+            rule.rules.push({
+                rule: ValidationUtil.RULE.MIN_LENGTH, value : 4, errorMessage: '최소 4글자 이상 입력해주세요.'
+            })
+        }
+
         if (selector.includes('email')) {
             rule.rules.push({
-                rule : ValidationUtil.RULE.REGEXP, value : ValidationUtil.PATTERN.EMAIL, errorMessage: '이메일을 확인해주세요.'
+                rule : ValidationUtil.RULE.REGEXP, value : ValidationUtil.PATTERN.EMAIL, errorMessage: '올바른 이메일을 입력해주세요.'
             })
         }
 
         if (selector.includes('phone')) {
             rule.rules.push({
-                rule : ValidationUtil.RULE.REGEXP, value : ValidationUtil.PATTERN.MOBILE, errorMessage : '전화번호를 확인해주세요.'
+                rule : ValidationUtil.RULE.REGEXP, value : ValidationUtil.PATTERN.MOBILE, errorMessage : '올바른 전화번호를 입력해주세요.'
             })
         }
-
-        // ID 중복체크
-        if (selector.includes('id')) {
-            rule.rules.push({
-                validator : async (value, context) => {
-                    let result = false;
-                    const {data} = await httpClient.get(`/member/check-id/${encodeURIComponent(value)}`);
-                    result = data.result;
-                    // .then((res) => {
-                    //     console.log('---', res.data.result)
-                    //     result =  res.data.result;
-                    // })
-                    // .catch((err) => {
-                    //     console.error(err);
-                    //     result = false;
-                    // });
-
-                    console.log('data', data);
-                    console.log('result', result);
-                    return result;
-                }
-            })
-        }
-
-        console.log('rule' , rule);
 
         return rule
     }
@@ -126,7 +108,11 @@ const ValidationUtil = (function () {
                 if (selector.id) {
                     validator.revalidateField(`#${selector.id}`);
                 }
-                fn.call(context ?? null);
+
+                // 매 검증 호출마다 진행되는 콜백 함수
+                if (fn && typeof fn === 'function') {
+                    fn.call(context ?? null);
+                }
             });
         });
     }

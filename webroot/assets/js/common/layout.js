@@ -925,7 +925,7 @@ export default class Layout {
 
 
         return {
-            init, open, close, tabOpen, renderContent, isOpen
+            init, open, close, tabOpen, renderContent, isOpen, loading
         }
     }
 }

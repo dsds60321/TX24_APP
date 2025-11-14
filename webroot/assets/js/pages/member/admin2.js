@@ -5,6 +5,10 @@
         submitButton : null,
         validator : null,
         requiredSelectors : [],
+        idField: null,
+        idCheckTimer: null,
+        lastRequestedId: '',
+        isIdAvailable: null,
 
         init() {
             this.cacheElements();
@@ -16,6 +20,7 @@
         cacheElements() {
             this.form = document.adminRegisterForm;
             this.submitButton = document.querySelector('.flex-submit');
+            this.idField = this.form?.querySelector('#id') ?? null;
 
         },
 
@@ -29,15 +34,43 @@
 
             // 필수 필드들에 대한 룰 저장
             const defaultRules = this.requiredSelectors.map(elem => {
-                return ValidationUtil.getDefaultRule(elem)
+                const rule = ValidationUtil.getDefaultRule(elem);
+                if (!rule) {
+                    return null;
+                }
+                if (elem.id === 'id') {
+                    rule.rules.push({
+                        validator: () => this.isIdAvailable !== false,
+                        errorMessage: '이미 사용 중인 아이디입니다.'
+                    });
+                }
+                return rule;
             });
 
             ValidationUtil.addFields(this.validator, defaultRules)
-                .onSuccess((event) => {
-                    console.log('success');
+                .onSuccess(async (event) => {
+                    event.preventDefault();
+                    try {
+                        layout.Overlay.loading(true);
+                        const {data} = await httpClient.post('/member/admin/add');
+                        if (data.result) {
+                            util.toastify.success(data.msg);
+                        } else {
+                            util.toastify.warning(data.data.msg || '서버로부터 오류가 발생했습니다.');
+                        }
+
+                        // 경로 이동
+                        layout.TabManager.activate('/member/admin/form');
+                    } catch (error) {
+                        console.log('error', error);
+                        util.toastify.error('서버로부터 오류가 발생했습니다.')
+                    } finally {
+                        layout.Overlay.loading(false);
+                    }
+
                 })
                 .onFail(() => {
-                    console.log('fail');
+                    util.toastify.warning('입력값을 다시 확인해주세요.');
                 });
 
         },
@@ -55,20 +88,25 @@
                 this
             );
 
+            this.setupIdDuplicateCheck();
+
         },
 
+        // 성공시 동작
         checkCompletion() {
-            const isValid = this.requiredSelectors.every(field => field.value !== '')
-                && !this.form.querySelector('.just-validate-error-label');
-
-            console.log('checkCompletion isValid', isValid);
-
-            this.toggleSubmit(isValid);
+            if (!this.form) {
+                return;
+            }
+            const hasErrors = Boolean(this.form.querySelector('.just-validate-error-label'));
+            const allFilled = this.requiredSelectors.every(field => field && field.checkValidity());
+            const idValid = this.isIdAvailable !== false;
+            this.toggleSubmit(!hasErrors && allFilled && idValid);
         },
 
         emailEvt() {
             const local = document.getElementById('emailLocal');
             const domain = document.getElementById('emailDomain');
+            const domainSelect = document.getElementById('emailDomainSelect');
             const email = document.getElementById('email');
             local.addEventListener('input', () => {
                 if (local.value) {
@@ -77,11 +115,56 @@
 
             });
 
+            domainSelect.addEventListener('change', () => {
+                if (domainSelect.value) {
+                    email.value = `${local.value}@${domain.value}`;
+                }
+            })
+
             domain.addEventListener('input', () => {
                 if (domain.value) {
                     email.value = `${local.value}@${domain.value}`;
                 }
             })
+        },
+
+        setupIdDuplicateCheck() {
+            if (!this.idField) {
+                return;
+            }
+
+            this.idField.addEventListener('input', () => {
+                this.isIdAvailable = null;
+                const value = this.idField.value.trim();
+
+                if (value.length < 4) {
+                    this.validator?.revalidateField('#id');
+                    this.checkCompletion();
+                    return;
+                }
+
+                window.clearTimeout(this.idCheckTimer);
+                this.idCheckTimer = window.setTimeout(() => {
+                    this.checkIdAvailability(value);
+                }, 300);
+            });
+        },
+
+        async checkIdAvailability(value) {
+            this.lastRequestedId = value;
+            try {
+                const { data } = await httpClient.get(`/member/check-id/${encodeURIComponent(value)}`);
+                if (this.lastRequestedId !== value) {
+                    return;
+                }
+                this.isIdAvailable = data?.result === true;
+            } catch (error) {
+                console.error('checkIdAvailability error', error);
+                this.isIdAvailable = false;
+            } finally {
+                this.validator?.revalidateField('#id');
+                this.checkCompletion();
+            }
         },
 
 
