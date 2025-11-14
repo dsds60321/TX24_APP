@@ -47,11 +47,10 @@ export default class Suggest {
 
 
         const items = data.data.map(item => {
-            return this.renderItem(key,item[val]);
+            return this.renderItem(item[key],item[val]);
         });
 
         const container = this.renderContainer();
-        console.log(container)
         container.innerHTML = items.join('');
         suggestElem.append(container);
     }
@@ -69,8 +68,7 @@ export default class Suggest {
     renderItem(key,val) {
         return `<li class="client-suggest-item">
                     <button onclick="layout.SuggestManager.renderItemAddTagEvt(this)" type="button" class="client-suggest-btn" data-val="${val}">
-<!--                        <span class="client-suggest-label">TX24 상사</span>-->
-                        <span class="client-suggest-meta">${val}</span>
+                        <span class="client-suggest-meta">${key}</span>
                     </button>
                 </li>`
     }

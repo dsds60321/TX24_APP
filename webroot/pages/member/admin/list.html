@@ -28,7 +28,7 @@
                     <tr>
                         <td>[[${entry['@INDEX']}]]</td>
                         <td>
-                            <a th:href="'/member/view/' + ${entry.id}">[[${entry.id}]]</a>
+                            <a class="link" style="cursor: pointer" th:attr="onclick=|layout.TabManager.open({ title : '사용자 수정',  url : '/member/admin/${entry.id}' , options : { activeTab : false } })|">[[${entry.id}]]</a>
                         </td>
                         <td style="min-width:100px;">[[${entry.name}]]</td>
                         <td>[[${entry.phone}]]</td>

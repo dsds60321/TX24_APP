@@ -34,6 +34,11 @@ public class AxiosSvc {
                 rows = DummyRepository.of(MockNames.APP, TypeRegistry.LIST_SHAREDMAP_OBJECT);
                 return suggestSearch(rows, k, v);
             }
+
+            case "user" -> {
+                rows = DummyRepository.of(MockNames.USER, TypeRegistry.LIST_SHAREDMAP_OBJECT);
+                return suggestSearch(rows, k, v);
+            }
         }
 
         return null;

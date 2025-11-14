@@ -2,6 +2,7 @@
     const AdminPage = {
 
         form : null,
+        isEditMode : false,
         submitButton : null,
         validator : null,
         requiredSelectors : [],
@@ -18,7 +19,8 @@
         },
 
         cacheElements() {
-            this.form = document.adminRegisterForm;
+            this.form = document.adminRegisterForm ? document.adminRegisterForm : document.adminUpdateForm;
+            this.isEditMode = !document.adminRegisterForm;
             this.submitButton = document.querySelector('.flex-submit');
             this.idField = this.form?.querySelector('#id') ?? null;
 
@@ -52,7 +54,7 @@
                     event.preventDefault();
                     try {
                         layout.Overlay.loading(true);
-                        const {data} = await httpClient.post('/member/admin/add');
+                        const {data} = await httpClient.post(this.form.action);
                         if (data.result) {
                             util.toastify.success(data.msg);
                         } else {

@@ -613,24 +613,30 @@ export default class Layout {
          * title : 탭 제목
          * url : 탭 유니크 아이디
          * referer : 네비게이션 탭 설정값
+         * options : { activeTab : 탭 등록 여부 , referer : Nav 찾기 위한 URL}
          */
-		function open({title, url, referer}) {
+		function open({title, url, options = {}}) {
+            options = { activeTab : true , ...options}
+
+            console.log('open', title, url, options)
 			if (!title && !url) {
 				return;
 			}
 
-            if (referer) {
-                state.refererUrl = referer;
+            if (options.referer) {
+                state.refererUrl = options.referer;
             }
-
 
 			const tab = {
 				title: title,
 				url: url,
 			};
 
-			state.tabs.set(url, tab);
-			state.activeUrl = url;
+            if (options.activeTab) {
+                state.tabs.set(url, tab);
+                state.activeUrl = url;
+            }
+
 
 			try {
 				activate(url, {skipNavSync: true});
@@ -649,17 +655,20 @@ export default class Layout {
 				toggleNav(tabUrl);
 			}
 
-			if (!state.tabs.has(tabUrl)) {
-				return;
-			}
+			// if (!state.tabs.has(tabUrl)) {
+			// 	return;
+			// }
 
             state.activeUrl = tabUrl;
-            const cached = state.cache.get(tabUrl); // 이미 가지고 있는 페이지인 경우
 
-            if (cached) {
-                renderContent(cached);
-                return;
+            if (state.tabs.has(tabUrl) && state.cache.get(tabUrl)) {
+                const cached = state.cache.get(tabUrl); // 이미 가지고 있는 페이지인 경우
+                if (cached) {
+                    renderContent(cached);
+                    return;
+                }
             }
+
 
             loadContent(tabUrl);
         }
@@ -727,7 +736,7 @@ export default class Layout {
 
         function loadContent(url) {
             const tab = state.tabs.get(url);
-            httpClient.get(tab.url)
+            httpClient.get(url)
                 .then(({data}) => {
                     state.cache.set(url, data);
                     renderContent(data);
@@ -736,7 +745,7 @@ export default class Layout {
                     console.error('loadContent ERROR ', error)
                     util.toastify.warning('컨텐츠를 불러오는데 실패했습니다.');
                     state.tabs.delete(url);
-                    renderError(tab.url);
+                    renderError(url);
                 });
         }
 

@@ -6,8 +6,14 @@
 <div class="row">
     <div class="col-12">
         <div class="pt-2">
-            <div th:replace="~{pages/layout/fragments :: maps('사용자 등록')}"></div>
-            <form action="/member/admin/add" method="POST" id="adminRegisterForm" name="adminRegisterForm" onsubmit="return false">
+            <div th:replace="~{pages/layout/fragments :: maps(${USER} != null ? '사용자 수정' : '사용자 등록')}"></div>
+
+            <form
+                    th:action="${USER} != null ? '/member/admin/update' : '/member/admin/add'"
+                    th:id="${USER} != null ? 'adminUpdateForm' : 'adminRegisterForm'"
+                    th:name="${USER} != null ? 'adminUpdateForm' : 'adminRegisterForm'"
+                    method="POST" onsubmit="return false">
+
                 <div class="card-wrapper edit register-card">
                     <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
                         <div>
@@ -16,7 +22,12 @@
                         </div>
                         <div class="d-flex gap-2">
                             <button type="reset" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2">초기화</button>
-                            <button type="submit" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2 flex-submit disabled" disabled>등록</button>
+                            <button type="submit"
+                                    class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2 flex-submit"
+                                    th:text="${USER} != null ? '수정' : '등록'"
+                                    th:classappend="${USER} == null ? ' disabled' : ''"
+                                    th:attr="disabled=${USER} == null ? true : null">
+                            </button>
                         </div>
                     </div>
 
@@ -26,7 +37,7 @@
                                 <div class="card-title required"><p class="fs-8 fw-bold">아이디</div>
                                 <div class="card-txt form-block__body">
                                     <div class="form-field">
-                                        <input type="text" id="id" name="id" class="form-control fs-8" placeholder="tx_admin01" minlength="4" maxlength="20" autocomplete="username" required>
+                                        <input type="text" id="id" name="id" class="form-control fs-8" placeholder="tx_admin01" minlength="4" maxlength="20" autocomplete="username" th:value="${USER != null ? USER.id : '' }" required>
                                         <p class="form-hint">영문/숫자 4~20자, 특수문자 제외</p>
                                     </div>
                                 </div>
@@ -35,7 +46,7 @@
                                 <div class="card-title required"><p class="fs-8 fw-bold">이름</div>
                                 <div class="card-txt form-block__body">
                                     <div class="form-field">
-                                        <input type="text" id="name" name="name" class="form-control fs-8" placeholder="홍길동" autocomplete="name" required>
+                                        <input type="text" id="name" name="name" class="form-control fs-8" placeholder="홍길동" autocomplete="name" th:value="${USER != null ? USER.name : '' }" required>
                                         <p class="form-hint">실제 사용자 성명을 입력하세요.</p>
                                     </div>
                                 </div>
@@ -50,20 +61,20 @@
                                         <div class="input-inline w-100">
                                             <div class="email flex-grow-1" data-role="email-combo">
                                                 <label class="visually-hidden" for="emailLocal">이메일 아이디</label>
-                                                <input type="text" id="emailLocal" class="form-control fs-8" placeholder="user" autocomplete="off" required>
+                                                <input type="text" id="emailLocal" class="form-control fs-8" placeholder="user" autocomplete="off" th:value="${USER != null and USER.emailLocal != null ? USER.emailLocal : ''}" required>
                                                 @
                                                 <label class="visually-hidden" for="emailDomain">이메일 도메인</label>
-                                                <input type="text" id="emailDomain" class="form-control fs-8" placeholder="tx24.co.kr" autocomplete="off" required>
+                                                <input type="text" id="emailDomain" class="form-control fs-8" placeholder="tx24.co.kr" autocomplete="off" th:value="${USER != null and USER.emailDomain != null ? USER.emailDomain : ''}" required>
                                             </div>
                                             <select id="emailDomainSelect" class="form-control select-to-input fs-8" data-target="emailDomain">
                                                 <option value="">직접입력</option>
-                                                <option value="tx24.co.kr">tx24.co.kr</option>
-                                                <option value="tx24.com">tx24.com</option>
-                                                <option value="gmail.com">gmail.com</option>
-                                                <option value="naver.com">naver.com</option>
+                                                <option th:selected="${USER != null and USER.emailDomain != null and USER.emailDomain == 'tx24.co.kr'}" value="tx24.co.kr">tx24.co.kr</option>
+                                                <option th:selected="${USER != null and USER.emailDomain != null and USER.emailDomain == 'tx24.com'}" value="tx24.com">tx24.com</option>
+                                                <option th:selected="${USER != null and USER.emailDomain != null and USER.emailDomain == 'gmail.com'}" value="gmail.com">gmail.com</option>
+                                                <option th:selected="${USER != null and USER.emailDomain != null and USER.emailDomain == 'naver.com'}" value="naver.com">naver.com</option>
                                             </select>
                                         </div>
-                                        <input type="hidden" id="email" name="email" required>
+                                        <input type="hidden" id="email" name="email" th:value="${USER != null and USER.email != null ? USER.email : ''}" required>
                                         <p class="form-hint">아이디·도메인을 입력하거나 선택하면 전체 주소가 완성됩니다.</p>
                                     </div>
                                 </div>
@@ -74,10 +85,18 @@
                                     <div class="form-field">
                                         <select id="dept" name="dept" class="form-control fs-8" required>
                                             <option value="">부서를 선택하세요</option>
-                                            <option value="sales">영업본부</option>
-                                            <option value="dev">플랫폼개발팀</option>
-                                            <option value="cs">고객지원실</option>
-                                            <option value="ops">운영관리팀</option>
+
+                                            <option value="영업본부"
+                                                    th:selected="${USER != null and USER.dept == '영업본부'}">영업본부</option>
+
+                                            <option value="개발"
+                                                    th:selected="${USER != null and USER.dept == '개발'}">개발</option>
+
+                                            <option value="고객지원실"
+                                                    th:selected="${USER != null and USER.dept == '고객지원실'}">고객지원실</option>
+
+                                            <option value="운영관리팀"
+                                                    th:selected="${USER != null and USER.dept == '운영관리팀'}">운영관리팀</option>
                                         </select>
                                     </div>
                                 </div>
@@ -90,7 +109,7 @@
                                 <div class="card-txt form-block__body">
                                     <div class="form-field">
                                         <div class="input-inline">
-                                            <input type="tel" id="phone" name="phone" class="form-control fs-8 flex-grow-1" placeholder="010-1234-5678" pattern="[0-9\-]{10,13}" autocomplete="tel-national" required>
+                                            <input type="tel" id="phone" name="phone" class="form-control fs-8 flex-grow-1" placeholder="010-1234-5678" pattern="[0-9\-]{10,13}" autocomplete="tel-national" th:value="${USER != null ? USER.phone : '' }" required>
                                         </div>
                                         <p class="form-hint">숫자와 하이픈(-)만 입력하세요.</p>
                                     </div>
@@ -102,7 +121,7 @@
                                     <div class="form-field">
                                         <div class="input-inline">
                                             <span class="input-addon">Tel</span>
-                                            <input type="tel" id="tel" name="tel" class="form-control fs-8 flex-grow-1" placeholder="02-123-4567" pattern="[0-9\-]{9,13}" autocomplete="tel">
+                                            <input type="tel" id="tel" name="tel" class="form-control fs-8 flex-grow-1" placeholder="02-123-4567" pattern="[0-9\-]{9,13}" th:value="${USER != null ? USER.tel : '' }" autocomplete="tel">
                                         </div>
                                     </div>
                                 </div>
@@ -116,9 +135,9 @@
                                     <div class="form-field">
                                         <select id="role" name="role" class="form-control fs-8" required>
                                             <option value="">등급을 선택하세요</option>
-                                            <option value="0">임원</option>
-                                            <option value="1">팀장</option>
-                                            <option value="2">팀원</option>
+                                            <option th:selected="${USER !=null and USER.role == 0 }" value="0">임원</option>
+                                            <option th:selected="${USER !=null and USER.role == 1 }" value="1">팀장</option>
+                                            <option th:selected="${USER !=null and USER.role == 2 }" value="2">팀원</option>
                                         </select>
                                         <p class="form-hint">권한은 등록 후에도 변경 가능합니다.</p>
                                     </div>
@@ -128,8 +147,8 @@
                                 <div class="card-title required"><p class="fs-8 fw-bold">2차 인증</p></div>
                                 <div class="card-txt form-block__body">
                                     <div class="radio-stack">
-                                        <label><input type="radio" class="form-check-input" id="twoFactor" name="2fa" value="active" checked>사용 (권장)</label>
-                                        <label><input type="radio" class="form-check-input" id="twoFactor" name="2fa" value="inactive"> 해제</label>
+                                        <label><input type="radio" class="form-check-input" th:checked="${USER != null and USER['2fa'] == 'active' }" id="twoFactor" name="2fa" value="active" checked>사용 (권장)</label>
+                                        <label><input type="radio" class="form-check-input" th:checked="${USER != null and USER['2fa'] == 'inactive' }" id="twoFactor" name="2fa" value="inactive"> 해제</label>
                                     </div>
                                     <p class="form-hint">필수 사용 시 최초 로그인 단계에서 OTP 등록을 안내합니다.</p>
                                 </div>

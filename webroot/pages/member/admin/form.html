@@ -28,8 +28,8 @@
                             <div class="col d-flex search-container">
                                 <div class="card-title"><p class="fs-8 fw-bold">아이디</p></div>
                                 <div class="card-txt">
-                                    <div class="search-group client-name-field" data-suggest="mcht" data-target="mchtName">
-                                        <input type="text" name="mchtName" data-oper="eq" class="form-control fs-8" data-source="mcht" data-val="name" data-key="name" placeholder="고객사명을 입력하세요">
+                                    <div class="search-group client-name-field">
+                                        <input type="text" name="id" data-oper="eq" class="form-control fs-8" data-source="user" data-val="id" data-key="id" placeholder="아이디를 입력하세요">
                                         <button type="button" class="btn search-btn circle" onclick="search.addTag(this)"></button>
                                         <!--  suggest 컨테이너 div -->
                                         <div class="client-suggest-panel" data-role="suggestions"></div>
@@ -87,7 +87,7 @@
                             <input type="hidden" id="perPage" value="20" oninput="search.sizingbtn(this)">
                         </div>
 
-                        <button onclick="layout.TabManager.open({ title : '사용자 등록', url : '/member/admin/add' , referer : '/member/admin/form' })" type="button" class="badge bg-grey-outline">
+                        <button onclick="layout.TabManager.open({ title : '사용자 등록', url : '/member/admin/add' , options : { referer : '/member/admin/form' } })" type="button" class="badge bg-grey-outline">
                             사용자 등록
                         </button>
 

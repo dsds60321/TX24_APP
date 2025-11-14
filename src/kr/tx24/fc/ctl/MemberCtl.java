@@ -39,7 +39,7 @@ public class MemberCtl {
 
     /**
      * NOTE
-     * 회원 관리
+     * 관리자 관리
      */
     @GetMapping("/admin/form")
     public String adminForm() {
@@ -54,13 +54,19 @@ public class MemberCtl {
 
     @GetMapping("/admin/add")
     public String adminAdd() {
-        return "pages/member/admin/add";
+        return "pages/member/admin/detail";
     }
 
     @PostMapping("/admin/add")
     public @ResponseBody TxResponse<?> adminAdd(@RequestBody SharedMap<String, Object> param) {
         memberSvc.adminAdd(param);
         return TxResponse.okWithMsg("회원을 등록했습니다.");
+    }
+
+    @GetMapping("/admin/{id}")
+    public String adminDetail(@PathVariable("id") String id, Model model) {
+        memberSvc.adminDetail(id, model);
+        return "pages/member/admin/detail";
     }
 
     /**

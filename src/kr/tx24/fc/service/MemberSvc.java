@@ -109,4 +109,19 @@ public class MemberSvc {
 		// 유저 저장 로직
 
 	}
+
+	public void adminDetail(String id, Model model) {
+		List<SharedMap<String,Object>> rows = DummyRepository.of(MockNames.USER, TypeRegistry.LIST_SHAREDMAP_OBJECT);
+		SharedMap<String, Object> user = rows.stream().filter(row -> row.isEquals("id", id))
+				.findFirst()
+				.orElseThrow(() -> new TxException(TxResultCode.NO_CONTENTS));
+
+		if (!user.isBlank("email") && user.getString("email").contains("@")) {
+			String email = user.getString("email");
+			user.put("emailLocal", email.substring(0, email.indexOf("@")));
+			user.put("emailDomain", email.substring(email.indexOf("@") + 1));
+		}
+
+		model.addAttribute("USER", user);
+	}
 }
