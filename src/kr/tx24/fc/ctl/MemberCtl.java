@@ -63,6 +63,11 @@ public class MemberCtl {
         return TxResponse.okWithMsg("회원을 등록했습니다.");
     }
 
+    @PostMapping("/admin/update")
+    public @ResponseBody TxResponse<?> adminUpdate(@RequestBody SharedMap<String, Object> param) {
+        return TxResponse.okWithMsg("회원을 수정했습니다.");
+    }
+
     @GetMapping("/admin/{id}")
     public String adminDetail(@PathVariable("id") String id, Model model) {
         memberSvc.adminDetail(id, model);

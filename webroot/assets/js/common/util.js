@@ -39,7 +39,7 @@ const util = {
         var activeToast = null;
 
         var baseOptions = {
-            duration: 2000,
+            duration: 3000,
             gravity: 'top',
             position: 'right',
             close: true,
