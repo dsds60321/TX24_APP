@@ -15,6 +15,7 @@ import kr.tx24.lib.lang.CommonUtils;
 import kr.tx24.lib.lang.MsgUtils;
 import kr.tx24.lib.map.SharedMap;
 import kr.tx24.lib.map.TypeRegistry;
+import kr.tx24.lib.redis.Redis;
 import kr.tx24.lib.redis.RedisUtils;
 import kr.tx24.was.util.*;
 import org.slf4j.Logger;
@@ -140,7 +141,6 @@ public class SignSvc {
             notificationSvc.sendTwoFactorAuth(csrf, type, userMap.getString(type.toLowerCase(), ""));
         }
 
-        // SESSION에 들어갈 userData tll 연장
         RedisUtils.pexpire(csrfRedisKey, Duration.ofMinutes(5).getSeconds() * 1000);
     }
 

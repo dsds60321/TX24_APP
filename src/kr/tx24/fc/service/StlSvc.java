@@ -37,7 +37,7 @@ public class StlSvc {
      * 모달 데이터 조회
      */
     public void detailModal(String trxId, Model model) {
-        List<SharedMap<String, Object>> rows = DummyRepository.of(MockNames.TRX, TypeRegistry.LIST_SHAREDMAP_OBJECT);
+        List<SharedMap<String, Object>> rows = DummyRepository.of(MockNames.CRAWL, TypeRegistry.LIST_SHAREDMAP_OBJECT);
         SharedMap<String, Object> data = rows.stream().filter(row -> row.isEquals("trxId", trxId))
                 .findFirst()
                 .orElseThrow(() -> new TxException(TxResultCode.NO_CONTENTS));

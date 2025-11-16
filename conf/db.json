@@ -1,6 +1,6 @@
 {
   "jdbcurl"     : "jdbc:mariadb://localhost:3306",
-  "username"    : "e2u",
+  "username"    : "root",
   "password"    : "12345",
   "driver"      : "org.mariadb.jdbc.Driver",
   "pool"        : "POOLNAME",

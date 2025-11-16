@@ -43,6 +43,6 @@ public class StlCtl {
     @GetMapping("/trx/{trxId}")
     public String collectionDetail(@PathVariable("trxId") String trxId, Model model){
         stlSvc.detailModal(trxId, model);
-        return "pages/stl/trx/modal/view";
+        return "pages/stl/crawling/modal/view";
     }
 }
