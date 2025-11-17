@@ -167,7 +167,13 @@
             </div>
         </div>
     </div>
+
+    <!--
+     모달 사이즈 modal-fullscreen > modal-xl > modal-lg > modal-md > modal-sm
+    -->
+    <div th:replace="~{pages/layout/fragments :: modal('default', 'modal-xl')}"></div>
 </div>
+
 <script th:src="@{/assets/js/pages/stl/crawling.js}"></script>
 </body>
 </html>

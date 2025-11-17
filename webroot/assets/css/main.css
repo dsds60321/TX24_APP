@@ -149,6 +149,32 @@ body {
 
 
 /* ============================================
+   MODAL POSITIONING
+   ============================================ */
+
+.modal.modal-fixed-position {
+    --modal-fixed-gap: clamp(24px, 8vh, 64px);
+}
+
+.modal.modal-fixed-position .modal-dialog.modal-dialog-centered {
+    display: block;
+    margin: var(--modal-fixed-gap) auto;
+    min-height: auto;
+}
+
+.modal.modal-fixed-position .modal-content {
+    max-height: calc(100vh - (var(--modal-fixed-gap) + var(--modal-fixed-gap)));
+    display: flex;
+    flex-direction: column;
+}
+
+.modal.modal-fixed-position .modal-body {
+    overflow-y: auto;
+    flex: 1 1 auto;
+}
+
+
+/* ============================================
    3. SIDEBAR
    ============================================ */
 

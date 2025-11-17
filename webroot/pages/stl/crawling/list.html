@@ -34,7 +34,7 @@
                     <td><input type="checkbox" class="form-check-input"></td>
                     <td>[[${entry['@INDEX']}]]</td>
                     <td>
-                        <a href="#" onclick="handleEdit(this);" th:data-url="${'/trx/view/fds/'+ entry.trxId}">[[${entry.trxId}]]</a>
+                        <a href="#" data-bs-toggle="modal" data-bs-target="#default" th:data-modal-url="${'/stl/crawling/'+ entry.trxId}">[[${entry.trxId}]]</a>
                     </td>
                     <td>[[${entry.trxDay}]]</td>
                     <td>[[${entry.trxStartDay}]] - [[${entry.trxEndDay}]]</td>

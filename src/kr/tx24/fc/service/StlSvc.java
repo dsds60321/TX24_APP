@@ -26,6 +26,18 @@ public class StlSvc {
     }
 
     /**
+     * 모달 데이터 조회
+     */
+    public void crawlModal(String trxId, Model model) {
+        List<SharedMap<String, Object>> rows = DummyRepository.of(MockNames.CRAWL, TypeRegistry.LIST_SHAREDMAP_OBJECT);
+        SharedMap<String, Object> data = rows.stream().filter(row -> row.isEquals("trxId", trxId))
+                .findFirst()
+                .orElseThrow(() -> new TxException(TxResultCode.NO_CONTENTS));
+
+        model.addAttribute("DATA", data);
+    }
+
+    /**
      * 정산
      */
     public void trxPaging(Model model, List<SearchBean> datas, SearchPage pages) {

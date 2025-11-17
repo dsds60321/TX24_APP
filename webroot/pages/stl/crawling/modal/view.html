@@ -1,0 +1,298 @@
+<style>
+    .crawling-modal {
+        background-color: #FFFFFF;
+    }
+
+    .crawling-modal .tab-content {
+        background-color: #FFFFFF;
+    }
+
+    .crawling-modal .modal-section + .modal-section {
+        margin-top: 1.5rem;
+    }
+
+    .crawling-modal .modal-data-table {
+        width: 100%;
+        border-collapse: collapse;
+        border: 1px solid #E4E8F1;
+        border-radius: 12px;
+        overflow: hidden;
+        background-color: #FFFFFF;
+    }
+
+    .crawling-modal .modal-data-table caption {
+        caption-side: top;
+        text-align: left;
+        font-weight: 600;
+        color: #4C5464;
+        padding-bottom: 0.5rem;
+    }
+
+    .crawling-modal .modal-data-table th,
+    .crawling-modal .modal-data-table td {
+        padding: 0.85rem 1rem;
+        font-size: 0.88rem;
+        border-bottom: 1px solid #E9EDF5;
+    }
+
+    .crawling-modal .modal-data-table thead th {
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        background-color: #F6F8FC;
+        color: #6B7484;
+        font-size: 0.78rem;
+    }
+
+    .crawling-modal .modal-data-table tbody tr:last-child th,
+    .crawling-modal .modal-data-table tbody tr:last-child td {
+        border-bottom: 0;
+    }
+
+    .crawling-modal .modal-data-table th[scope="row"] {
+        background-color: #F8F9FB;
+        color: #4C5464;
+        font-weight: 700;
+        width: 170px;
+    }
+
+    .crawling-modal .modal-data-table.status-table th[scope="row"] {
+        width: 150px;
+    }
+
+    .crawling-modal .modal-data-table td {
+        color: #1F2430;
+    }
+
+    .crawling-modal .modal-data-table .table-description {
+        display: block;
+        margin-top: 4px;
+        font-size: 0.75rem;
+        color: #6B7484;
+    }
+
+    .crawling-modal .modal-data-table .text-right {
+        text-align: right;
+    }
+
+    .crawling-modal .status-chip {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #EEF1F7;
+        color: #30374F;
+        border: 1px solid #E0E5F0;
+        border-radius: 999px;
+        padding: 4px 14px;
+        font-size: 0.78rem;
+        font-weight: 600;
+        min-width: 72px;
+    }
+
+    .crawling-modal .status-chip[data-status="완료"] {
+        background-color: #E6F2FF;
+        color: #0F4C81;
+        border-color: #BBD7FF;
+    }
+
+    .crawling-modal .status-chip[data-status="진행중"] {
+        background-color: #FFF4E0;
+        color: #B7610E;
+        border-color: #FFD8A6;
+    }
+
+    .crawling-modal .status-chip[data-status="실패"],
+    .crawling-modal .status-chip[data-status="오류"] {
+        background-color: #FCE8E6;
+        color: #C62828;
+        border-color: #F4B1B1;
+    }
+
+    .crawling-modal .status-chip[data-status="대기"] {
+        background-color: #F4F6FB;
+        color: #4C5A73;
+        border-color: #E1E6F1;
+    }
+
+    .crawling-modal .note-table td {
+        font-size: 0.85rem;
+        color: #4A5568;
+    }
+
+    @media (max-width: 768px) {
+        .crawling-modal .modal-data-table th[scope="row"] {
+            width: 120px;
+        }
+
+        .crawling-modal .modal-data-table.status-table th[scope="row"] {
+            width: 110px;
+        }
+    }
+</style>
+
+<div class="modal-header p-3">
+    <div>
+        <p class="modal-eyebrow">취급일 <span>2024-05-03</span></p>
+        <h5 class="modal-title">데이터 수집 상세 - 정산번호 미지정</h5>
+    </div>
+    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="닫기"></button>
+</div>
+<div class="modal-body p-0 crawling-modal" data-modal-position="fixed">
+    <div class="nav-box nav-underline">
+        <div class="tab-nav">
+            <button class="tab-button active" data-tab-target="basic">기본정보</button>
+            <button class="tab-button" data-tab-target="settle">정산정보</button>
+        </div>
+        <div class="tab-content">
+            <div id="basic" class="tab-pane active">
+                <div class="modal-section">
+                    <p class="modal-section-title">거래 개요</p>
+                    <table class="modal-data-table status-table">
+                        <tbody>
+                        <tr>
+                            <th scope="row">수집상태</th>
+                            <td>
+                                <span class="status-chip" data-status="대기">대기</span>
+                                <span class="table-description">상태 메시지가 없습니다.</span>
+                            </td>
+                            <th scope="row">정산생성</th>
+                            <td>
+                                <span class="status-chip" data-status="대기">대기</span>
+                                <span class="table-description">등록일 -</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">거래건수</th>
+                            <td>0 건</td>
+                            <th scope="row">총거래금액</th>
+                            <td>0 원</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">채권예상금액</th>
+                            <td colspan="3" class="fw-bold text-primary">0 원</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-section">
+                    <p class="modal-section-title">기본 정보</p>
+                    <table class="modal-data-table info-table">
+                        <tbody>
+                        <tr>
+                            <th scope="row">고객사</th>
+                            <td>고객사명</td>
+                            <th scope="row">MID</th>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">APP</th>
+                            <td>APP 명</td>
+                            <th scope="row">APP ID</th>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">PG</th>
+                            <td>PG사</td>
+                            <th scope="row">정산번호</th>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">취급일</th>
+                            <td>2024-05-03</td>
+                            <th scope="row">등록일시</th>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">대상거래기간</th>
+                            <td>2024-05-01</td>
+                            <th scope="row">종료일</th>
+                            <td>2024-05-02</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">수집상태 메시지</th>
+                            <td colspan="3">등록된 메시지가 없습니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-section">
+                    <p class="modal-section-title">최근 메시지</p>
+                    <table class="modal-data-table note-table">
+                        <tbody>
+                        <tr>
+                            <th scope="row">최근 업데이트</th>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">메시지</th>
+                            <td>등록된 메시지가 없습니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div id="settle" class="tab-pane">
+                <div class="modal-section">
+                    <p class="modal-section-title">정산 현황</p>
+                    <table class="modal-data-table status-table">
+                        <tbody>
+                        <tr>
+                            <th scope="row">정산생성여부</th>
+                            <td><span class="status-chip" data-status="대기">대기</span></td>
+                            <th scope="row">총거래금액</th>
+                            <td>0 원</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">거래건수</th>
+                            <td>0 건</td>
+                            <th scope="row">채권예상금액</th>
+                            <td>0 원</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">수집상태</th>
+                            <td>-</td>
+                            <th scope="row">등록일</th>
+                            <td>-</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-section">
+                    <p class="modal-section-title">정산 요약</p>
+                    <table class="modal-data-table">
+                        <thead>
+                        <tr>
+                            <th scope="col">구분</th>
+                            <th scope="col" class="text-right">거래건수</th>
+                            <th scope="col" class="text-right">총거래금액</th>
+                            <th scope="col" class="text-right">채권예상금액</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>총합</td>
+                            <td class="text-right">0</td>
+                            <td class="text-right">0</td>
+                            <td class="text-right">0</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-section">
+                    <p class="modal-section-title">비고</p>
+                    <table class="modal-data-table note-table">
+                        <tbody>
+                        <tr>
+                            <th scope="row">등록일시</th>
+                            <td>-</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">메시지</th>
+                            <td>등록된 메시지가 없습니다.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

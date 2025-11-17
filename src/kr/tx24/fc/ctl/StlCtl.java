@@ -29,6 +29,12 @@ public class StlCtl {
         return "pages/stl/crawling/list";
     }
 
+    @GetMapping("/crawling/{trxId}")
+    public String crawlingDetail(@PathVariable("trxId") String trxId, Model model){
+        stlSvc.crawlModal(trxId, model);
+        return "pages/stl/crawling/modal/view";
+    }
+
     @GetMapping("/trx")
     public String trxForm() {
         return "pages/stl/trx/form";

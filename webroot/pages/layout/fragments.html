@@ -19,7 +19,7 @@
 
     <!--    기본 모달 -->
     <th:block th:fragment="modal(id, size)">
-        <div class="modal fade" th:id="${id}" tabindex="-1" th:attr="aria-labelledby=${id + '_label'}" aria-hidden="true">
+        <div class="modal fade modal-fixed-position" th:id="${id}" tabindex="-1" th:attr="aria-labelledby=${id + '_label'}" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" th:classappend="' ' + (${size} != null ? ${size} : 'modal-lg')">
                 <div class="modal-content">
                 </div>
