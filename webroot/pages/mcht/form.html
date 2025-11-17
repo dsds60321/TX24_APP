@@ -1,0 +1,168 @@
+<html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div class="row">
+    <div class="col-12">
+        <div class="pt-2">
+
+            <div th:replace="~{pages/layout/fragments :: maps('고객사조회')}"></div>
+
+
+            <div class="card-wrapper search" data-url="/mcht/list" data-target="#search-list"
+                 data-detail-mode="true">
+                <form action="">
+                    <div class="card-contents">
+                        <div class="card-row">
+                            <div class="col d-flex search-container">
+                                <div class="card-title"><p class="fs-8 fw-bold">취급일</p></div>
+                                <div class="card-txt">
+                                    <div class="search-group">
+                                        <input type="text" class="form-control fs-8 tx-datepicker" name="regDay"
+                                               data-oper-sep=" - " data-separator="-" data-format="yyyy-mm-dd"
+                                               data-default="today" data-range="Y" data-oper="eq" data-group="0">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex search-container">
+                                <div class="card-title"><p class="fs-8 fw-bold">수집상태</p></div>
+                                <div class="card-txt">
+                                    <div class="search-group">
+                                        <select onchange="search.selectOption(this)" name="status" id="" data-oper="eq" class="form-control fs-8">
+                                            <option value="">----</option>
+                                            <option value="대기">대기</option>
+                                            <option value="완료">완료</option>
+                                            <option value="실패">실패</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col d-flex search-container">
+                                <div class="card-title"><p class="fs-8 fw-bold">고객사명</p></div>
+                                <div class="card-txt">
+                                    <div class="search-group client-name-field">
+                                        <input type="text" name="mchtName" data-oper="eq" class="form-control fs-8" data-source="mcht" data-val="name" data-key="name" placeholder="고객사명을 입력하세요">
+                                        <button type="button" class="btn search-btn circle" onclick="search.addTag(this)"></button>
+                                        <!--  suggest 컨테이너 div -->
+                                        <div class="client-suggest-panel" data-role="suggestions"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tag-contents">
+                        <div class="tag-inner">
+                            <div class="search-form-w">
+                                <a href="#" class="search-reload fs-8 fw-bold">
+                                    Reset
+                                </a>
+                            </div>
+                            <div class="card-txt">
+                                <div class="field">
+                                </div>
+
+                                <div class="tag tag-temp" style="display: none;">
+                                    <a href="#" class="tag-close">
+                                        <i class="fas fa-rectangle-xmark"></i>
+                                    </a>
+                                    <span class="tag-label"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <button type="button" class="search-btn btn btn-primary search-submit-btn"
+                                onclick="search.submit(this, event, 'tag');">검색
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="table-wrapper mt-3">
+                <div class="table-header">
+                    <div class="txt-box">
+                        <p class="fs-6 fw-bold mb-0 result-title search-form-w">Result</p>
+                        <p class="search-total fs-9 text-grey mb-0 ms-3">0</p>
+                        <p class="fs-9 text-grey mb-0">건 조회됨</p>
+                    </div>
+                    <div class="btn-box">
+
+                        <!--    신규 select box   -->
+                        <div class="simple-select">
+                            <div class="simple-select-trigger">
+                                <span class="selected-label" data-placeholder="선택하세요">선택하세요</span>
+                                <span>▾</span>
+                            </div>
+
+                            <ul class="simple-select-options">
+                                <li data-value="데이터 수집">데이터 수집</li>
+                                <li data-value="D+0지급내역수집">D+0지급내역수집</li>
+                            </ul>
+
+                            <input type="hidden" name="type" value="">
+                        </div>
+
+                        <div class="simple-select">
+                            <div class="simple-select-trigger">
+                                <span class="selected-label" data-placeholder="선택하세요">선택하세요</span>
+                                <span>▾</span>
+                            </div>
+
+                            <ul class="simple-select-options">
+                                <li data-value="정산생성">정산생성</li>
+                            </ul>
+
+                            <input type="hidden" name="type" value="">
+                        </div>
+
+                        <div class="simple-select">
+                            <div class="simple-select-trigger">
+                                <span class="selected-label">show 20</span>
+                                <span>▾</span>
+                            </div>
+
+                            <ul class="simple-select-options">
+                                <li onclick="search.sizingbtn(this)" data-value="20">show 20</li>
+                                <li onclick="search.sizingbtn(this)" data-value="50">show 50</li>
+                                <li onclick="search.sizingbtn(this)" data-value="100">show 100</li>
+                            </ul>
+                            <input type="hidden" id="perPage" value="20" oninput="search.sizingbtn(this)">
+                        </div>
+
+<!--                        <select onchange="search.sizingbtn(this)" name="" id="" class="form-control select-grey fs-8 rows-per-page">-->
+<!--                            <option value="20">show 20</option>-->
+<!--                            <option value="50">show 50</option>-->
+<!--                            <option value="100">show 100</option>-->
+<!--                        </select>-->
+                        <button onclick="search.submit(this)" data-type="excel" type="button"
+                                class="badge bg-grey-outline"><i class="fa-solid fa-file-excel"></i></button>
+                    </div>
+                </div>
+
+                <div class="page-container">
+                    <div class="table-contents">
+                        <table>
+                            <thead>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td colspan="20">조회된 데이터가 없습니다.</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="table-footer">
+                        <div class="paging">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--
+     모달 사이즈 modal-fullscreen > modal-xl > modal-lg > modal-md > modal-sm
+    -->
+    <div th:replace="~{pages/layout/fragments :: modal('default', 'modal-xl')}"></div>
+</div>
+
+</body>
+</html>

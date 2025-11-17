@@ -515,7 +515,7 @@ select.select-grey:focus {
 /* Modal navigation - underline style */
 .modal .nav-underline .tab-nav {
     border-bottom: 1px solid #B8C1CE;
-    padding: 0 1.5rem;
+    padding: 0.8rem 1.5rem;
     display: flex;
     gap: 1.5rem;
 }
@@ -775,5 +775,139 @@ select.select-grey:focus {
 @media (max-width: 992px) {
     .m-none {
         display: none !important;
+    }
+}
+
+
+/* ============================================
+   10. CUSTOM MODAL - gh
+   ============================================   */
+.tx-modal {
+    background-color: #FFFFFF;
+    border-radius: 12px;
+}
+
+.tx-modal .tab-content {
+    background-color: #FFFFFF;
+}
+
+.tx-modal .modal-section + .modal-section {
+    margin-top: 1.5rem;
+}
+
+.tx-modal .modal-data-table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 1px solid #E4E8F1;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #FFFFFF;
+}
+
+.tx-modal .modal-data-table caption {
+    caption-side: top;
+    text-align: left;
+    font-weight: 600;
+    color: #4C5464;
+    padding-bottom: 0.5rem;
+}
+
+.tx-modal .modal-data-table th,
+.tx-modal .modal-data-table td {
+    padding: 0.85rem 1rem;
+    font-size: 0.88rem;
+    border-bottom: 1px solid #E9EDF5;
+}
+
+.tx-modal .modal-data-table thead th {
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    background-color: #F6F8FC;
+    color: #6B7484;
+    font-size: 0.78rem;
+}
+
+.tx-modal .modal-data-table tbody tr:last-child th,
+.tx-modal .modal-data-table tbody tr:last-child td {
+    border-bottom: 0;
+}
+
+.tx-modal .modal-data-table th[scope="row"] {
+    background-color: #F8F9FB;
+    color: #4C5464;
+    font-weight: 700;
+    width: 170px;
+}
+
+.tx-modal .modal-data-table.status-table th[scope="row"] {
+    width: 150px;
+}
+
+.tx-modal .modal-data-table td {
+    color: #1F2430;
+}
+
+.tx-modal .modal-data-table .table-description {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.75rem;
+    color: #6B7484;
+}
+
+.tx-modal .modal-data-table .text-right {
+    text-align: right;
+}
+
+.tx-modal .status-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #EEF1F7;
+    color: #30374F;
+    border: 1px solid #E0E5F0;
+    border-radius: 999px;
+    padding: 4px 14px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    min-width: 72px;
+}
+
+.tx-modal .status-chip[data-status="완료"] {
+    background-color: #E6F2FF;
+    color: #0F4C81;
+    border-color: #BBD7FF;
+}
+
+.tx-modal .status-chip[data-status="진행중"] {
+    background-color: #FFF4E0;
+    color: #B7610E;
+    border-color: #FFD8A6;
+}
+
+.tx-modal .status-chip[data-status="실패"],
+.tx-modal .status-chip[data-status="오류"] {
+    background-color: #FCE8E6;
+    color: #C62828;
+    border-color: #F4B1B1;
+}
+
+.tx-modal .status-chip[data-status="대기"] {
+    background-color: #F4F6FB;
+    color: #4C5A73;
+    border-color: #E1E6F1;
+}
+
+.tx-modal .note-table td {
+    font-size: 0.85rem;
+    color: #4A5568;
+}
+
+@media (max-width: 768px) {
+    .tx-modal .modal-data-table th[scope="row"] {
+        width: 120px;
+    }
+
+    .tx-modal .modal-data-table.status-table th[scope="row"] {
+        width: 110px;
     }
 }

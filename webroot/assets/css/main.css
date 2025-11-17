@@ -153,7 +153,7 @@ body {
    ============================================ */
 
 .modal.modal-fixed-position {
-    --modal-fixed-gap: clamp(24px, 8vh, 64px);
+    --modal-fixed-gap: clamp(72px, 8vh, 64px);
 }
 
 .modal.modal-fixed-position .modal-dialog.modal-dialog-centered {
@@ -171,6 +171,76 @@ body {
 .modal.modal-fixed-position .modal-body {
     overflow-y: auto;
     flex: 1 1 auto;
+}
+
+.modal-header-with-close {
+    position: relative;
+    padding-right: 3rem;
+}
+
+.modal-title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.modal-close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 36px;
+    height: 36px;
+    border: 0;
+    border-radius: 50%;
+    background-color: rgba(244, 246, 251, 0.9);
+    color: #6B7484;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.modal-close-button:hover {
+    background-color: rgba(227, 232, 244, 0.9);
+    color: #1F2430;
+}
+
+.modal-close-button i {
+    pointer-events: none;
+}
+
+.modal-action-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding: 1rem;
+    border-top: 1px solid #E4E8F1;
+}
+
+.modal-section-title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding-left: 0.8rem;
+    margin-bottom: 0.75rem;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1F2430;
+    letter-spacing: -0.01em;
+}
+
+.modal-section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.1rem;
+    bottom: 0.1rem;
+    width: 4px;
+    border-radius: 999px;
+    background: linear-gradient(180deg, #4F7EFF 0%, #6AC9FF 100%);
 }
 
 
@@ -1466,14 +1536,13 @@ body {
 /*SELECT CSS*/
 .simple-select {
     position: relative;
-    width: 150px;
+    width: 140px;
     min-width: 0;
     font-size: 14px;
     flex: 1 1 150px;
 }
 
 .simple-select-trigger {
-    border: 1px solid #ced4da;
     background: #fff;
     padding: 6px 8px;
     border-radius: 2px; /* radius 최소 */
@@ -1481,6 +1550,10 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.simple-select-trigger:hover {
+    border: 1px solid #ced4da;
 }
 
 
