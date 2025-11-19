@@ -615,36 +615,59 @@ export default class Layout {
          * referer : 네비게이션 탭 설정값
          * options : { activeTab : 탭 등록 여부 , referer : Nav 찾기 위한 URL}
          */
-		function open({title, url, options = {}}) {
-            options = { activeTab : true , ...options}
+        function open(param) {
+            let title;
+            let url;
+            let options = {};
 
-            console.log('open', title, url, options)
-			if (!title && !url) {
-				return;
-			}
+            // 1) HTML 엘리먼트로 들어온 경우: <button onclick="open(this)" ...>
+            if (param instanceof HTMLElement) {
+                const ds = param.dataset || {};
+
+                // data-title, data-url
+                title = ds.title;
+                url = ds.url;
+
+                // 나머지 data-* 들은 options로 사용 (title, url 제외)
+                const { title: _t, url: _u, ...rest } = ds;
+                options = { ...rest };
+            }
+            // 2) 기존처럼 객체로 들어온 경우: open({ title, url, options })
+            else {
+                const cfg = param || {};
+                ({ title, url, options = {} } = cfg);
+            }
+
+            // 기본 옵션 병합 (기존 로직 유지)
+            options = { activeTab: true, ...options };
+
+            console.log('open', title, url, options);
+
+            if (!title && !url) {
+                return;
+            }
 
             if (options.referer) {
                 state.refererUrl = options.referer;
             }
 
-			const tab = {
-				title: title,
-				url: url,
-			};
+            const tab = {
+                title: title,
+                url: url,
+            };
 
             if (options.activeTab) {
                 state.tabs.set(url, tab);
                 state.activeUrl = url;
             }
 
-
-			try {
-				activate(url, {skipNavSync: true});
-			} finally {
-				// 콘텐츠 로딩 결과와 관계없이 UI 상태는 항상 동기화
-				toggleNav(url);
-			}
-		}
+            try {
+                activate(url, { skipNavSync: true });
+            } finally {
+                // 콘텐츠 로딩 결과와 관계없이 UI 상태는 항상 동기화
+                toggleNav(url);
+            }
+        }
 
 		function activate(tabUrl, options = {}) {
 			const {skipNavSync = false} = options;

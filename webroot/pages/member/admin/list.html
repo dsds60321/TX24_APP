@@ -1,5 +1,6 @@
 <div th:fragment="list" th:remove="tag">
-    <div class="table-contents" th:data-current=${RLIST.page.selectedPage} th:data-lastnum=${RLIST.page.lastPage} th:data-total=${RLIST.page.totalSize} th:data-size=${RLIST.page.rowsPerPage}>
+    <div class="table-contents" th:data-current=${RLIST.page.selectedPage} th:data-lastnum=${RLIST.page.lastPage}
+         th:data-total=${RLIST.page.totalSize} th:data-size=${RLIST.page.rowsPerPage}>
         <table>
             <thead>
             <tr>
@@ -28,22 +29,28 @@
                     <tr>
                         <td>[[${entry['@INDEX']}]]</td>
                         <td>
-                            <a class="link" style="cursor: pointer" th:attr="onclick=|layout.TabManager.open({ title : '사용자 수정',  url : '/member/admin/${entry.id}' , options : { activeTab : false } })|">[[${entry.id}]]</a>
+                            <!--  th:attr 탭 open시 사용  -->
+                            <a class="link" style="cursor:pointer" onclick="layout.TabManager.open(this)" th:attr="data-title='사용자 수정', data-url=|/member/admin/${entry.id}|, data-referer='/member/admin/form', data-active-tab='false'">
+                                [[${entry.id}]]
+                            </a>
+                            <!--  아래와 같이 사용도 가능 -->
+<!--                            <a class="link" style="cursor: pointer" th:attr="onclick=|layout.TabManager.open({ title : '사용자 수정',  url : '/member/admin/${entry.id}' , options : { activeTab : false } })|">[[${entry.id}]]</a>-->
+
                         </td>
                         <td style="min-width:100px;">[[${entry.name}]]</td>
                         <td>[[${entry.phone}]]</td>
                         <td>[[${entry.email}]]</td>
                         <td>[[${entry.dept}]]</td>
                         <td>
-                            <div th:if = "${entry.role eq 0}"> 임원</div>
-                            <div th:if = "${entry.role eq 1}"> 팀장</div>
-                            <div th:if = "${entry.role eq 2}"> 팀원</div>
+                            <div th:if="${entry.role eq 0}"> 임원</div>
+                            <div th:if="${entry.role eq 1}"> 팀장</div>
+                            <div th:if="${entry.role eq 2}"> 팀원</div>
                         </td>
                         <td>
-                            <div th:if = "${entry.status eq 'pending'}"> <span class="badge bg-danger">대기</span> </div>
-                            <div th:if = "${entry.status eq 'active'}"> <span class="badge bg-info">사용</span> </div>
-                            <div th:if = "${entry.status eq 'inactive'}"> <span class="badge bg-primary">중지</span> </div>
-                            <div th:if = "${entry.status eq 'terminate'}"> <span class="badge bg-dark">탈퇴</span> </div>
+                            <div th:if="${entry.status eq 'pending'}"><span class="badge bg-danger">대기</span></div>
+                            <div th:if="${entry.status eq 'active'}"><span class="badge bg-info">사용</span></div>
+                            <div th:if="${entry.status eq 'inactive'}"><span class="badge bg-primary">중지</span></div>
+                            <div th:if="${entry.status eq 'terminate'}"><span class="badge bg-dark">탈퇴</span></div>
                         </td>
                         <td class="date" style="min-width: 125px;">[[${entry.udtDate}]]</td>
                         <td class="date" style="min-width: 125px;">[[${entry.regDate}]]</td>

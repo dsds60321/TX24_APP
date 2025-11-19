@@ -18,4 +18,8 @@ public class MchtSvc {
         List<SharedMap<String, Object>> rows = DummyRepository.of(MockNames.MCHT, datas, pages);
         model.addAttribute("RLIST", new SearchResponse(rows, pages));
     }
+
+    public void detailView(Model model, String mchtId) {
+
+    }
 }

@@ -53,6 +53,10 @@
                 .onSuccess(async (event) => {
                     event.preventDefault();
                     try {
+                        if (!await util.sweetAlert.confirm('해당 사용자를 등록하시겠습니까?')) {
+                            return;
+                        }
+
                         layout.Overlay.loading(true);
                         const {data} = await httpClient.post(this.form.action);
                         if (data.result) {

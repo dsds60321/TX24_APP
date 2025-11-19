@@ -1,6 +1,6 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 <head>
-    <meta charset="UTF-8"/>
+    <meta charset="UTF-8" />
     <style>
         .multi-step-form {
             margin-top: 16px;
@@ -8,13 +8,11 @@
             flex-direction: column;
             gap: 24px;
         }
-
         .step-progress {
             display: flex;
             flex-wrap: wrap;
             gap: 12px;
         }
-
         .step-progress__item {
             flex: 1 1 0;
             min-width: 120px;
@@ -26,37 +24,31 @@
             color: #64748b;
             transition: all 0.2s ease;
         }
-
         .step-progress__item.is-current {
             border-style: solid;
             border-color: #3b82f6;
             background: #e0f2ff;
             color: #0f172a;
         }
-
         .step-progress__item.is-complete {
             border-color: #22c55e;
             background: #e7f9f0;
             color: #065f46;
         }
-
         .step-progress__title {
             display: block;
             font-weight: 600;
         }
-
         .step-progress__status {
             display: block;
             font-size: 0.8rem;
             margin-top: 4px;
         }
-
         .tab-navigation {
             display: flex;
             gap: 8px;
             border-bottom: 1px solid #e2e8f0;
         }
-
         .tab-button {
             padding: 10px 16px;
             border: none;
@@ -66,70 +58,70 @@
             cursor: pointer;
             border-bottom: 2px solid transparent;
         }
-
         .tab-button.active {
             color: #0f172a;
             border-color: #2563eb;
         }
-
         .tab-pane {
             display: none;
         }
-
         .tab-pane.active {
             display: flex;
             flex-direction: column;
             gap: 24px;
         }
-
-        .doc-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
-        .doc-list__row {
-            display: grid;
-            grid-template-columns: minmax(180px, 240px) 1fr;
-            gap: 16px;
-            padding: 10px 14px;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
+        .section-card {
             background: #fff;
-            box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            box-shadow: 0 25px 45px rgba(15, 23, 42, 0.05);
+            padding: 20px 24px;
         }
-
-        .doc-check {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+        .section-card__header {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+        .section-card__title {
+            font-size: 1rem;
             font-weight: 600;
-            color: #0f172a;
+            margin-bottom: 4px;
         }
-
-        .doc-need {
+        .section-card__meta {
+            font-size: 0.85rem;
+            color: #64748b;
             margin: 0;
-            font-size: 0.7rem;
-            color: #9e9e9e;
         }
-
-        .doc-upload-panel {
-            margin-top: 16px;
-            border: 1px dashed #d6def1;
+        .section-card__actions {
+            display: flex;
+            gap: 8px;
+        }
+        .doc-upload-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+        }
+        .doc-card {
+            border: 1px solid #e2e8f0;
             border-radius: 12px;
             padding: 16px;
-            background: #f8faff;
             display: flex;
             flex-direction: column;
             gap: 12px;
-            transition: border-color 0.2s ease, background 0.2s ease;
+            background: #fdfefe;
         }
-        .doc-upload-panel.is-dragging {
-            border-color: #2563eb;
-            background: #e0ecff;
+        .doc-card__title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
         }
-
-
+        .doc-card__desc {
+            color: #475569;
+            font-size: 0.82rem;
+            margin: 0;
+        }
         .file-chip-list {
             min-height: 36px;
             padding: 6px;
@@ -140,18 +132,15 @@
             flex-wrap: wrap;
             gap: 6px;
         }
-
         .file-chip-list.empty {
             align-items: center;
             justify-content: center;
         }
-
         .file-chip__placeholder {
             color: #94a3b8;
             font-size: 0.82rem;
             margin: 0;
         }
-
         .file-chip {
             display: inline-flex;
             align-items: center;
@@ -162,7 +151,6 @@
             color: #166534;
             font-size: 0.8rem;
         }
-
         .file-chip__remove {
             border: none;
             background: transparent;
@@ -171,19 +159,129 @@
             font-size: 1rem;
             line-height: 1;
         }
-
         .file-upload-btn {
             position: relative;
             overflow: hidden;
         }
-
         .file-upload-btn input[type="file"] {
             position: absolute;
             inset: 0;
             opacity: 0;
             cursor: pointer;
         }
-
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .form-field label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #475569;
+        }
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .item-row {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 12px;
+            align-items: center;
+        }
+        .item-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+        .badge-status {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 500;
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+        .badge-status.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+        .item-actions {
+            display: flex;
+            gap: 6px;
+        }
+        .tab-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        .inline-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 24px;
+        }
+        .inline-modal.open {
+            display: flex;
+        }
+        .inline-modal__dialog {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 40px 70px rgba(15, 23, 42, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .inline-modal__header,
+        .inline-modal__footer {
+            padding: 16px 20px;
+            border-bottom: 1px solid #eef2f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .inline-modal__footer {
+            border-bottom: none;
+            border-top: 1px solid #eef2f7;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        .inline-modal__body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+        .inline-modal__close {
+            border: none;
+            background: transparent;
+            font-size: 1.25rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+        @media (max-width: 768px) {
+            .item-row {
+                grid-template-columns: 1fr;
+            }
+            .section-card__header {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
@@ -195,17 +293,17 @@
             <form id="merchantForm" class="multi-step-form" onsubmit="return false;">
                 <div class="step-progress" aria-label="등록 단계">
                     <div class="step-progress__item is-current" data-step="documents">
-                        <span class="step-progress__title">1. 서류</span>
+                        <span class="step-progress__title">1. 서류취합</span>
                         <span class="step-progress__status">미완료</span>
                     </div>
 
                     <div class="step-progress__item" data-step="basic">
                         <span class="step-progress__title">2. 기본 / 대표자</span>
-                        <span class="step-progress__status">미완료</span>
+                        <span class="step-progress__status">대기</span>
                     </div>
                     <div class="step-progress__item" data-step="contract">
                         <span class="step-progress__title">3. 계약 · 계좌 · 지급</span>
-                        <span class="step-progress__status">미완료</span>
+                        <span class="step-progress__status">대기</span>
                     </div>
                 </div>
 
@@ -218,108 +316,107 @@
                 <div class="tab-content">
 
                     <div class="tab-pane active" data-tab-pane="documents">
-                        <div class="card-wrapper edit register-card">
-                            <form action="#" method="post" onsubmit="return false" class="doc-request-form">
-                                <div class="card-group-divider d-flex justify-content-between align-items-center">
-                                    <span>필수 서류 취합</span>
-                                    <div class="d-flex gap-2">
-                                        <button type="reset" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2">
-                                            초기화
-                                        </button>
-                                        <button type="submit" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">등록
-                                        </button>
-                                    </div>
+                        <section class="section-card">
+                            <div class="section-card__header">
+                                <div>
+                                    <p class="section-card__title">필수 서류 취합</p>
+                                    <p class="section-card__meta">계약 전 필요한 모든 서류를 업로드하세요.</p>
                                 </div>
-
-                                <div class="doc-list">
-                                    <div class="doc-list__row">
-                                        <label class="doc-check">
-                                            <input type="checkbox">
-                                            <span>계약서</span>
-                                        </label>
-                                        <p class="doc-need">3부, 날인확인</p>
-                                    </div>
-                                    <div class="doc-list__row">
-                                        <label class="doc-check">
-                                            <input type="checkbox">
-                                            <span>사업자등록증</span>
-                                        </label>
-                                        <p class="doc-need">-</p>
-                                    </div>
-                                    <div class="doc-list__row">
-                                        <label class="doc-check">
-                                            <input type="checkbox">
-                                            <span>대표자이사 신분증 사본</span>
-                                        </label>
-                                        <p class="doc-need">신분증 검증</p>
-                                    </div>
-                                    <div class="doc-list__row">
-                                        <label class="doc-check">
-                                            <input type="checkbox">
-                                            <span>통장 사본</span>
-                                        </label>
-                                        <p class="doc-need">-</p>
-                                    </div>
-                                    <div class="doc-list__row">
-                                        <label class="doc-check">
-                                            <input type="checkbox">
-                                            <span>법인등기부등본</span>
-                                        </label>
-                                        <p class="doc-need">원본, 3개월이내</p>
-                                    </div>
-                                    <div class="doc-list__row">
-                                        <label class="doc-check">
-                                            <input type="checkbox">
-                                            <span>법인인감증명서</span>
-                                        </label>
-                                        <p class="doc-need">원본, 3개월이내</p>
-                                    </div>
-                                    <div class="doc-list__row">
-                                        <label class="doc-check">
-                                            <input type="checkbox">
-                                            <span>연대보증인 신분증 사본</span>
-                                        </label>
-                                        <p class="doc-need">신분증 검증</p>
-                                    </div>
-                                    <div class="doc-list__row">
-                                        <label class="doc-check">
-                                            <input type="checkbox">
-                                            <span>연대보증인 개인인감증명서</span>
-                                        </label>
-                                        <p class="doc-need">원본</p>
-                                    </div>
-                                    <div class="doc-list__row">
-                                        <label class="doc-check">
-                                            <input type="checkbox">
-                                            <span>국세 및 지방세 완납증명서</span>
-                                        </label>
-                                        <p class="doc-need">원본</p>
-                                    </div>
+                                <div class="section-card__actions">
+                                    <button type="button" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2">전체 다운로드</button>
+                                    <button type="button" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2">업로드 이력</button>
                                 </div>
-
-                                <div class="doc-upload-panel" data-role="doc-upload-panel">
-                                    <div class="file-chip-list empty flex-column" id="docUploadList" aria-live="polite">
-                                        <div class="mb-3"
-                                             style="font-size: 1.21875rem; line-height: 1.2; margin-top: 0; margin-bottom: 0.5rem; color:#495057">
-                                            <i class="fa-solid fa-cloud-arrow-up display-4 text-muted"
-                                               style="color: #878a99!important; font-size: calc(1.475rem + 2.7vw); line-height: 1.2;"></i>
+                            </div>
+                            <div class="doc-upload-grid">
+                                <div class="doc-card">
+                                    <div>
+                                        <p class="doc-card__title">계약서</p>
+                                        <p class="doc-card__desc">법인 직인 날인이 포함된 최신 계약서</p>
+                                    </div>
+                                    <div class="file-chip-list">
+                                        <div class="file-chip">
+                                            <span class="file-chip__name">contract_v1.pdf</span>
+                                            <button type="button" class="file-chip__remove" aria-label="계약서 삭제">&times;</button>
                                         </div>
-                                        <p class="file-chip__placeholder">첨부파일을 끌어오거나, 구역을 클릭하여 업로드하세요.</p>
                                     </div>
-
-                                    <!--                                <div class="file-chip-list" id="docUploadList">-->
-                                    <!--                                    <div class="file-chip">-->
-                                    <!--                                        <span class="file-chip__name">contract_v1.pdf</span>-->
-                                    <!--                                        <button type="button" class="file-chip__remove" aria-label="contract_v1.pdf 삭제">×</button>-->
-                                    <!--                                    </div>-->
-                                    <!--                                    <div class="file-chip">-->
-                                    <!--                                        <span class="file-chip__name">ceo_id.jpg</span>-->
-                                    <!--                                        <button type="button" class="file-chip__remove" aria-label="ceo_id.jpg 삭제">×</button>-->
-                                    <!--                                    </div>-->
-                                    <input type="file" id="docUploadInput" hidden>
+                                    <label class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 file-upload-btn">
+                                        파일 업로드
+                                        <input type="file" hidden>
+                                    </label>
                                 </div>
-                            </form>
-                        </div>
+                                <div class="doc-card">
+                                    <div>
+                                        <p class="doc-card__title">사업자등록증</p>
+                                        <p class="doc-card__desc">최근 3개월 이내 발급본만 인정됩니다.</p>
+                                    </div>
+                                    <div class="file-chip-list empty">
+                                        <p class="file-chip__placeholder">업로드된 파일이 없습니다.</p>
+                                    </div>
+                                    <label class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 file-upload-btn">
+                                        파일 업로드
+                                        <input type="file" hidden>
+                                    </label>
+                                </div>
+                                <div class="doc-card">
+                                    <div>
+                                        <p class="doc-card__title">대표자 신분증</p>
+                                        <p class="doc-card__desc">대표자 또는 수권인 사본을 컬러로 첨부합니다.</p>
+                                    </div>
+                                    <div class="file-chip-list">
+                                        <div class="file-chip">
+                                            <span class="file-chip__name">ceo_id.jpg</span>
+                                            <button type="button" class="file-chip__remove" aria-label="신분증 삭제">&times;</button>
+                                        </div>
+                                    </div>
+                                    <label class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 file-upload-btn">
+                                        파일 업로드
+                                        <input type="file" hidden>
+                                    </label>
+                                </div>
+                                <div class="doc-card">
+                                    <div>
+                                        <p class="doc-card__title">통장 사본</p>
+                                        <p class="doc-card__desc">정산 계좌와 동일한 계좌번호가 노출되어야 합니다.</p>
+                                    </div>
+                                    <div class="file-chip-list empty">
+                                        <p class="file-chip__placeholder">업로드된 파일이 없습니다.</p>
+                                    </div>
+                                    <label class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 file-upload-btn">
+                                        파일 업로드
+                                        <input type="file" hidden>
+                                    </label>
+                                </div>
+                                <div class="doc-card">
+                                    <div>
+                                        <p class="doc-card__title">등기부등본</p>
+                                        <p class="doc-card__desc">말소사항 포함 전체본, 1개월 이내 발급본</p>
+                                    </div>
+                                    <div class="file-chip-list empty">
+                                        <p class="file-chip__placeholder">업로드된 파일이 없습니다.</p>
+                                    </div>
+                                    <label class="btn btn-grey-outline fs-9 pt-0 pt-0 btn-radius-2 file-upload-btn">
+                                        파일 업로드
+                                        <input type="file" hidden>
+                                    </label>
+                                </div>
+                                <div class="doc-card">
+                                    <div>
+                                        <p class="doc-card__title">인감증명서</p>
+                                        <p class="doc-card__desc">대표자 인감증명서 원본 스캔본 (1개월 이내)</p>
+                                    </div>
+                                    <div class="file-chip-list">
+                                        <div class="file-chip">
+                                            <span class="file-chip__name">seal_cert.pdf</span>
+                                            <button type="button" class="file-chip__remove" aria-label="인감증명서 삭제">&times;</button>
+                                        </div>
+                                    </div>
+                                    <label class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2 file-upload-btn">
+                                        파일 업로드
+                                        <input type="file" hidden>
+                                    </label>
+                                </div>
+                            </div>
+                        </section>
                     </div>
 
 
@@ -327,23 +424,17 @@
 
                         <div class="card-group-divider"><span>고객사 정보</span></div>
 
-                        <form action="/member/admin/add" id="adminRegisterForm" name="adminRegisterForm" method="POST"
-                              onsubmit="return false" novalidate="novalidate">
+                        <form action="/member/admin/add" id="adminRegisterForm" name="adminRegisterForm" method="POST" onsubmit="return false" novalidate="novalidate">
 
                             <div class="card-wrapper edit register-card">
                                 <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
                                     <div>
-                                        <p class="fs-6 fw-bold mb-1">고객사 기본정보</p>
+                                        <p class="fs-6 fw-bold mb-1">사용자 기본정보</p>
                                         <p class="register-lead mb-0">필수 항목을 입력하면 등록 버튼이 활성화됩니다.</p>
                                     </div>
                                     <div class="d-flex gap-2">
-                                        <button type="reset" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2">
-                                            초기화
-                                        </button>
-                                        <button type="submit"
-                                                class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2 flex-submit  disabled"
-                                                disabled="">등록
-                                        </button>
+                                        <button type="reset" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2">초기화</button>
+                                        <button type="submit" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2 flex-submit  disabled" disabled="">등록</button>
                                     </div>
                                 </div>
 
@@ -353,19 +444,17 @@
                                             <div class="card-title required"><p class="fs-8 fw-bold">아이디</p></div>
                                             <div class="card-txt form-block__body">
                                                 <div class="form-field">
-                                                    <input type="text" id="id" name="id" class="form-control fs-8"
-                                                           placeholder="tx_admin01" minlength="4" maxlength="20"
-                                                           autocomplete="username" value="" required="">
+                                                    <input type="text" id="id" name="id" class="form-control fs-8" placeholder="tx_admin01" minlength="4" maxlength="20" autocomplete="username" value="" required="">
                                                     <p class="form-hint">영문/숫자 4~20자, 특수문자 제외</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col d-flex form-block">
-                                            <div class="card-title required"><p class="fs-8 fw-bold">상호명</p></div>
+                                            <div class="card-title required"><p class="fs-8 fw-bold">이름</p></div>
                                             <div class="card-txt form-block__body">
                                                 <div class="form-field">
-                                                    <input type="text" id="name" name="name" class="form-control fs-8"
-                                                           placeholder="" autocomplete="name" value="" required="">
+                                                    <input type="text" id="name" name="name" class="form-control fs-8" placeholder="홍길동" autocomplete="name" value="" required="">
+                                                    <p class="form-hint">실제 사용자 성명을 입력하세요.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -373,20 +462,45 @@
 
                                     <div class="card-row m-0 ">
                                         <div class="col d-flex form-block">
-                                            <div class="card-title required"><p class="fs-8 fw-bold">사업자번호</p></div>
+                                            <div class="card-title required"><p class="fs-8 fw-bold">이메일</p></div>
                                             <div class="card-txt form-block__body">
                                                 <div class="form-field">
-                                                    <input type="text" id="name" name="name" class="form-control fs-8"
-                                                           placeholder="" autocomplete="name" value="" required="">
+                                                    <div class="input-inline w-100">
+                                                        <div class="email flex-grow-1" data-role="email-combo" data-bound-email="true">
+                                                            <label class="visually-hidden" for="emailLocal">이메일 아이디</label>
+                                                            <input type="text" id="emailLocal" class="form-control fs-8" placeholder="user" autocomplete="off" value="" required="">
+                                                            @
+                                                            <label class="visually-hidden" for="emailDomain">이메일 도메인</label>
+                                                            <input type="text" id="emailDomain" class="form-control fs-8" placeholder="tx24.co.kr" autocomplete="off" value="" required="">
+                                                        </div>
+                                                        <select id="emailDomainSelect" class="form-control select-to-input fs-8" data-target="emailDomain" data-bound-select-to-input="true">
+                                                            <option value="">직접입력</option>
+                                                            <option value="tx24.co.kr">tx24.co.kr</option>
+                                                            <option value="tx24.com">tx24.com</option>
+                                                            <option value="gmail.com">gmail.com</option>
+                                                            <option value="naver.com">naver.com</option>
+                                                        </select>
+                                                    </div>
+                                                    <input type="hidden" id="email" name="email" value="" required="">
+                                                    <p class="form-hint">아이디·도메인을 입력하거나 선택하면 전체 주소가 완성됩니다.</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col d-flex form-block">
-                                            <div class="card-title required"><p class="fs-8 fw-bold">법인등록번호</p></div>
+                                            <div class="card-title required"><p class="fs-8 fw-bold">부서</p></div>
                                             <div class="card-txt form-block__body">
                                                 <div class="form-field">
-                                                    <input type="text" id="name" name="name" class="form-control fs-8"
-                                                           placeholder="" autocomplete="name" value="" required="">
+                                                    <select id="dept" name="dept" class="form-control fs-8" required="">
+                                                        <option value="">부서를 선택하세요</option>
+
+                                                        <option value="영업본부">영업본부</option>
+
+                                                        <option value="개발">개발</option>
+
+                                                        <option value="고객지원실">고객지원실</option>
+
+                                                        <option value="운영관리팀">운영관리팀</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -394,20 +508,24 @@
 
                                     <div class="card-row m-0 ">
                                         <div class="col d-flex form-block">
-                                            <div class="card-title required"><p class="fs-8 fw-bold">업종</div>
+                                            <div class="card-title required"><p class="fs-8 fw-bold">휴대전화</p></div>
                                             <div class="card-txt form-block__body">
                                                 <div class="form-field">
-                                                    <input type="text" id="name" name="name" class="form-control fs-8"
-                                                           placeholder="" autocomplete="name" value="" required="">
+                                                    <div class="input-inline">
+                                                        <input type="tel" id="phone" name="phone" class="form-control fs-8 flex-grow-1" placeholder="010-1234-5678" pattern="[0-9\-]{10,13}" autocomplete="tel-national" value="" required="">
+                                                    </div>
+                                                    <p class="form-hint">숫자와 하이픈(-)만 입력하세요.</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col d-flex form-block">
-                                            <div class="card-title required"><p class="fs-8 fw-bold">업태</p></div>
+                                            <div class="card-title"><p class="fs-8 fw-bold">전화번호</p></div>
                                             <div class="card-txt form-block__body">
                                                 <div class="form-field">
-                                                    <input type="text" id="name" name="name" class="form-control fs-8"
-                                                           placeholder="" autocomplete="name" value="" required="">
+                                                    <div class="input-inline">
+                                                        <span class="input-addon">Tel</span>
+                                                        <input type="tel" id="tel" name="tel" class="form-control fs-8 flex-grow-1" placeholder="02-123-4567" pattern="[0-9\-]{9,13}" value="" autocomplete="tel">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -415,15 +533,40 @@
 
                                     <div class="card-row m-0 ">
                                         <div class="col d-flex form-block">
-                                            <div class="card-title required"><p class="fs-8 fw-bold">홈페이지</p></div>
+                                            <div class="card-title required"><p class="fs-8 fw-bold">등급</p></div>
                                             <div class="card-txt form-block__body">
                                                 <div class="form-field">
-                                                    <input type="text" id="name" name="name" class="form-control fs-8"
-                                                           placeholder="" autocomplete="name" value="" required="">
+                                                    <select id="role" name="role" class="form-control fs-8" required="">
+                                                        <option value="">등급을 선택하세요</option>
+                                                        <option value="0">임원</option>
+                                                        <option value="1">팀장</option>
+                                                        <option value="2">팀원</option>
+                                                    </select>
+                                                    <p class="form-hint">권한은 등록 후에도 변경 가능합니다.</p>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col d-flex form-block">
+                                            <div class="card-title required"><p class="fs-8 fw-bold">2차 인증</p></div>
+                                            <div class="card-txt form-block__body">
+                                                <div class="radio-stack">
+                                                    <label><input type="radio" class="form-check-input" id="twoFactor" name="2fa" value="active">사용 (권장)</label>
+                                                    <label><input type="radio" class="form-check-input" id="twoFactor" name="2fa" value="inactive"> 해제</label>
+                                                </div>
+                                                <p class="form-hint">필수 사용 시 최초 로그인 단계에서 OTP 등록을 안내합니다.</p>
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <div class="card-row m-0 ">
+                                        <div class="col d-flex form-block">
+                                            <div class="card-title"><p class="fs-8 fw-bold">비고</p></div>
+                                            <div class="card-txt form-block__body">
+                                                <textarea id="note" name="note" class="form-control fs-8" rows="3" placeholder="추가 메모를 입력하세요"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </form>
@@ -436,6 +579,7 @@
                             <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
                                 <div>
                                     <p class="fs-6 fw-bold mb-1">대표자 정보</p>
+                                    <p class="register-lead mb-0">대표자에 기본정보</p>
                                 </div>
                                 <div class="d-flex gap-2">
                                     <button type="submit" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">등록</button>
@@ -443,14 +587,14 @@
                             </div>
 
 
-                            <div class="table-wrapper">
+                            <div class="table-wrapper" >
                                 <div class="page-container">
                                     <div class="table-contents">
                                         <table>
                                             <thead>
                                             <tr>
                                                 <th>성명</th>
-                                                <th>주민번호 (생년월일)</th>
+                                                <th>주민번호 (생년월일) </th>
                                                 <th>연락처</th>
                                                 <th>이메일</th>
                                                 <th>상태</th>
@@ -494,14 +638,14 @@
                             </div>
 
 
-                            <div class="table-wrapper">
+                            <div class="table-wrapper" >
                                 <div class="page-container">
                                     <div class="table-contents">
                                         <table>
                                             <thead>
                                             <tr>
                                                 <th>성명</th>
-                                                <th>주민번호 (생년월일)</th>
+                                                <th>주민번호 (생년월일) </th>
                                                 <th>연락처</th>
                                                 <th>이메일</th>
                                                 <th>상태</th>
@@ -545,14 +689,14 @@
                             </div>
 
 
-                            <div class="table-wrapper">
+                            <div class="table-wrapper" >
                                 <div class="page-container">
                                     <div class="table-contents">
                                         <table>
                                             <thead>
                                             <tr>
                                                 <th>성명</th>
-                                                <th>주민번호 (생년월일)</th>
+                                                <th>주민번호 (생년월일) </th>
                                                 <th>연락처</th>
                                                 <th>이메일</th>
                                                 <th>상태</th>
@@ -596,14 +740,14 @@
                             </div>
 
 
-                            <div class="table-wrapper">
+                            <div class="table-wrapper" >
                                 <div class="page-container">
                                     <div class="table-contents">
                                         <table>
                                             <thead>
                                             <tr>
                                                 <th>성명</th>
-                                                <th>주민번호 (생년월일)</th>
+                                                <th>주민번호 (생년월일) </th>
                                                 <th>연락처</th>
                                                 <th>이메일</th>
                                                 <th>상태</th>
@@ -642,8 +786,7 @@
                     <div class="tab-pane" data-tab-pane="contract">
                         <div class="card-group-divider"><span>지급 정보</span></div>
 
-                        <form action="/member/admin/add" id="adminRegisterForm" name="adminRegisterForm" method="POST"
-                              onsubmit="return false" novalidate="novalidate">
+                        <form action="/member/admin/add" id="adminRegisterForm" name="adminRegisterForm" method="POST" onsubmit="return false" novalidate="novalidate">
 
                             <div class="card-wrapper edit register-card">
                                 <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
@@ -652,13 +795,8 @@
                                         <p class="register-lead mb-0">(*서비스수수료는 "영업일 1일 기준 값" 입니다.)</p>
                                     </div>
                                     <div class="d-flex gap-2">
-                                        <button type="reset" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2">
-                                            초기화
-                                        </button>
-                                        <button type="submit"
-                                                class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2 flex-submit  disabled"
-                                                disabled="">등록
-                                        </button>
+                                        <button type="reset" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2">초기화</button>
+                                        <button type="submit" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2 flex-submit  disabled" disabled="">등록</button>
                                     </div>
                                 </div>
 
@@ -733,14 +871,14 @@
                             </div>
 
 
-                            <div class="table-wrapper">
+                            <div class="table-wrapper" >
                                 <div class="page-container">
                                     <div class="table-contents">
                                         <table>
                                             <thead>
                                             <tr>
                                                 <th>성명</th>
-                                                <th>주민번호 (생년월일)</th>
+                                                <th>주민번호 (생년월일) </th>
                                                 <th>연락처</th>
                                                 <th>이메일</th>
                                                 <th>상태</th>
@@ -784,14 +922,14 @@
                             </div>
 
 
-                            <div class="table-wrapper">
+                            <div class="table-wrapper" >
                                 <div class="page-container">
                                     <div class="table-contents">
                                         <table>
                                             <thead>
                                             <tr>
                                                 <th>성명</th>
-                                                <th>주민번호 (생년월일)</th>
+                                                <th>주민번호 (생년월일) </th>
                                                 <th>연락처</th>
                                                 <th>이메일</th>
                                                 <th>상태</th>
@@ -831,65 +969,152 @@
     </div>
 </div>
 
-<!--<div class="inline-modal" id="contractModal" aria-hidden="true">-->
-<!--    <div class="inline-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="contractModalTitle">-->
-<!--        <div class="inline-modal__header">-->
-<!--            <p id="contractModalTitle" class="inline-modal__title">계약 등록</p>-->
-<!--            <button type="button" class="inline-modal__close" data-modal-close>&times;</button>-->
-<!--        </div>-->
-<!--        <div class="inline-modal__body">-->
-<!--            <div class="form-grid">-->
-<!--                <div class="form-field">-->
-<!--                    <label for="contractName">계약명</label>-->
-<!--                    <input type="text" id="contractName" class="form-control fs-8" placeholder="정산 대행" required>-->
-<!--                </div>-->
-<!--                <div class="form-field">-->
-<!--                    <label for="contractService">서비스 구분</label>-->
-<!--                    <select id="contractService" class="form-control fs-8">-->
-<!--                        <option value="CARD">카드</option>-->
-<!--                        <option value="PG">PG</option>-->
-<!--                        <option value="BANK">가상계좌</option>-->
-<!--                    </select>-->
-<!--                </div>-->
-<!--                <div class="form-field">-->
-<!--                    <label for="contractStatus">계약 상태</label>-->
-<!--                    <select id="contractStatus" class="form-control fs-8">-->
-<!--                        <option value="ACTIVE">진행</option>-->
-<!--                        <option value="PENDING">대기</option>-->
-<!--                        <option value="CLOSED">종료</option>-->
-<!--                    </select>-->
-<!--                </div>-->
-<!--                <div class="form-field">-->
-<!--                    <label>계약 기간</label>-->
-<!--                    <div class="d-flex gap-1 align-items-center">-->
-<!--                        <input type="text" class="form-control fs-8" placeholder="2024-01-01">-->
-<!--                        <span>~</span>-->
-<!--                        <input type="text" class="form-control fs-8" placeholder="2024-12-31">-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="form-field">-->
-<!--                    <label for="settleCycle">정산 주기</label>-->
-<!--                    <select id="settleCycle" class="form-control fs-8">-->
-<!--                        <option value="D0">D+0</option>-->
-<!--                        <option value="D1">D+1</option>-->
-<!--                        <option value="WEEK">주간</option>-->
-<!--                        <option value="MONTH">월간</option>-->
-<!--                    </select>-->
-<!--                </div>-->
-<!--                <div class="form-field">-->
-<!--                    <label for="contractMemo">비고</label>-->
-<!--                    <textarea id="contractMemo" class="form-control fs-8" rows="2"></textarea>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="inline-modal__footer">-->
-<!--            <button type="button" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2" data-modal-close>취소</button>-->
-<!--            <button type="button" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">저장</button>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<div class="inline-modal" id="contractModal" aria-hidden="true">
+    <div class="inline-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="contractModalTitle">
+        <div class="inline-modal__header">
+            <p id="contractModalTitle" class="inline-modal__title">계약 등록</p>
+            <button type="button" class="inline-modal__close" data-modal-close>&times;</button>
+        </div>
+        <div class="inline-modal__body">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="contractName">계약명</label>
+                    <input type="text" id="contractName" class="form-control fs-8" placeholder="정산 대행" required>
+                </div>
+                <div class="form-field">
+                    <label for="contractService">서비스 구분</label>
+                    <select id="contractService" class="form-control fs-8">
+                        <option value="CARD">카드</option>
+                        <option value="PG">PG</option>
+                        <option value="BANK">가상계좌</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="contractStatus">계약 상태</label>
+                    <select id="contractStatus" class="form-control fs-8">
+                        <option value="ACTIVE">진행</option>
+                        <option value="PENDING">대기</option>
+                        <option value="CLOSED">종료</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label>계약 기간</label>
+                    <div class="d-flex gap-1 align-items-center">
+                        <input type="text" class="form-control fs-8" placeholder="2024-01-01">
+                        <span>~</span>
+                        <input type="text" class="form-control fs-8" placeholder="2024-12-31">
+                    </div>
+                </div>
+                <div class="form-field">
+                    <label for="settleCycle">정산 주기</label>
+                    <select id="settleCycle" class="form-control fs-8">
+                        <option value="D0">D+0</option>
+                        <option value="D1">D+1</option>
+                        <option value="WEEK">주간</option>
+                        <option value="MONTH">월간</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="contractMemo">비고</label>
+                    <textarea id="contractMemo" class="form-control fs-8" rows="2"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="inline-modal__footer">
+            <button type="button" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2" data-modal-close>취소</button>
+            <button type="button" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">저장</button>
+        </div>
+    </div>
+</div>
 
+<div class="inline-modal" id="accountModal" aria-hidden="true">
+    <div class="inline-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="accountModalTitle">
+        <div class="inline-modal__header">
+            <p id="accountModalTitle" class="inline-modal__title">계좌 등록</p>
+            <button type="button" class="inline-modal__close" data-modal-close>&times;</button>
+        </div>
+        <div class="inline-modal__body">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="accountBank">은행명</label>
+                    <input type="text" id="accountBank" class="form-control fs-8" placeholder="KB국민은행" required>
+                </div>
+                <div class="form-field">
+                    <label for="accountNumber">계좌번호</label>
+                    <input type="text" id="accountNumber" class="form-control fs-8" placeholder="123456-78-901234" required>
+                </div>
+                <div class="form-field">
+                    <label for="accountHolder">예금주</label>
+                    <input type="text" id="accountHolder" class="form-control fs-8" placeholder="㈜TX" required>
+                </div>
+                <div class="form-field">
+                    <label for="accountType">용도</label>
+                    <select id="accountType" class="form-control fs-8">
+                        <option value="MAIN">주계좌</option>
+                        <option value="SUB">보조</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="accountMemoModal">메모</label>
+                    <textarea id="accountMemoModal" class="form-control fs-8" rows="2"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="inline-modal__footer">
+            <button type="button" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2" data-modal-close>취소</button>
+            <button type="button" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">저장</button>
+        </div>
+    </div>
+</div>
 
+<div class="inline-modal" id="contactModal" aria-hidden="true">
+    <div class="inline-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+        <div class="inline-modal__header">
+            <p id="contactModalTitle" class="inline-modal__title">담당자 등록</p>
+            <button type="button" class="inline-modal__close" data-modal-close>&times;</button>
+        </div>
+        <div class="inline-modal__body">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="managerName">이름</label>
+                    <input type="text" id="managerName" class="form-control fs-8" placeholder="홍길동" required>
+                </div>
+                <div class="form-field">
+                    <label for="managerRole">역할</label>
+                    <select id="managerRole" class="form-control fs-8">
+                        <option value="SALES">영업</option>
+                        <option value="CS">CS</option>
+                        <option value="FINANCE">정산</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="managerPhone">연락처</label>
+                    <input type="tel" id="managerPhone" class="form-control fs-8" placeholder="010-1234-5678">
+                </div>
+                <div class="form-field">
+                    <label for="managerEmail">이메일</label>
+                    <input type="email" id="managerEmail" class="form-control fs-8" placeholder="sales@example.com">
+                </div>
+                <div class="form-field">
+                    <label for="managerNotify">알림 수신</label>
+                    <select id="managerNotify" class="form-control fs-8">
+                        <option value="ALL">전체</option>
+                        <option value="SETTLE">정산 알림</option>
+                        <option value="NONE">미수신</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="managerMemo">메모</label>
+                    <textarea id="managerMemo" class="form-control fs-8" rows="2"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="inline-modal__footer">
+            <button type="button" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2" data-modal-close>취소</button>
+            <button type="button" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">저장</button>
+        </div>
+    </div>
+</div>
 
 <script>
     (function () {
@@ -969,64 +1194,6 @@
                 }
             });
         });
-
-        const uploadPanel = document.querySelector('[data-role="doc-upload-panel"]');
-        const uploadInput = document.getElementById('docUploadInput');
-        const fileList = document.getElementById('docUploadList');
-
-        function appendFileChip(file) {
-            if (!fileList) {
-                return;
-            }
-            fileList.classList.remove('empty');
-            const chip = document.createElement('div');
-            chip.className = 'file-chip';
-            chip.innerHTML = `<span class="file-chip__name">${file.name}</span>
-                <button type="button" class="file-chip__remove">×</button>`;
-            chip.querySelector('.file-chip__remove').addEventListener('click', () => {
-                chip.remove();
-                if (!fileList.querySelector('.file-chip')) {
-                    fileList.classList.add('empty');
-                }
-            });
-            fileList.appendChild(chip);
-        }
-
-        if (uploadPanel && uploadInput) {
-            uploadPanel.addEventListener('click', (event) => {
-                if (!event.target.closest('button')) {
-                    uploadInput.click();
-                }
-            });
-
-            uploadPanel.addEventListener('dragover', (event) => {
-                event.preventDefault();
-                uploadPanel.classList.add('is-dragging');
-            });
-
-            uploadPanel.addEventListener('dragleave', (event) => {
-                if (event.target === uploadPanel) {
-                    uploadPanel.classList.remove('is-dragging');
-                }
-            });
-
-            uploadPanel.addEventListener('drop', (event) => {
-                event.preventDefault();
-                uploadPanel.classList.remove('is-dragging');
-                if (!event.dataTransfer || !event.dataTransfer.files) {
-                    return;
-                }
-                Array.from(event.dataTransfer.files).forEach(appendFileChip);
-            });
-
-            uploadInput.addEventListener('change', () => {
-                if (!uploadInput.files || uploadInput.files.length === 0) {
-                    return;
-                }
-                Array.from(uploadInput.files).forEach(appendFileChip);
-                uploadInput.value = '';
-            });
-        }
     })();
 </script>
 </body>

@@ -4,10 +4,7 @@ import kr.tx24.fc.bean.SearchRequest;
 import kr.tx24.fc.service.MchtSvc;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * NOTE
@@ -32,5 +29,16 @@ public class MchtCtl {
     public String mchtPage(@RequestBody SearchRequest searchRequest, Model model){
         mchtSvc.paging(model, searchRequest.datas, searchRequest.page);
         return "pages/mcht/list";
+    }
+
+    @GetMapping("/view")
+    public String mchtView(Model model) {
+        return "pages/mcht/view";
+    }
+
+    @GetMapping("/view/{mchtId}")
+    public String mchtView(@PathVariable("mchtId") String mchtId, Model model) {
+        mchtSvc.detailView(model, mchtId);
+        return "pages/mcht/view";
     }
 }

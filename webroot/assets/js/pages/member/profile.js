@@ -68,7 +68,7 @@
 				payload[key] = value;
 			});
 
-			if (!confirm('계정 정보를 변경하시겠습니까?')) {
+			if (!await util.sweetAlert.confirm('계정 정보를 변경하시겠습니까?')) {
 				return;
 			}
 

@@ -28,7 +28,7 @@
                     <tr>
                         <td>[[${entry['@INDEX']}]]</td>
                         <td>
-                            <a th:href="'/mcht/view/' + ${entry.mchtId}">[[${entry.mchtId}]]</a>
+                            <a class="link" onclick="layout.TabManager.open(this)" th:attr="data-title='고객사', data-url=|/mcht/view/${entry.mchtId}|, data-referer='/mcht/form', data-active-tab='false'">[[${entry.mchtId}]]</a>
                         </td>
                         <td>[[${entry.name}]]</td>
                         <td>[[${entry.nick}]]</td>

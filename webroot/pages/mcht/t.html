@@ -82,6 +82,45 @@
             gap: 24px;
         }
 
+        .section-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 16px;
+            box-shadow: 0 25px 45px rgba(15, 23, 42, 0.05);
+            padding: 20px 24px;
+        }
+
+        .section-card__header {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .section-card__title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .section-card__meta {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin: 0;
+        }
+
+        .section-card__actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .doc-upload-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 14px;
+        }
+
         .doc-list {
             display: flex;
             flex-direction: column;
@@ -109,8 +148,8 @@
 
         .doc-need {
             margin: 0;
-            font-size: 0.7rem;
-            color: #9e9e9e;
+            font-size: 0.85rem;
+            color: #475569;
         }
 
         .doc-upload-panel {
@@ -129,6 +168,27 @@
             background: #e0ecff;
         }
 
+        .doc-card {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            background: #fdfefe;
+        }
+
+        .doc-card__title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .doc-card__desc {
+            color: #475569;
+            font-size: 0.82rem;
+            margin: 0;
+        }
 
         .file-chip-list {
             min-height: 36px;
@@ -184,6 +244,137 @@
             cursor: pointer;
         }
 
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-field label {
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .item-row {
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 14px 16px;
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .item-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+
+        .badge-status {
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 0.76rem;
+            font-weight: 500;
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        .badge-status.success {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .tab-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .inline-modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, 0.55);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 24px;
+        }
+
+        .inline-modal.open {
+            display: flex;
+        }
+
+        .inline-modal__dialog {
+            background: #fff;
+            border-radius: 16px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 40px 70px rgba(15, 23, 42, 0.2);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .inline-modal__header,
+        .inline-modal__footer {
+            padding: 16px 20px;
+            border-bottom: 1px solid #eef2f7;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .inline-modal__footer {
+            border-bottom: none;
+            border-top: 1px solid #eef2f7;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .inline-modal__body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .inline-modal__close {
+            border: none;
+            background: transparent;
+            font-size: 1.25rem;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        @media (max-width: 768px) {
+            .item-row {
+                grid-template-columns: 1fr;
+            }
+
+            .section-card__header {
+                flex-direction: column;
+            }
+        }
     </style>
 </head>
 <body>
@@ -237,63 +428,42 @@
                                             <input type="checkbox">
                                             <span>계약서</span>
                                         </label>
-                                        <p class="doc-need">3부, 날인확인</p>
+                                        <p class="doc-need">법인 직인 날인된 최신 계약서 스캔본</p>
                                     </div>
                                     <div class="doc-list__row">
                                         <label class="doc-check">
                                             <input type="checkbox">
                                             <span>사업자등록증</span>
                                         </label>
-                                        <p class="doc-need">-</p>
+                                        <p class="doc-need">최근 3개월 이내 발급본 업로드</p>
                                     </div>
                                     <div class="doc-list__row">
                                         <label class="doc-check">
                                             <input type="checkbox">
-                                            <span>대표자이사 신분증 사본</span>
+                                            <span>대표자 신분증</span>
                                         </label>
-                                        <p class="doc-need">신분증 검증</p>
+                                        <p class="doc-need">대표자 또는 수권인 컬러 스캔본</p>
                                     </div>
                                     <div class="doc-list__row">
                                         <label class="doc-check">
                                             <input type="checkbox">
                                             <span>통장 사본</span>
                                         </label>
-                                        <p class="doc-need">-</p>
+                                        <p class="doc-need">정산 계좌와 동일한 계좌번호 노출</p>
                                     </div>
                                     <div class="doc-list__row">
                                         <label class="doc-check">
                                             <input type="checkbox">
-                                            <span>법인등기부등본</span>
+                                            <span>등기부등본</span>
                                         </label>
-                                        <p class="doc-need">원본, 3개월이내</p>
+                                        <p class="doc-need">말소사항 포함 전체본 (1개월 이내)</p>
                                     </div>
                                     <div class="doc-list__row">
                                         <label class="doc-check">
                                             <input type="checkbox">
-                                            <span>법인인감증명서</span>
+                                            <span>인감증명서</span>
                                         </label>
-                                        <p class="doc-need">원본, 3개월이내</p>
-                                    </div>
-                                    <div class="doc-list__row">
-                                        <label class="doc-check">
-                                            <input type="checkbox">
-                                            <span>연대보증인 신분증 사본</span>
-                                        </label>
-                                        <p class="doc-need">신분증 검증</p>
-                                    </div>
-                                    <div class="doc-list__row">
-                                        <label class="doc-check">
-                                            <input type="checkbox">
-                                            <span>연대보증인 개인인감증명서</span>
-                                        </label>
-                                        <p class="doc-need">원본</p>
-                                    </div>
-                                    <div class="doc-list__row">
-                                        <label class="doc-check">
-                                            <input type="checkbox">
-                                            <span>국세 및 지방세 완납증명서</span>
-                                        </label>
-                                        <p class="doc-need">원본</p>
+                                        <p class="doc-need">대표자 인감증명서 원본 스캔본 (1개월 이내)</p>
                                     </div>
                                 </div>
 
@@ -333,7 +503,7 @@
                             <div class="card-wrapper edit register-card">
                                 <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
                                     <div>
-                                        <p class="fs-6 fw-bold mb-1">고객사 기본정보</p>
+                                        <p class="fs-6 fw-bold mb-1">사용자 기본정보</p>
                                         <p class="register-lead mb-0">필수 항목을 입력하면 등록 버튼이 활성화됩니다.</p>
                                     </div>
                                     <div class="d-flex gap-2">
@@ -361,11 +531,12 @@
                                             </div>
                                         </div>
                                         <div class="col d-flex form-block">
-                                            <div class="card-title required"><p class="fs-8 fw-bold">상호명</p></div>
+                                            <div class="card-title required"><p class="fs-8 fw-bold">이름</p></div>
                                             <div class="card-txt form-block__body">
                                                 <div class="form-field">
                                                     <input type="text" id="name" name="name" class="form-control fs-8"
-                                                           placeholder="" autocomplete="name" value="" required="">
+                                                           placeholder="홍길동" autocomplete="name" value="" required="">
+                                                    <p class="form-hint">실제 사용자 성명을 입력하세요.</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -373,20 +544,55 @@
 
                                     <div class="card-row m-0 ">
                                         <div class="col d-flex form-block">
-                                            <div class="card-title required"><p class="fs-8 fw-bold">사업자번호</p></div>
+                                            <div class="card-title required"><p class="fs-8 fw-bold">이메일</p></div>
                                             <div class="card-txt form-block__body">
                                                 <div class="form-field">
-                                                    <input type="text" id="name" name="name" class="form-control fs-8"
-                                                           placeholder="" autocomplete="name" value="" required="">
+                                                    <div class="input-inline w-100">
+                                                        <div class="email flex-grow-1" data-role="email-combo"
+                                                             data-bound-email="true">
+                                                            <label class="visually-hidden" for="emailLocal">이메일
+                                                                아이디</label>
+                                                            <input type="text" id="emailLocal" class="form-control fs-8"
+                                                                   placeholder="user" autocomplete="off" value=""
+                                                                   required="">
+                                                            @
+                                                            <label class="visually-hidden" for="emailDomain">이메일
+                                                                도메인</label>
+                                                            <input type="text" id="emailDomain"
+                                                                   class="form-control fs-8" placeholder="tx24.co.kr"
+                                                                   autocomplete="off" value="" required="">
+                                                        </div>
+                                                        <select id="emailDomainSelect"
+                                                                class="form-control select-to-input fs-8"
+                                                                data-target="emailDomain"
+                                                                data-bound-select-to-input="true">
+                                                            <option value="">직접입력</option>
+                                                            <option value="tx24.co.kr">tx24.co.kr</option>
+                                                            <option value="tx24.com">tx24.com</option>
+                                                            <option value="gmail.com">gmail.com</option>
+                                                            <option value="naver.com">naver.com</option>
+                                                        </select>
+                                                    </div>
+                                                    <input type="hidden" id="email" name="email" value="" required="">
+                                                    <p class="form-hint">아이디·도메인을 입력하거나 선택하면 전체 주소가 완성됩니다.</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col d-flex form-block">
-                                            <div class="card-title required"><p class="fs-8 fw-bold">법인등록번호</p></div>
+                                            <div class="card-title required"><p class="fs-8 fw-bold">부서</p></div>
                                             <div class="card-txt form-block__body">
                                                 <div class="form-field">
-                                                    <input type="text" id="name" name="name" class="form-control fs-8"
-                                                           placeholder="" autocomplete="name" value="" required="">
+                                                    <select id="dept" name="dept" class="form-control fs-8" required="">
+                                                        <option value="">부서를 선택하세요</option>
+
+                                                        <option value="영업본부">영업본부</option>
+
+                                                        <option value="개발">개발</option>
+
+                                                        <option value="고객지원실">고객지원실</option>
+
+                                                        <option value="운영관리팀">운영관리팀</option>
+                                                    </select>
                                                 </div>
                                             </div>
                                         </div>
@@ -394,20 +600,30 @@
 
                                     <div class="card-row m-0 ">
                                         <div class="col d-flex form-block">
-                                            <div class="card-title required"><p class="fs-8 fw-bold">업종</div>
+                                            <div class="card-title required"><p class="fs-8 fw-bold">휴대전화</p></div>
                                             <div class="card-txt form-block__body">
                                                 <div class="form-field">
-                                                    <input type="text" id="name" name="name" class="form-control fs-8"
-                                                           placeholder="" autocomplete="name" value="" required="">
+                                                    <div class="input-inline">
+                                                        <input type="tel" id="phone" name="phone"
+                                                               class="form-control fs-8 flex-grow-1"
+                                                               placeholder="010-1234-5678" pattern="[0-9\-]{10,13}"
+                                                               autocomplete="tel-national" value="" required="">
+                                                    </div>
+                                                    <p class="form-hint">숫자와 하이픈(-)만 입력하세요.</p>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col d-flex form-block">
-                                            <div class="card-title required"><p class="fs-8 fw-bold">업태</p></div>
+                                            <div class="card-title"><p class="fs-8 fw-bold">전화번호</p></div>
                                             <div class="card-txt form-block__body">
                                                 <div class="form-field">
-                                                    <input type="text" id="name" name="name" class="form-control fs-8"
-                                                           placeholder="" autocomplete="name" value="" required="">
+                                                    <div class="input-inline">
+                                                        <span class="input-addon">Tel</span>
+                                                        <input type="tel" id="tel" name="tel"
+                                                               class="form-control fs-8 flex-grow-1"
+                                                               placeholder="02-123-4567" pattern="[0-9\-]{9,13}"
+                                                               value="" autocomplete="tel">
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -415,15 +631,43 @@
 
                                     <div class="card-row m-0 ">
                                         <div class="col d-flex form-block">
-                                            <div class="card-title required"><p class="fs-8 fw-bold">홈페이지</p></div>
+                                            <div class="card-title required"><p class="fs-8 fw-bold">등급</p></div>
                                             <div class="card-txt form-block__body">
                                                 <div class="form-field">
-                                                    <input type="text" id="name" name="name" class="form-control fs-8"
-                                                           placeholder="" autocomplete="name" value="" required="">
+                                                    <select id="role" name="role" class="form-control fs-8" required="">
+                                                        <option value="">등급을 선택하세요</option>
+                                                        <option value="0">임원</option>
+                                                        <option value="1">팀장</option>
+                                                        <option value="2">팀원</option>
+                                                    </select>
+                                                    <p class="form-hint">권한은 등록 후에도 변경 가능합니다.</p>
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="col d-flex form-block">
+                                            <div class="card-title required"><p class="fs-8 fw-bold">2차 인증</p></div>
+                                            <div class="card-txt form-block__body">
+                                                <div class="radio-stack">
+                                                    <label><input type="radio" class="form-check-input" id="twoFactor"
+                                                                  name="2fa" value="active">사용 (권장)</label>
+                                                    <label><input type="radio" class="form-check-input" id="twoFactor"
+                                                                  name="2fa" value="inactive"> 해제</label>
+                                                </div>
+                                                <p class="form-hint">필수 사용 시 최초 로그인 단계에서 OTP 등록을 안내합니다.</p>
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <div class="card-row m-0 ">
+                                        <div class="col d-flex form-block">
+                                            <div class="card-title"><p class="fs-8 fw-bold">비고</p></div>
+                                            <div class="card-txt form-block__body">
+                                                <textarea id="note" name="note" class="form-control fs-8" rows="3"
+                                                          placeholder="추가 메모를 입력하세요"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                         </form>
@@ -831,65 +1075,153 @@
     </div>
 </div>
 
-<!--<div class="inline-modal" id="contractModal" aria-hidden="true">-->
-<!--    <div class="inline-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="contractModalTitle">-->
-<!--        <div class="inline-modal__header">-->
-<!--            <p id="contractModalTitle" class="inline-modal__title">계약 등록</p>-->
-<!--            <button type="button" class="inline-modal__close" data-modal-close>&times;</button>-->
-<!--        </div>-->
-<!--        <div class="inline-modal__body">-->
-<!--            <div class="form-grid">-->
-<!--                <div class="form-field">-->
-<!--                    <label for="contractName">계약명</label>-->
-<!--                    <input type="text" id="contractName" class="form-control fs-8" placeholder="정산 대행" required>-->
-<!--                </div>-->
-<!--                <div class="form-field">-->
-<!--                    <label for="contractService">서비스 구분</label>-->
-<!--                    <select id="contractService" class="form-control fs-8">-->
-<!--                        <option value="CARD">카드</option>-->
-<!--                        <option value="PG">PG</option>-->
-<!--                        <option value="BANK">가상계좌</option>-->
-<!--                    </select>-->
-<!--                </div>-->
-<!--                <div class="form-field">-->
-<!--                    <label for="contractStatus">계약 상태</label>-->
-<!--                    <select id="contractStatus" class="form-control fs-8">-->
-<!--                        <option value="ACTIVE">진행</option>-->
-<!--                        <option value="PENDING">대기</option>-->
-<!--                        <option value="CLOSED">종료</option>-->
-<!--                    </select>-->
-<!--                </div>-->
-<!--                <div class="form-field">-->
-<!--                    <label>계약 기간</label>-->
-<!--                    <div class="d-flex gap-1 align-items-center">-->
-<!--                        <input type="text" class="form-control fs-8" placeholder="2024-01-01">-->
-<!--                        <span>~</span>-->
-<!--                        <input type="text" class="form-control fs-8" placeholder="2024-12-31">-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--                <div class="form-field">-->
-<!--                    <label for="settleCycle">정산 주기</label>-->
-<!--                    <select id="settleCycle" class="form-control fs-8">-->
-<!--                        <option value="D0">D+0</option>-->
-<!--                        <option value="D1">D+1</option>-->
-<!--                        <option value="WEEK">주간</option>-->
-<!--                        <option value="MONTH">월간</option>-->
-<!--                    </select>-->
-<!--                </div>-->
-<!--                <div class="form-field">-->
-<!--                    <label for="contractMemo">비고</label>-->
-<!--                    <textarea id="contractMemo" class="form-control fs-8" rows="2"></textarea>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="inline-modal__footer">-->
-<!--            <button type="button" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2" data-modal-close>취소</button>-->
-<!--            <button type="button" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">저장</button>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<div class="inline-modal" id="contractModal" aria-hidden="true">
+    <div class="inline-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="contractModalTitle">
+        <div class="inline-modal__header">
+            <p id="contractModalTitle" class="inline-modal__title">계약 등록</p>
+            <button type="button" class="inline-modal__close" data-modal-close>&times;</button>
+        </div>
+        <div class="inline-modal__body">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="contractName">계약명</label>
+                    <input type="text" id="contractName" class="form-control fs-8" placeholder="정산 대행" required>
+                </div>
+                <div class="form-field">
+                    <label for="contractService">서비스 구분</label>
+                    <select id="contractService" class="form-control fs-8">
+                        <option value="CARD">카드</option>
+                        <option value="PG">PG</option>
+                        <option value="BANK">가상계좌</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="contractStatus">계약 상태</label>
+                    <select id="contractStatus" class="form-control fs-8">
+                        <option value="ACTIVE">진행</option>
+                        <option value="PENDING">대기</option>
+                        <option value="CLOSED">종료</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label>계약 기간</label>
+                    <div class="d-flex gap-1 align-items-center">
+                        <input type="text" class="form-control fs-8" placeholder="2024-01-01">
+                        <span>~</span>
+                        <input type="text" class="form-control fs-8" placeholder="2024-12-31">
+                    </div>
+                </div>
+                <div class="form-field">
+                    <label for="settleCycle">정산 주기</label>
+                    <select id="settleCycle" class="form-control fs-8">
+                        <option value="D0">D+0</option>
+                        <option value="D1">D+1</option>
+                        <option value="WEEK">주간</option>
+                        <option value="MONTH">월간</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="contractMemo">비고</label>
+                    <textarea id="contractMemo" class="form-control fs-8" rows="2"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="inline-modal__footer">
+            <button type="button" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2" data-modal-close>취소</button>
+            <button type="button" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">저장</button>
+        </div>
+    </div>
+</div>
 
+<div class="inline-modal" id="accountModal" aria-hidden="true">
+    <div class="inline-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="accountModalTitle">
+        <div class="inline-modal__header">
+            <p id="accountModalTitle" class="inline-modal__title">계좌 등록</p>
+            <button type="button" class="inline-modal__close" data-modal-close>&times;</button>
+        </div>
+        <div class="inline-modal__body">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="accountBank">은행명</label>
+                    <input type="text" id="accountBank" class="form-control fs-8" placeholder="KB국민은행" required>
+                </div>
+                <div class="form-field">
+                    <label for="accountNumber">계좌번호</label>
+                    <input type="text" id="accountNumber" class="form-control fs-8" placeholder="123456-78-901234"
+                           required>
+                </div>
+                <div class="form-field">
+                    <label for="accountHolder">예금주</label>
+                    <input type="text" id="accountHolder" class="form-control fs-8" placeholder="㈜TX" required>
+                </div>
+                <div class="form-field">
+                    <label for="accountType">용도</label>
+                    <select id="accountType" class="form-control fs-8">
+                        <option value="MAIN">주계좌</option>
+                        <option value="SUB">보조</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="accountMemoModal">메모</label>
+                    <textarea id="accountMemoModal" class="form-control fs-8" rows="2"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="inline-modal__footer">
+            <button type="button" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2" data-modal-close>취소</button>
+            <button type="button" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">저장</button>
+        </div>
+    </div>
+</div>
 
+<div class="inline-modal" id="contactModal" aria-hidden="true">
+    <div class="inline-modal__dialog" role="dialog" aria-modal="true" aria-labelledby="contactModalTitle">
+        <div class="inline-modal__header">
+            <p id="contactModalTitle" class="inline-modal__title">담당자 등록</p>
+            <button type="button" class="inline-modal__close" data-modal-close>&times;</button>
+        </div>
+        <div class="inline-modal__body">
+            <div class="form-grid">
+                <div class="form-field">
+                    <label for="managerName">이름</label>
+                    <input type="text" id="managerName" class="form-control fs-8" placeholder="홍길동" required>
+                </div>
+                <div class="form-field">
+                    <label for="managerRole">역할</label>
+                    <select id="managerRole" class="form-control fs-8">
+                        <option value="SALES">영업</option>
+                        <option value="CS">CS</option>
+                        <option value="FINANCE">정산</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="managerPhone">연락처</label>
+                    <input type="tel" id="managerPhone" class="form-control fs-8" placeholder="010-1234-5678">
+                </div>
+                <div class="form-field">
+                    <label for="managerEmail">이메일</label>
+                    <input type="email" id="managerEmail" class="form-control fs-8" placeholder="sales@example.com">
+                </div>
+                <div class="form-field">
+                    <label for="managerNotify">알림 수신</label>
+                    <select id="managerNotify" class="form-control fs-8">
+                        <option value="ALL">전체</option>
+                        <option value="SETTLE">정산 알림</option>
+                        <option value="NONE">미수신</option>
+                    </select>
+                </div>
+                <div class="form-field">
+                    <label for="managerMemo">메모</label>
+                    <textarea id="managerMemo" class="form-control fs-8" rows="2"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="inline-modal__footer">
+            <button type="button" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2" data-modal-close>취소</button>
+            <button type="button" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">저장</button>
+        </div>
+    </div>
+</div>
 
 <script>
     (function () {

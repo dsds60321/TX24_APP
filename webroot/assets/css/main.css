@@ -820,7 +820,7 @@ body {
 
 /* Search group */
 .card-wrapper.search .card-contents .card-row .col .card-txt .search-group {
-    width: 100%;
+    width: 90%;
     position: relative;
 }
 
@@ -1548,8 +1548,23 @@ body {
     border-radius: 2px; /* radius 최소 */
     cursor: pointer;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+    gap: 6px;
+}
+
+.simple-select-trigger .selected-label {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: inherit;
+}
+
+.simple-select-trigger > span:last-child {
+    flex: 0 0 auto;
+    line-height: 1;
 }
 
 .simple-select-trigger:hover {
@@ -1681,6 +1696,23 @@ body {
     flex-direction: column;
     gap: 6px;
     width: 100%;
+}
+
+.card-group-divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 24px 0 12px;
+    font-weight: 600;
+    color: #475569;
+    font-size: 0.85rem;
+}
+
+.card-group-divider::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(148,163,184,0.4), rgba(226,232,240,0));
 }
 
 .form-hint {

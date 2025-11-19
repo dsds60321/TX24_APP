@@ -1,6 +1,7 @@
 # Repository Guidelines
 - 소통은 항상 한국말로 진행한다.
 - 계획을 짜고 개발자에게 동의를 받고 진행한다.
+- main.css 등 css를 추가할때는 공통적으로 사용할수 있게 클래스명을 작성한다.
 
 ## Project Structure & Module Organization
 - `src/` holds Java sources. Keep boot logic in `kr.tx24.fc.main` and MVC controllers in `kr.tx24.fc.ctl` so the component scan declared in `conf/server.json` stays tight.

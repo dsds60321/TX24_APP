@@ -86,32 +86,6 @@
                     <div class="btn-box">
 
                         <!--    신규 select box   -->
-                        <div class="simple-select">
-                            <div class="simple-select-trigger">
-                                <span class="selected-label" data-placeholder="선택하세요">선택하세요</span>
-                                <span>▾</span>
-                            </div>
-
-                            <ul class="simple-select-options">
-                                <li data-value="데이터 수집">데이터 수집</li>
-                                <li data-value="D+0지급내역수집">D+0지급내역수집</li>
-                            </ul>
-
-                            <input type="hidden" name="type" value="">
-                        </div>
-
-                        <div class="simple-select">
-                            <div class="simple-select-trigger">
-                                <span class="selected-label" data-placeholder="선택하세요">선택하세요</span>
-                                <span>▾</span>
-                            </div>
-
-                            <ul class="simple-select-options">
-                                <li data-value="정산생성">정산생성</li>
-                            </ul>
-
-                            <input type="hidden" name="type" value="">
-                        </div>
 
                         <div class="simple-select">
                             <div class="simple-select-trigger">
@@ -125,6 +99,12 @@
                                 <li onclick="search.sizingbtn(this)" data-value="100">show 100</li>
                             </ul>
                             <input type="hidden" id="perPage" value="20" oninput="search.sizingbtn(this)">
+                        </div>
+
+                        <div>
+                            <button onclick="layout.TabManager.open({ title : '고객사 등록', url : '/mcht/view' , options : { referer : '/mcht/form' } })" type="button" class="badge bg-grey-outline">
+                                고객사 등록
+                            </button>
                         </div>
 
 <!--                        <select onchange="search.sizingbtn(this)" name="" id="" class="form-control select-grey fs-8 rows-per-page">-->
