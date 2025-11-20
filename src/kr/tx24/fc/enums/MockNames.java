@@ -8,7 +8,7 @@ public enum MockNames {
     DFA("dfa"),
     TRX("trx"),
     MCHT("mcht"),
-    APP("app");
+    APP("app"), PERSON("person");
 
     private final String key;
 

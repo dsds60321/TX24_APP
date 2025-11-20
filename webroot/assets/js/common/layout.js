@@ -966,29 +966,30 @@ export default class Layout {
     // 공통적으로 사용되는 화면 응답
     /**
      * 주소지, 대표자, 계좌...
-     * @returns {{}}
      */
-    commonRender() {
-        document.querySelectorAll('.common-render').forEach(elem => {
-            const { url, id, target} = elem.dataset;
-            if (!url || !id || !target) {
+    async commonRender() {
+        for (const elem of document.querySelectorAll('.common-render')) {
+            const {url, id, target} = elem.dataset;
+            if (!url  || !target) {
                 console.warn('렌더링에 필요한 값이 비어있습니다. ', elem);
-                return;
+                continue;
+            }
+
+            let targetElem = document.getElementById(target);
+
+            if (!targetElem) {
+                console.warn('렌더링할 대상이 없습니다.', target);
+                continue;
             }
 
 
-
-            httpClient.get(elem.dataset.url)
+            await httpClient.get(elem.dataset.url)
                 .then(({data}) => {
-                    elem.innerHTML = data;
+                    targetElem.innerHTML = data;
                 })
                 .catch(error => {
                     console.error('commonRender ERROR ', error)
                 });
-        });
-
-
-
-        return {}
+        }
     }
 }

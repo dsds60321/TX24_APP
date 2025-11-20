@@ -1,0 +1,60 @@
+<div class="card-wrapper" id="person-view">
+    <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+        <div>
+            <p class="fs-6 fw-bold mb-1">[[${TYPE}]] 담당자 정보</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button type="submit" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">[[${TYPE}]] 등록</button>
+        </div>
+    </div>
+
+
+    <div class="table-wrapper" >
+        <div class="page-container">
+            <div class="table-contents">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>담당자구분</th>
+                        <th>성명</th>
+                        <th>직급/직위</th>
+                        <th>부서</th>
+                        <th>연락처</th>
+                        <th>이메일</th>
+                        <th>상태</th>
+                        <th>변경일자</th>
+                        <th>등록일자</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:if = "${not #lists.isEmpty(PERSON)}">
+                        <tr th:each = "entry: ${PERSON}">
+
+                            <td>
+                                <a href="#" class="text-btn">[[${entry.type}]]</a>
+                            </td>
+                            <td>[[${entry.name}]]</td>
+                            <td>[[${entry.position}]]</td>
+                            <td>[[${entry.dept}]]</td>
+                            <td>[[${entry.phoneNo}]]</td>
+                            <td>[[${entry.email}]]</td>
+                            <td>
+                                <div th:if = "${entry.status eq 'active'}"> <span class="badge bg-info">사용</span> </div>
+                                <div th:if = "${entry.status eq 'inactive'}"> <span class="badge bg-primary">중지</span> </div>
+                            </td>
+                            <td class="date">[[${entry.udtDate}]]</td>
+                            <td class="date">[[${entry.regDate}]]</td>
+                        </tr>
+                    </th:block>
+                    <th:block th:if = "${#lists.isEmpty(PERSON)}">
+                        <tr>
+                            <td colspan="20">조회된 정보가 없습니다.</td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-footer"></div>
+        </div>
+    </div>
+</div>

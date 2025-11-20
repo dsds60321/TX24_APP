@@ -209,15 +209,22 @@
                     </div>
                 </div>
 
-                <div class="tab-navigation">
-                    <button type="button" class="tab-button active" data-tab-button="documents">서류 취합</button>
-                    <button type="button" class="tab-button" data-tab-button="basic">기본 정보</button>
-                    <button type="button" class="tab-button" data-tab-button="contract">지급 · 계좌</button>
-                </div>
+                <div class="nav-box nav-underline">
+                    <div class="tab-nav">
+                        <button class="tab-button active" data-tab-target="documents">서류 취합</button>
+                        <button class="tab-button" data-tab-target="basic">기본 정보</button>
+                        <button class="tab-button" data-tab-target="contract">지급 · 계좌</button>
+                    </div>
 
-                <div class="tab-content">
+<!--                <div class="tab-navigation">-->
+<!--                    <button type="button" class="tab-button active" data-tab-button="documents">서류 취합</button>-->
+<!--                    <button type="button" class="tab-button" data-tab-button="basic">기본 정보</button>-->
+<!--                    <button type="button" class="tab-button" data-tab-button="contract">지급 · 계좌</button>-->
+<!--                </div>-->
 
-                    <div class="tab-pane active" data-tab-pane="documents">
+                    <div class="tab-content">
+
+                    <div class="tab-pane active" id="documents">
                         <div class="card-wrapper edit register-card">
                             <form action="#" method="post" onsubmit="return false" class="doc-request-form">
                                 <div class="card-group-divider d-flex justify-content-between align-items-center">
@@ -323,7 +330,7 @@
                     </div>
 
 
-                    <div class="tab-pane" data-tab-pane="basic">
+                    <div class="tab-pane" id="basic">
 
                         <div class="card-group-divider"><span>고객사 정보</span></div>
 
@@ -418,8 +425,13 @@
                                             <div class="card-title required"><p class="fs-8 fw-bold">홈페이지</p></div>
                                             <div class="card-txt form-block__body">
                                                 <div class="form-field">
-                                                    <input type="text" id="name" name="name" class="form-control fs-8"
-                                                           placeholder="" autocomplete="name" value="" required="">
+                                                    <div class="input-group">
+                                                        <input type="text" id="homepageInput" name="name"
+                                                               class="form-control fs-8 input-action-field"
+                                                               placeholder="https://example.com" autocomplete="url"
+                                                               value="" required="">
+                                                        <button class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">홈페이지 확인</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -432,53 +444,54 @@
                         <div class="card-group-divider"><span>기본 정보</span></div>
 
 
-                        <div class="card-wrapper">
-                            <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
-                                <div>
-                                    <p class="fs-6 fw-bold mb-1">대표자 정보</p>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <button type="submit" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">등록</button>
-                                </div>
-                            </div>
-
-
-                            <div class="table-wrapper common-render" data-url="" data-id="" data-target="">
-                                <div class="page-container">
-                                    <div class="table-contents">
-                                        <table>
-                                            <thead>
-                                            <tr>
-                                                <th>성명</th>
-                                                <th>주민번호 (생년월일)</th>
-                                                <th>연락처</th>
-                                                <th>이메일</th>
-                                                <th>상태</th>
-                                                <th>변경일자</th>
-                                                <th>등록일자</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td>
-                                                    <a class="link" style="cursor:pointer"
-                                                       onclick="layout.TabManager.open(this)" data-title="사용자 수정"
-                                                       data-url="/member/admin/ghkang" data-referer="/member/admin/form"
-                                                       data-active-tab="false">
-                                                        ghkang
-                                                    </a>
-                                                </td>
-                                                <td>991011</td>
-                                                <td>01036134750</td>
-                                                <td>ghkang@tx24.com</td>
-                                                <td><span class="badge bg-info">사용</span></td>
-                                                <td class="date" style="min-width: 125px;">2025-11-03 09:46:05</td>
-                                                <td class="date" style="min-width: 125px;">2025-11-03 09:46:05</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                        <div class="common-render" data-url="/person/view/temp" data-target="person-view">
+                            <div class="card-wrapper" id="person-view">
+                                <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+                                    <div>
+                                        <p class="fs-6 fw-bold mb-1">대표자 정보</p>
                                     </div>
-                                    <div class="table-footer"></div>
+                                    <div class="d-flex gap-2">
+                                        <button type="submit" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">등록</button>
+                                    </div>
+                                </div>
+
+                                <div class="table-wrapper" >
+                                    <div class="page-container">
+                                        <div class="table-contents">
+                                            <table>
+                                                <thead>
+                                                <tr>
+                                                    <th>성명</th>
+                                                    <th>주민번호 (생년월일)</th>
+                                                    <th>연락처</th>
+                                                    <th>이메일</th>
+                                                    <th>상태</th>
+                                                    <th>변경일자</th>
+                                                    <th>등록일자</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td>
+                                                        <a class="link" style="cursor:pointer"
+                                                           onclick="layout.TabManager.open(this)" data-title="사용자 수정"
+                                                           data-url="/member/admin/ghkang" data-referer="/member/admin/form"
+                                                           data-active-tab="false">
+                                                            ghkang
+                                                        </a>
+                                                    </td>
+                                                    <td>991011</td>
+                                                    <td>01036134750</td>
+                                                    <td>ghkang@tx24.com</td>
+                                                    <td><span class="badge bg-info">사용</span></td>
+                                                    <td class="date" style="min-width: 125px;">2025-11-03 09:46:05</td>
+                                                    <td class="date" style="min-width: 125px;">2025-11-03 09:46:05</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="table-footer"></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -585,61 +598,17 @@
                             </div>
                         </div>
 
-                        <div class="card-wrapper">
-                            <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
-                                <div>
-                                    <p class="fs-6 fw-bold mb-1">채널 담당자 정보</p>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <button type="submit" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">등록</button>
-                                </div>
-                            </div>
 
-
-                            <div class="table-wrapper">
-                                <div class="page-container">
-                                    <div class="table-contents">
-                                        <table>
-                                            <thead>
-                                            <tr>
-                                                <th>성명</th>
-                                                <th>주민번호 (생년월일)</th>
-                                                <th>연락처</th>
-                                                <th>이메일</th>
-                                                <th>상태</th>
-                                                <th>변경일자</th>
-                                                <th>등록일자</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td>
-                                                    <a class="link" style="cursor:pointer"
-                                                       onclick="layout.TabManager.open(this)" data-title="사용자 수정"
-                                                       data-url="/member/admin/ghkang" data-referer="/member/admin/form"
-                                                       data-active-tab="false">
-                                                        ghkang
-                                                    </a>
-                                                </td>
-                                                <td>991011</td>
-                                                <td>01036134750</td>
-                                                <td>ghkang@tx24.com</td>
-                                                <td><span class="badge bg-info">사용</span></td>
-                                                <td class="date" style="min-width: 125px;">2025-11-03 09:46:05</td>
-                                                <td class="date" style="min-width: 125px;">2025-11-03 09:46:05</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="table-footer"></div>
-                                </div>
+                        <!-- 채널 담당자 생성 -->
+                        <div class="common-render" data-url="/person/list/채널/temp" data-target="person-channel-list">
+                            <div id="person-channel-list">
+                                채널 담당자 렌더링에 실패했습니다.
                             </div>
                         </div>
 
-
                     </div>
 
-                    <div class="tab-pane" data-tab-pane="contract">
+                    <div class="tab-pane" id="contract">
                         <div class="card-group-divider"><span>지급 정보</span></div>
 
                         <form action="/member/admin/add" id="adminRegisterForm" name="adminRegisterForm" method="POST"
@@ -722,54 +691,10 @@
                         <div class="card-group-divider"><span>계좌 정보</span></div>
 
 
-                        <div class="card-wrapper">
-                            <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
-                                <div>
-                                    <p class="fs-6 fw-bold mb-1">정산 담당자 정보</p>
-                                </div>
-                                <div class="d-flex gap-2">
-                                    <button type="submit" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">등록</button>
-                                </div>
-                            </div>
-
-
-                            <div class="table-wrapper">
-                                <div class="page-container">
-                                    <div class="table-contents">
-                                        <table>
-                                            <thead>
-                                            <tr>
-                                                <th>성명</th>
-                                                <th>주민번호 (생년월일)</th>
-                                                <th>연락처</th>
-                                                <th>이메일</th>
-                                                <th>상태</th>
-                                                <th>변경일자</th>
-                                                <th>등록일자</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td>
-                                                    <a class="link" style="cursor:pointer"
-                                                       onclick="layout.TabManager.open(this)" data-title="사용자 수정"
-                                                       data-url="/member/admin/ghkang" data-referer="/member/admin/form"
-                                                       data-active-tab="false">
-                                                        ghkang
-                                                    </a>
-                                                </td>
-                                                <td>991011</td>
-                                                <td>01036134750</td>
-                                                <td>ghkang@tx24.com</td>
-                                                <td><span class="badge bg-info">사용</span></td>
-                                                <td class="date" style="min-width: 125px;">2025-11-03 09:46:05</td>
-                                                <td class="date" style="min-width: 125px;">2025-11-03 09:46:05</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                    <div class="table-footer"></div>
-                                </div>
+                        <!-- 정산 담당자 생성 -->
+                        <div class="common-render" data-url="/person/list/정산/temp" data-target="person-stl-list">
+                            <div id="person-stl-list">
+                                정산 담당자 렌더링에 실패했습니다.
                             </div>
                         </div>
 
@@ -825,6 +750,7 @@
                         </div>
 
                     </div>
+                </div>
                 </div>
             </form>
         </div>
@@ -890,144 +816,175 @@
 <!--</div>-->
 
 
+<script th:src="@{/assets/js/pages/mcht/view.js}"></script>
 
 <script>
-    (function () {
-        const tabButtons = document.querySelectorAll('[data-tab-button]');
-        const tabPanes = document.querySelectorAll('[data-tab-pane]');
-        const stepItems = document.querySelectorAll('.step-progress__item');
-        const order = ['documents', 'basic', 'contract', 'contacts'];
-
-        function setStepState(targetId) {
-            order.forEach(step => {
-                const item = document.querySelector(`.step-progress__item[data-step="${step}"]`);
-                if (!item) return;
-                item.classList.remove('is-current', 'is-complete');
-                const status = item.querySelector('.step-progress__status');
-                if (step === targetId) {
-                    item.classList.add('is-current');
-                    if (status) status.textContent = '진행중';
-                } else if (order.indexOf(step) < order.indexOf(targetId)) {
-                    item.classList.add('is-complete');
-                    if (status) status.textContent = '완료';
-                } else {
-                    if (status) status.textContent = '대기';
-                }
-            });
-        }
-
-        function activateTab(tabId) {
-            tabButtons.forEach(btn => {
-                btn.classList.toggle('active', btn.getAttribute('data-tab-button') === tabId);
-            });
-            tabPanes.forEach(pane => {
-                pane.classList.toggle('active', pane.getAttribute('data-tab-pane') === tabId);
-            });
-            setStepState(tabId);
-        }
-
-        tabButtons.forEach(btn => {
-            btn.addEventListener('click', () => {
-                activateTab(btn.getAttribute('data-tab-button'));
-            });
-        });
-
-        document.querySelectorAll('[data-next-tab]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const nextId = btn.getAttribute('data-next-tab');
-                if (nextId) {
-                    activateTab(nextId);
-                }
-            });
-        });
-
-        const modals = document.querySelectorAll('.inline-modal');
-        document.querySelectorAll('[data-modal-open]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const id = btn.getAttribute('data-modal-open');
-                const target = document.getElementById(id);
-                if (target) {
-                    target.classList.add('open');
-                    target.setAttribute('aria-hidden', 'false');
-                }
-            });
-        });
-        document.querySelectorAll('[data-modal-close]').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const modal = btn.closest('.inline-modal');
-                if (modal) {
-                    modal.classList.remove('open');
-                    modal.setAttribute('aria-hidden', 'true');
-                }
-            });
-        });
-        modals.forEach(modal => {
-            modal.addEventListener('click', (event) => {
-                if (event.target === modal) {
-                    modal.classList.remove('open');
-                    modal.setAttribute('aria-hidden', 'true');
-                }
-            });
-        });
-
-        const uploadPanel = document.querySelector('[data-role="doc-upload-panel"]');
-        const uploadInput = document.getElementById('docUploadInput');
-        const fileList = document.getElementById('docUploadList');
-
-        function appendFileChip(file) {
-            if (!fileList) {
-                return;
-            }
-            fileList.classList.remove('empty');
-            const chip = document.createElement('div');
-            chip.className = 'file-chip';
-            chip.innerHTML = `<span class="file-chip__name">${file.name}</span>
-                <button type="button" class="file-chip__remove">×</button>`;
-            chip.querySelector('.file-chip__remove').addEventListener('click', () => {
-                chip.remove();
-                if (!fileList.querySelector('.file-chip')) {
-                    fileList.classList.add('empty');
-                }
-            });
-            fileList.appendChild(chip);
-        }
-
-        if (uploadPanel && uploadInput) {
-            uploadPanel.addEventListener('click', (event) => {
-                if (!event.target.closest('button')) {
-                    uploadInput.click();
-                }
-            });
-
-            uploadPanel.addEventListener('dragover', (event) => {
-                event.preventDefault();
-                uploadPanel.classList.add('is-dragging');
-            });
-
-            uploadPanel.addEventListener('dragleave', (event) => {
-                if (event.target === uploadPanel) {
-                    uploadPanel.classList.remove('is-dragging');
-                }
-            });
-
-            uploadPanel.addEventListener('drop', (event) => {
-                event.preventDefault();
-                uploadPanel.classList.remove('is-dragging');
-                if (!event.dataTransfer || !event.dataTransfer.files) {
-                    return;
-                }
-                Array.from(event.dataTransfer.files).forEach(appendFileChip);
-            });
-
-            uploadInput.addEventListener('change', () => {
-                if (!uploadInput.files || uploadInput.files.length === 0) {
-                    return;
-                }
-                Array.from(uploadInput.files).forEach(appendFileChip);
-                uploadInput.value = '';
-            });
-        }
-    })();
+    // (function () {
+    //     const tabButtons = document.querySelectorAll('[data-tab-button]');
+    //     const tabPanes = document.querySelectorAll('[data-tab-pane]');
+    //     const stepItems = document.querySelectorAll('.step-progress__item');
+    //     const order = ['documents', 'basic', 'contract', 'contacts'];
+    //
+    //     function setStepState(targetId) {
+    //         order.forEach(step => {
+    //             const item = document.querySelector(`.step-progress__item[data-step="${step}"]`);
+    //             if (!item) return;
+    //             item.classList.remove('is-current', 'is-complete');
+    //             const status = item.querySelector('.step-progress__status');
+    //             if (step === targetId) {
+    //                 item.classList.add('is-current');
+    //                 if (status) status.textContent = '진행중';
+    //             } else if (order.indexOf(step) < order.indexOf(targetId)) {
+    //                 item.classList.add('is-complete');
+    //                 if (status) status.textContent = '완료';
+    //             } else {
+    //                 if (status) status.textContent = '대기';
+    //             }
+    //         });
+    //     }
+    //
+    //     function activateTab(tabId) {
+    //         tabButtons.forEach(btn => {
+    //             btn.classList.toggle('active', btn.getAttribute('data-tab-button') === tabId);
+    //         });
+    //         tabPanes.forEach(pane => {
+    //             pane.classList.toggle('active', pane.getAttribute('data-tab-pane') === tabId);
+    //         });
+    //         setStepState(tabId);
+    //     }
+    //
+    //     tabButtons.forEach(btn => {
+    //         btn.addEventListener('click', () => {
+    //             activateTab(btn.getAttribute('data-tab-button'));
+    //         });
+    //     });
+    //
+    //     document.querySelectorAll('[data-next-tab]').forEach(btn => {
+    //         btn.addEventListener('click', () => {
+    //             const nextId = btn.getAttribute('data-next-tab');
+    //             if (nextId) {
+    //                 activateTab(nextId);
+    //             }
+    //         });
+    //     });
+    //
+    //     const homepageActionButton = document.querySelector('[data-action="homepage-check"]');
+    //
+    //     function normalizeHomepageUrl(rawValue) {
+    //         if (!rawValue) {
+    //             return '';
+    //         }
+    //         const trimmed = rawValue.trim();
+    //         if (!trimmed) {
+    //             return '';
+    //         }
+    //         return /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+    //     }
+    //
+    //     if (homepageActionButton) {
+    //         homepageActionButton.addEventListener('click', () => {
+    //             const targetSelector = homepageActionButton.getAttribute('data-target');
+    //             const targetInput = targetSelector ? document.querySelector(targetSelector) : null;
+    //             if (!targetInput) {
+    //                 return;
+    //             }
+    //             const normalizedUrl = normalizeHomepageUrl(targetInput.value || '');
+    //             if (!normalizedUrl) {
+    //                 alert('홈페이지 주소를 입력해주세요.');
+    //                 targetInput.focus();
+    //                 return;
+    //             }
+    //             window.open(normalizedUrl, '_blank', 'noopener,noreferrer');
+    //         });
+    //     }
+    //
+    //     const modals = document.querySelectorAll('.inline-modal');
+    //     document.querySelectorAll('[data-modal-open]').forEach(btn => {
+    //         btn.addEventListener('click', () => {
+    //             const id = btn.getAttribute('data-modal-open');
+    //             const target = document.getElementById(id);
+    //             if (target) {
+    //                 target.classList.add('open');
+    //                 target.setAttribute('aria-hidden', 'false');
+    //             }
+    //         });
+    //     });
+    //     document.querySelectorAll('[data-modal-close]').forEach(btn => {
+    //         btn.addEventListener('click', () => {
+    //             const modal = btn.closest('.inline-modal');
+    //             if (modal) {
+    //                 modal.classList.remove('open');
+    //                 modal.setAttribute('aria-hidden', 'true');
+    //             }
+    //         });
+    //     });
+    //     modals.forEach(modal => {
+    //         modal.addEventListener('click', (event) => {
+    //             if (event.target === modal) {
+    //                 modal.classList.remove('open');
+    //                 modal.setAttribute('aria-hidden', 'true');
+    //             }
+    //         });
+    //     });
+    //
+    //     const uploadPanel = document.querySelector('[data-role="doc-upload-panel"]');
+    //     const uploadInput = document.getElementById('docUploadInput');
+    //     const fileList = document.getElementById('docUploadList');
+    //
+    //     function appendFileChip(file) {
+    //         if (!fileList) {
+    //             return;
+    //         }
+    //         fileList.classList.remove('empty');
+    //         const chip = document.createElement('div');
+    //         chip.className = 'file-chip';
+    //         chip.innerHTML = `<span class="file-chip__name">${file.name}</span>
+    //             <button type="button" class="file-chip__remove">×</button>`;
+    //         chip.querySelector('.file-chip__remove').addEventListener('click', () => {
+    //             chip.remove();
+    //             if (!fileList.querySelector('.file-chip')) {
+    //                 fileList.classList.add('empty');
+    //             }
+    //         });
+    //         fileList.appendChild(chip);
+    //     }
+    //
+    //     if (uploadPanel && uploadInput) {
+    //         uploadPanel.addEventListener('click', (event) => {
+    //             if (!event.target.closest('button')) {
+    //                 uploadInput.click();
+    //             }
+    //         });
+    //
+    //         uploadPanel.addEventListener('dragover', (event) => {
+    //             event.preventDefault();
+    //             uploadPanel.classList.add('is-dragging');
+    //         });
+    //
+    //         uploadPanel.addEventListener('dragleave', (event) => {
+    //             if (event.target === uploadPanel) {
+    //                 uploadPanel.classList.remove('is-dragging');
+    //             }
+    //         });
+    //
+    //         uploadPanel.addEventListener('drop', (event) => {
+    //             event.preventDefault();
+    //             uploadPanel.classList.remove('is-dragging');
+    //             if (!event.dataTransfer || !event.dataTransfer.files) {
+    //                 return;
+    //             }
+    //             Array.from(event.dataTransfer.files).forEach(appendFileChip);
+    //         });
+    //
+    //         uploadInput.addEventListener('change', () => {
+    //             if (!uploadInput.files || uploadInput.files.length === 0) {
+    //                 return;
+    //             }
+    //             Array.from(uploadInput.files).forEach(appendFileChip);
+    //             uploadInput.value = '';
+    //         });
+    //     }
+    // })();
 </script>
 </body>
 </html>
