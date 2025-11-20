@@ -190,7 +190,7 @@
 <div class="row">
     <div class="col-12">
         <div class="pt-2">
-            <div th:replace="~{pages/layout/fragments :: maps('고객사 등록/수정')}"></div>
+            <div th:replace="~{pages/layout/fragments :: maps('고객사 등록')}"></div>
 
             <form id="merchantForm" class="multi-step-form" onsubmit="return false;">
                 <div class="step-progress" aria-label="등록 단계">
@@ -204,7 +204,7 @@
                         <span class="step-progress__status">미완료</span>
                     </div>
                     <div class="step-progress__item" data-step="contract">
-                        <span class="step-progress__title">3. 계약 · 계좌 · 지급</span>
+                        <span class="step-progress__title">3. 지급 · 계좌</span>
                         <span class="step-progress__status">미완료</span>
                     </div>
                 </div>
@@ -212,7 +212,7 @@
                 <div class="tab-navigation">
                     <button type="button" class="tab-button active" data-tab-button="documents">서류 취합</button>
                     <button type="button" class="tab-button" data-tab-button="basic">기본 정보</button>
-                    <button type="button" class="tab-button" data-tab-button="contract">계약 · 계좌 · 지급</button>
+                    <button type="button" class="tab-button" data-tab-button="contract">지급 · 계좌</button>
                 </div>
 
                 <div class="tab-content">
@@ -443,7 +443,7 @@
                             </div>
 
 
-                            <div class="table-wrapper">
+                            <div class="table-wrapper common-render" data-url="" data-id="" data-target="">
                                 <div class="page-container">
                                     <div class="table-contents">
                                         <table>

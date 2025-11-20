@@ -1,0 +1,64 @@
+<div class="tab-content">
+    <div class="container">
+        <div class="page-title result-title between">
+            <div class="title font-size-17">주소지 정보</div>
+            <div class="action">
+                <div class="btn-enc">
+                    <!-- <a class="text-btn mr-20" th:attr="onclick='edit(\'/address/modal/add/'+ ${REFTB} +'/'+ ${ID} +'\')'"> -->
+                    <a href="#" class="text-btn mr-20" onclick="handleEdit(this);" th:data-url="${'/address/modal/add/'+ REFTB + '/' + ID}">
+                        <i class="fas fa-plus"></i>
+                        <p>주소지 등록</p>
+                    </a>
+                    <!-- <a class="text-btn" onclick="">
+                        <i class="fas fa-edit"></i>
+                        <p>변경 이력</p>
+                    </a> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="card search-list  mt-0" style = "width: calc(100% - 40px);">
+            <div class="table-wrap" data-current="" data-lastnum="" data-total="" data-size="">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>주소지 형태</th>
+                        <th>우편번호</th>
+                        <th>주소</th>
+                        <th>상세주소</th>
+                        <th>상태</th>
+                        <th>변경일자</th>
+                        <th>등록일자</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <th:block th:if = "${not #lists.isEmpty(ADDR)}">
+                        <tr th:each = "entry: ${ADDR}">
+                            <td>
+                                <!-- <a class="text-btn" th:attr="onclick='edit(\'/address/modal/edit/' + ${entry.idx} +'\')'"> [[${entry.place}]] </a> -->
+                                <a href="#" class="text-btn" onclick="handleEdit(this);" th:data-url="${'/address/modal/edit/'+ entry.idx}"> [[${entry.place}]] </a>
+                            </td>
+                            <td>[[${entry.zip}]]</td>
+                            <td>[[${entry.addr1}]]</td>
+                            <td>[[${entry.addr2Dec}]]</td>
+                            <td>
+                                <div th:if = "${entry.status eq 'active'}"> <span class="badge bg-info">사용</span> </div>
+                                <div th:if = "${entry.status eq 'inactive'}"> <span class="badge bg-primary">중지</span> </div>
+                            </td>
+                            <td class="date">[[${entry.udtDate}]]</td>
+                            <td class="date">[[${entry.regDate}]]</td>
+                        </tr>
+                    </th:block>
+                    <th:block th:if = "${#lists.isEmpty(ADDR)}">
+                        <tr>
+                            <td colspan="20">조회된 정보가 없습니다.</td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-footer">
+            </div>
+        </div>
+    </div>
+</div>

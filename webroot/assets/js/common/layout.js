@@ -960,4 +960,35 @@ export default class Layout {
             init, open, close, tabOpen, renderContent, isOpen, loading
         }
     }
+
+
+
+    // 공통적으로 사용되는 화면 응답
+    /**
+     * 주소지, 대표자, 계좌...
+     * @returns {{}}
+     */
+    commonRender() {
+        document.querySelectorAll('.common-render').forEach(elem => {
+            const { url, id, target} = elem.dataset;
+            if (!url || !id || !target) {
+                console.warn('렌더링에 필요한 값이 비어있습니다. ', elem);
+                return;
+            }
+
+
+
+            httpClient.get(elem.dataset.url)
+                .then(({data}) => {
+                    elem.innerHTML = data;
+                })
+                .catch(error => {
+                    console.error('commonRender ERROR ', error)
+                });
+        });
+
+
+
+        return {}
+    }
 }
