@@ -787,6 +787,10 @@ select.select-grey:focus {
     border-radius: 12px;
 }
 
+.tab-content {
+    padding: 1rem 1.5rem;
+}
+
 .tx-modal .tab-content {
     background-color: #FFFFFF;
 }
