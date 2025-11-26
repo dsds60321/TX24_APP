@@ -184,6 +184,13 @@ body {
     gap: 0.35rem;
 }
 
+.modal-title {
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+    color: #1F2937;
+}
+
 .modal-close-button {
     position: absolute;
     top: 1rem;

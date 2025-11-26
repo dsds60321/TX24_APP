@@ -30,12 +30,18 @@ public class PersonCtl {
     /**
      * NOTE : 타입 별 담당자 리스트
      */
-    @GetMapping("list/{type}/{id}")
+    @GetMapping("/list/{type}/{id}")
     public String listByType(@PathVariable("type") String type, @PathVariable("id") String id, Model mv) {
 
         mv.addAttribute("ID", id);
         mv.addAttribute("TYPE", type);
         mv.addAttribute("PERSON", personSvc.getList(id, type));
         return "pages/person/view";
+    }
+
+    @GetMapping("/add/{type}")
+    public String add(@PathVariable("type") String type, Model mv) {
+        mv.addAttribute("type", type);
+        return "pages/person/add";
     }
 }

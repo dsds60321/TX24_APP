@@ -1,0 +1,114 @@
+<div th:fragment="mchtFile">
+    <form action="#"
+          method="post"
+          enctype="multipart/form-data"
+          onsubmit="return false"
+          class="doc-request-form"
+          data-request-url="/mcht/documents/upload"
+          data-role="doc-request-form">
+        <div class="card-group-divider d-flex justify-content-between align-items-center">
+            <span>필수 서류 취합</span>
+            <div class="d-flex gap-2">
+                <button type="reset" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2">
+                    초기화
+                </button>
+                <button type="submit" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">등록
+                </button>
+            </div>
+        </div>
+
+        <div class="layout-split">
+            <div class="layout-split__primary">
+                <div class="doc-list">
+                    <div class="doc-list__row">
+                        <label class="doc-check">
+                            <input type="checkbox" name="requiredDocuments[]" value="contract">
+                            <span>계약서</span>
+                        </label>
+                        <p class="doc-need">3부, 날인확인</p>
+                    </div>
+                    <div class="doc-list__row">
+                        <label class="doc-check">
+                            <input type="checkbox" name="requiredDocuments[]" value="business-registration">
+                            <span>사업자등록증</span>
+                        </label>
+                        <p class="doc-need">-</p>
+                    </div>
+                    <div class="doc-list__row">
+                        <label class="doc-check">
+                            <input type="checkbox" name="requiredDocuments[]" value="ceo-id">
+                            <span>대표자이사 신분증 사본</span>
+                        </label>
+                        <p class="doc-need">신분증 검증</p>
+                    </div>
+                    <div class="doc-list__row">
+                        <label class="doc-check">
+                            <input type="checkbox" name="requiredDocuments[]" value="bankbook">
+                            <span>통장 사본</span>
+                        </label>
+                        <p class="doc-need">-</p>
+                    </div>
+                    <div class="doc-list__row">
+                        <label class="doc-check">
+                            <input type="checkbox" name="requiredDocuments[]" value="corp-registration">
+                            <span>법인등기부등본</span>
+                        </label>
+                        <p class="doc-need">원본, 3개월이내</p>
+                    </div>
+                    <div class="doc-list__row">
+                        <label class="doc-check">
+                            <input type="checkbox" name="requiredDocuments[]" value="corp-seal-cert">
+                            <span>법인인감증명서</span>
+                        </label>
+                        <p class="doc-need">원본, 3개월이내</p>
+                    </div>
+                    <div class="doc-list__row">
+                        <label class="doc-check">
+                            <input type="checkbox" name="requiredDocuments[]" value="guarantor-id">
+                            <span>연대보증인 신분증 사본</span>
+                        </label>
+                        <p class="doc-need">신분증 검증</p>
+                    </div>
+                    <div class="doc-list__row">
+                        <label class="doc-check">
+                            <input type="checkbox" name="requiredDocuments[]" value="guarantor-seal-cert">
+                            <span>연대보증인 개인인감증명서</span>
+                        </label>
+                        <p class="doc-need">원본</p>
+                    </div>
+                    <div class="doc-list__row">
+                        <label class="doc-check">
+                            <input type="checkbox" name="requiredDocuments[]" value="tax-clearance">
+                            <span>국세 및 지방세 완납증명서</span>
+                        </label>
+                        <p class="doc-need">원본</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layout-split__secondary">
+                <div class="doc-upload-panel">
+                    <div id="documentDropzone"
+                         class="dropzone doc-upload-dropzone"
+                         data-role="doc-upload-panel"
+                         aria-live="polite">
+                        <div class="dz-message" data-dz-message>
+                            <div class="mb-3"
+                                 style="font-size: 1.21875rem; line-height: 1.2; margin-top: 0; margin-bottom: 0.5rem; color:#495057">
+                                <i class="fa-solid fa-cloud-arrow-up display-4 text-muted"
+                                   style="color: #878a99!important; font-size: calc(1.475rem + 2.7vw); line-height: 1.2;"></i>
+                            </div>
+                            <p class="file-chip__placeholder mb-0">첨부파일을 끌어오거나, 구역을 클릭하여 업로드하세요.</p>
+                        </div>
+                    </div>
+                    <template id="docUploadTemplate">
+                        <div class="file-chip" data-dz-preview>
+                            <span class="file-chip__name" data-dz-name></span>
+                            <button type="button" class="file-chip__remove" data-dz-remove aria-label="파일 삭제">×</button>
+                        </div>
+                    </template>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

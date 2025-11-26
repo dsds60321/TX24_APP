@@ -31,7 +31,7 @@
       "regDate": "2025-11-03 09:46:05"
     }
   ],
-  "ubo" : [
+  "ubo": [
     {
       "idx": 117,
       "id": "TEST1234",
@@ -87,6 +87,68 @@
       "regId": "SEUNGWOOKOH",
       "regDay": 20240603,
       "regDate": "2024-06-03 18:46:25"
+    }
+  ],
+  "addr": [
+    {
+      "idx": 110,
+      "refTb": "PERSON_UBO",
+      "refId": "101",
+      "status": "active",
+      "place": "연대보증인",
+      "country": "KR",
+      "zip": "01016",
+      "addr1": "서울 강북구 4.19로17길 14",
+      "addr2": "",
+      "addr2Enc": "",
+      "lat": 37.64430094807,
+      "lng": 127.00577644328,
+      "sort": 1,
+      "udtId": "SEUNGWOOKOH",
+      "udtDate": "2024-01-17 09:17:25",
+      "regId": "SEUNGWOOKOH",
+      "regDay": 20240115,
+      "regDate": "2024-01-15 13:22:15"
+    },
+    {
+      "idx": 111,
+      "refTb": "PERSON_UBO",
+      "refId": "102",
+      "status": "active",
+      "place": "대표자",
+      "country": "KR",
+      "zip": "01016",
+      "addr1": "서울 강북구 4.19로17길 14",
+      "addr2": "",
+      "addr2Enc": "",
+      "lat": 37.64430094807,
+      "lng": 127.00577644328,
+      "sort": 1,
+      "udtId": "SEUNGWOOKOH",
+      "udtDate": "2024-01-17 09:17:25",
+      "regId": "SEUNGWOOKOH",
+      "regDay": 20240115,
+      "regDate": "2024-01-15 13:22:24"
+    },
+    {
+      "idx": 112,
+      "refTb": "PERSON_UBO",
+      "refId": "103",
+      "status": "active",
+      "place": "연대보증인",
+      "country": "KR",
+      "zip": "36242",
+      "addr1": "경북 봉화군 봉화읍 1농공단지길 6",
+      "addr2": "",
+      "addr2Enc": "",
+      "lat": 36.87386244922,
+      "lng": 128.74034372399,
+      "sort": 1,
+      "udtId": "SEUNGWOOKOH",
+      "udtDate": "2024-01-17 09:17:25",
+      "regId": "SEUNGWOOKOH",
+      "regDay": 20240115,
+      "regDate": "2024-01-15 13:24:26"
     }
   ],
   "person": [

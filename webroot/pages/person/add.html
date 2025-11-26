@@ -1,0 +1,99 @@
+<div class="modal-header p-3 modal-header-with-close">
+    <div class="modal-title-group">
+        <span class="modal-title">[[${type}]] 담당자 등록</span>
+    </div>
+    <div class="modal-close-button" data-bs-dismiss="modal" >
+        <i class="fas fa-times" aria-hidden="true"></i>
+    </div>
+</div>
+
+<div class="modal-body p-0 tx-modal" data-modal-position="fixed">
+    <form class="nav-box nav-underline form-modal" action="#" method="post">
+        <input type="hidden" name="type" th:value="${type}">
+        <div class="tab-content">
+            <div class="tab-pane active">
+                <div class="modal-section">
+                    <p class="modal-section-title">기본정보</p>
+                    <table class="modal-data-table form-table">
+                        <tbody>
+                        <tr>
+                            <th scope="row">성명</th>
+                            <td>
+                                <input type="text" class="form-control" name="name" placeholder="성명을 입력하세요">
+                            </td>
+                            <th scope="row">상태</th>
+                            <td>
+                                <select class="form-select" name="companyStatus">
+                                    <option value="">선택</option>
+                                    <option value="active">사용</option>
+                                    <option value="inactive">중지</option>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">직급/직위</th>
+                            <td>
+                                <input type="text" class="form-control" name="businessNumber">
+                            </td>
+                            <th scope="row">부서</th>
+                            <td>
+                                <input type="text" class="form-control" name="corporateNumber">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">이메일</th>
+                            <td colspan="4">
+                                <div class="input-inline w-100">
+                                    <div class="email flex-grow-1" data-role="email-combo" data-bound-email="true">
+                                        <label class="visually-hidden" for="emailLocal">이메일 아이디</label>
+                                        <input type="text" id="emailLocal" class="form-control fs-8" placeholder="user" autocomplete="off" value="" required="">
+                                        @
+                                        <label class="visually-hidden" for="emailDomain">이메일 도메인</label>
+                                        <input type="text" id="emailDomain" class="form-control fs-8" placeholder="tx24.co.kr" autocomplete="off" value="" required="">
+                                    </div>
+                                    <select id="emailDomainSelect" class="form-control select-to-input fs-8" data-target="emailDomain" data-bound-select-to-input="true">
+                                        <option value="">직접입력</option>
+                                        <option value="tx24.co.kr">tx24.co.kr</option>
+                                        <option value="tx24.com">tx24.com</option>
+                                        <option value="gmail.com">gmail.com</option>
+                                        <option value="naver.com">naver.com</option>
+                                    </select>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">휴대폰번호</th>
+                            <td>
+                                <input type="text" class="form-control" name="industry" placeholder="업종을 입력하세요">
+                            </td>
+                            <th scope="row">전화번호</th>
+                            <td>
+                                <input type="text" class="form-control" name="businessType" placeholder="업태를 입력하세요">
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row">팩스번호</th>
+                            <td>
+                                <input type="text" class="form-control" name="businessType" placeholder="업태를 입력하세요">
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+
+                <div class="modal-section">
+                    <p class="modal-section-title">Summary</p>
+                    <div class="modal-note">
+                        <textarea class="form-control" name="summary" rows="4" placeholder="요약 내용을 입력하세요"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer modal-action-footer">
+            <button type="button" class="btn btn-light" data-bs-dismiss="modal">취소</button>
+            <button type="submit" class="btn btn-primary">등록</button>
+        </div>
+    </form>
+</div>

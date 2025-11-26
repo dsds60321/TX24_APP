@@ -1,0 +1,60 @@
+<div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+    <div>
+        <p class="fs-6 fw-bold mb-1">계좌 정보</p>
+    </div>
+    <div class="d-flex gap-2">
+        <button type="submit" class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2">등록</button>
+    </div>
+</div>
+
+
+<div class="table-wrapper" >
+    <div class="page-container">
+        <div class="table-contents">
+            <table>
+                <thead>
+                <tr>
+                    <th>구분</th>
+                    <th>은행코드</th>
+                    <th>은행명</th>
+                    <th>예금주</th>
+                    <th>계좌번호</th>
+                    <th>계좌확인일</th>
+                    <th>상태</th>
+                    <th>변경일자</th>
+                    <th>등록일자</th>
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:if = "${not #lists.isEmpty(ACCNT)}">
+                    <tr th:each = "entry: ${ACCNT}">
+                        <td>
+                            <!-- <a class="text-btn" th:attr="onclick='edit(\'/account/modal/edit/'+ ${ACCNTTYPE} + '/' + ${entry.idx} +'\')'"> [[${entry.unit}]] </a> -->
+                            <a href="#" class="text-btn" onclick="handleEdit(this);" th:data-url="${'/account/modal/edit/'+ ACCNTTYPE + '/' + entry.idx}"> [[${entry.unit}]] </a>
+                        </td>
+                        <td>[[${entry.bankCd}]]</td>
+                        <td>[[${entry.bankName}]]</td>
+                        <td>[[${entry.holder}]]</td>
+                        <td>[[${entry.account}]]</td>
+                        <td class="date">[[${entry.verifyDay}]]</td>
+                        <td>
+                            <div th:if = "${entry.status eq 'pending'}"> <span class="badge bg-dark">대기</span> </div>
+                            <div th:if = "${entry.status eq 'active'}"> <span class="badge bg-primary">사용</span> </div>
+                            <div th:if = "${entry.status eq 'inactive'}"><span class="badge bg-danger">중지</span> </div>
+                            <div th:if = "${entry.status eq 'terminate'}"><span class="badge bg-danger">만료</span> </div>
+                        </td>
+                        <td class="date">[[${entry.udtDate}]]</td>
+                        <td class="date">[[${entry.regDate}]]</td>
+                    </tr>
+                </th:block>
+                <th:block th:if = "${#lists.isEmpty(ACCNT)}">
+                    <tr>
+                        <td colspan="14">조회된 정보가 없습니다.</td>
+                    </tr>
+                </th:block>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-footer"></div>
+    </div>
+</div>

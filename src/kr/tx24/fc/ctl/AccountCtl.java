@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/account")
 public class AccountCtl {
 
-    @GetMapping("/{id}")
+    @GetMapping("/list/{id}")
     public String detailView(@PathVariable("id") String id) {
         return "pages/account/view";
     }

@@ -1,0 +1,95 @@
+<div th:fragment="mchtPayment">
+    <div class="card-group-divider"><span>지급 정보</span></div>
+    <form action="/member/admin/add" id="adminRegisterForm" name="adminRegisterForm" method="POST"
+          onsubmit="return false" novalidate="novalidate">
+
+        <div class="card-wrapper edit register-card">
+            <div class="card-header d-flex justify-content-between align-items-center flex-wrap">
+                <div>
+                    <p class="fs-6 fw-bold mb-1">상품 정보</p>
+                    <p class="register-lead mb-0">(*서비스수수료는 "영업일 1일 기준 값" 입니다.)</p>
+                </div>
+                <div class="d-flex gap-2">
+                    <button type="reset" class="btn btn-grey-outline fs-9 pt-0 pb-0 btn-radius-2">
+                        초기화
+                    </button>
+                    <button type="submit"
+                            class="btn btn-blue fs-9 pt-0 pb-0 btn-radius-2 flex-submit  disabled"
+                            disabled="">등록
+                    </button>
+                </div>
+            </div>
+
+            <div class="card-contents">
+                <div class="card-row m-0 ">
+                    <div class="col d-flex form-block">
+                        <div class="card-title required"><p class="fs-8 fw-bold">서비스주기</p></div>
+                        <div class="card-txt form-block__body">
+                            <div class="form-field">
+                                <select id="dept" name="dept" class="form-control fs-8" required="">
+                                    <option value="">서비스 주기</option>
+                                    <option value="D+0">D+0</option>
+                                    <option value="D+1">D+1</option>
+                                    <option value="D+2">D+2</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col d-flex form-block">
+                        <div class="card-title required"><p class="fs-8 fw-bold">서비스수수료</p></div>
+                        <div class="card-txt form-block__body">
+                            <div class="form-field">
+                                <select id="dept" name="dept" class="form-control fs-8" required="">
+                                    <option value="">수수료</option>
+                                    <option value="D01040">0.040% ,DAILY</option>
+                                    <option value="F01040">0.040% ,FIX</option>
+                                    <option value="D01050">0.050% ,DAILY</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-row m-0 ">
+                    <div class="col d-flex form-block text-black-50">
+                        <div class="card-title"><p class="fs-6 fw-bold">에이전시</p></div>
+
+                    </div>
+                </div>
+
+                <div class="card-row m-0 ">
+                    <div class="col d-flex form-block">
+                        <div class="card-title required"><p class="fs-8 fw-bold">에이전시</p></div>
+                        <div class="card-txt form-block__body">
+                            <div class="form-field">
+                                <select id="dept" name="dept" class="form-control fs-8" required="">
+                                    <option value="">에이전시</option>
+                                    <option value="agency">agency</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col d-flex form-block"></div>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    <div class="card-group-divider"><span>계좌 정보</span></div>
+
+
+    <!-- 정산 담당자 생성 -->
+    <div class="common-render" data-url="/person/list/정산/temp" data-target="person-stl-list">
+        <div class="card-wrapper p-2" id="person-stl-list">
+            정산 담당자 렌더링에 실패했습니다.
+        </div>
+    </div>
+
+    <div class="common-render" data-url="/account/list/temp" data-target="account-list">
+        <div class="card-wrapper p-2" id="account-list">
+            계좌 정보 렌더링에 실패했습니다.
+        </div>
+    </div>
+</div>
