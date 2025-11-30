@@ -9,6 +9,7 @@ import kr.tx24.lib.map.SharedMap;
 import kr.tx24.lib.map.TypeRegistry;
 import org.springframework.stereotype.Service;
 
+import java.net.Socket;
 import java.util.List;
 import java.util.stream.Collectors;
 

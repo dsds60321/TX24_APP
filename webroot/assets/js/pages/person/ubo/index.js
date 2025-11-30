@@ -8,27 +8,36 @@
 
 
         init() {
+            console.log('ubo page init')
             this.cacheElements();
+            if (!this.form) {
+                return;
+            }
             this.initValidator();
             this.bindEvents();
         },
 
         cacheElements() {
             this.form = document.uboForm;
-            this.submitButton = document.querySelector('#submit');
+            this.submitButton = this.form ? this.form.querySelector('#submit') : null;
 
         },
 
         initValidator() {
-            this.requiredSelectors = ValidationUtil.findRequiredFields(this.form);
+            this.requiredSelectors = ValidationUtil.findRequiredFields(this.form) || [];
             this.validator = ValidationUtil.create(this.form, {
                 validateOnInput: true,
                 focusInvalidField: true
             });
 
-            const defaultRules = this.requiredSelectors.map(elem => {
-                return ValidationUtil.getDefaultRule(elem);
-            });
+            let defaultRules = [];
+            if (this.requiredSelectors.length !== 0) {
+                defaultRules = this.requiredSelectors.map(elem => {
+                    return ValidationUtil.getDefaultRule(elem);
+                });
+            };
+
+
 
             ValidationUtil.addFields(this.validator, defaultRules)
                 .onSuccess(async (event) => {
@@ -61,6 +70,9 @@
                 });
 
 
+        },
+
+        bindEvents() {
         }
 
     }

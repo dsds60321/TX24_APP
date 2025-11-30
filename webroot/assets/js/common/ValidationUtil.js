@@ -35,6 +35,10 @@ const ValidationUtil = (function () {
      * ]
      */
     function addFields(validator, fields = []) {
+        if (!validator || !Array.isArray(fields)) {
+            return validator;
+        }
+
         fields.forEach((field) => {
             if (field) {
                 validator.addField(field.selector, field.rules);

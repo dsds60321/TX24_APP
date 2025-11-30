@@ -242,11 +242,18 @@ export default class Layout {
 
                 modalContent.innerHTML = layout.buildModalLoading();
                 layout.loadModalContent(requestUrl).then(function (html) {
-                    modalContent.innerHTML = html || layout.buildModalError();
-                    layout.rebindDynamic(modal);
-                    layout.syncModalLabel(modal);
+                    const content = html || layout.buildModalError();
+                    layout.renderHtmlWithScripts(modalContent, content, {
+                        rebindRoot: modal,
+                        enableDatepicker: true,
+                        afterRender: function () {
+                            layout.syncModalLabel(modal);
+                        }
+                    });
                 }).catch(function (error) {
-                    modalContent.innerHTML = layout.buildModalError(error);
+                    layout.renderHtmlWithScripts(modalContent, layout.buildModalError(error), {
+                        rebindRoot: modal
+                    });
                 });
             });
 
@@ -451,6 +458,55 @@ export default class Layout {
         this.showTab(root);
         this.simpleSelectEvt();
         this.renderSuggest();
+    }
+
+    renderHtmlWithScripts(targetElem, html, options = {}) {
+        if (!targetElem) {
+            return;
+        }
+
+        const template = document.createElement('template');
+        template.innerHTML = html || '';
+
+        const fragment = template.content.cloneNode(true);
+        const scripts = Array.from(fragment.querySelectorAll('script'));
+        scripts.forEach(function (script) {
+            if (script.parentNode) {
+                script.parentNode.removeChild(script);
+            }
+        });
+
+        targetElem.innerHTML = '';
+        targetElem.appendChild(fragment);
+
+        const {
+            rebindRoot = targetElem,
+            enableDatepicker = false,
+            afterRender = null
+        } = options;
+
+        if (rebindRoot) {
+            this.rebindDynamic(rebindRoot);
+        }
+
+        scripts.forEach(function (script) {
+            const cloned = document.createElement('script');
+            Array.from(script.attributes).forEach(function (attr) {
+                cloned.setAttribute(attr.name, attr.value);
+            });
+            if (script.textContent) {
+                cloned.textContent = script.textContent;
+            }
+            targetElem.appendChild(cloned);
+        });
+
+        if (enableDatepicker) {
+            this.datepickerRender();
+        }
+
+        if (typeof afterRender === 'function') {
+            afterRender();
+        }
     }
 
     // suggest 렌더링
@@ -726,34 +782,12 @@ export default class Layout {
                 return;
             }
 
-            const template = document.createElement('template');
-            template.innerHTML = html;
-
-            // JS 동적 로딩
-            const fragment = template.content.cloneNode(true);
-            const scripts = Array.from(fragment.querySelectorAll('script'));
-            scripts.forEach(function (script) {
-                script.parentNode.removeChild(script);
-            });
-
-            contentArea.innerHTML = '';
-            contentArea.appendChild(fragment);
-            layout.rebindDynamic(contentArea);
-
-            scripts.forEach(function (script) {
-                const cloned = document.createElement('script');
-                Array.from(script.attributes).forEach(function (attr) {
-                    cloned.setAttribute(attr.name, attr.value);
-                });
-                if (script.textContent) {
-                    cloned.textContent = script.textContent;
+            layout.renderHtmlWithScripts(contentArea, html, {
+                enableDatepicker: true,
+                afterRender: function () {
+                    capturePage(state.activeUrl);
                 }
-                contentArea.appendChild(cloned);
             });
-
-            // datepicker
-            layout.datepickerRender();
-            capturePage(state.activeUrl);
         }
 
 
