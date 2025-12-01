@@ -530,16 +530,16 @@ export default class Layout {
 
     blockBrowserEvt() {
 
-        // document.addEventListener('keydown', function (e) {
-        //     if (
-        //         e.key === 'F5' ||
-        //         (e.ctrlKey && e.key === 'r') ||
-        //         (e.metaKey && e.key === 'r')
-        //     ) {
-        //         e.preventDefault();
-        //         alert('새로고침이 차단되어 있습니다.');
-        //     }
-        // });
+        document.addEventListener('keydown', function (e) {
+            if (
+                e.key === 'F5' ||
+                (e.ctrlKey && e.key === 'r') ||
+                (e.metaKey && e.key === 'r')
+            ) {
+                e.preventDefault();
+                alert('새로고침이 차단되어 있습니다.');
+            }
+        });
 
         // 뒤로 가기 클릭시 탭 생성 -> # 버튼 클릭시 열리는 문제 있음
         history.pushState(null, '', location.href);
