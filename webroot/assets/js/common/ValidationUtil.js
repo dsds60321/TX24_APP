@@ -125,20 +125,41 @@ const ValidationUtil = (function () {
      * 필수값 선택자 헬퍼 함수
      */
     function findRequiredFields(form, excludes = []) {
-        // 전체 필드 수집
-        const fields = form.querySelectorAll(
-            '.card-title.required + .card-txt :is(input, select, textarea)'
-        );
+        // form 자체가 없거나 이상하면 바로 빈 배열 반환
+        if (!form || typeof form.querySelectorAll !== 'function') {
+            return [];
+        }
 
-        if (!excludes.length) return fields;
+        // NodeList → 배열로 변환 (항상 배열 보장)
+        const fields = Array.from(
+            form.querySelectorAll(
+                '.required + .card-txt :is(input, select, textarea)'
+            )
+        ) || [];
 
-        // 배열로 변환 후 제외 처리
-        const excludeNodes = excludes.flatMap(selector =>
-            Array.from(form.querySelectorAll(selector))
-        );
+        // excludes가 배열이 아니거나 비어있으면 그대로 필드 반환
+        if (!Array.isArray(excludes) || excludes.length === 0) {
+            return fields;
+        }
 
-        return Array.from(fields).filter(field => !excludeNodes.includes(field));
+        // flatMap 사용 안 하고, 안전하게 수집
+        const excludeNodes = [];
+        for (const selector of excludes) {
+            // selector가 문자열이 아니면 스킵
+            if (typeof selector !== 'string') continue;
+
+            const nodes = form.querySelectorAll(selector);
+            excludeNodes.push(...Array.from(nodes));
+        }
+
+        if (excludeNodes.length === 0) {
+            return fields;
+        }
+
+        // 제외 대상에 없는 필드만 반환
+        return fields.filter(field => !excludeNodes.includes(field));
     }
+
 
 
     // 자주 쓰는 정규식 같은 것도 여기 모아둘 수 있음

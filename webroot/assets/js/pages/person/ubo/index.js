@@ -30,12 +30,9 @@
                 focusInvalidField: true
             });
 
-            let defaultRules = [];
-            if (this.requiredSelectors.length !== 0) {
-                defaultRules = this.requiredSelectors.map(elem => {
-                    return ValidationUtil.getDefaultRule(elem);
-                });
-            };
+            const defaultRules = (this.requiredSelectors || []).map(elem => {
+                return ValidationUtil.getDefaultRule(elem);
+            });
 
 
 
@@ -73,6 +70,13 @@
         },
 
         bindEvents() {
+
+            ValidationUtil.validExecute(
+                this.validator,
+                this.requiredSelectors,
+                null,
+                this
+            );
         }
 
     }
